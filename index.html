@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="glass.css">
+    <link rel="stylesheet" href="glassCal.css">
+</head>
+
+<body>
+    <div style="display:flex;align-items: center;justify-content: center;">
+        <h1>
+            Book Appointment
+        </h1>
+    </div>
+    <div id="background">
+        <div style="display:flex;justify-content: center;flex-direction: column;">
+            <div >
+                <h3 id="label">
+                    How often?
+                </h3>
+            </div>
+            <div style="display:flex;justify-content: center;">
+            <div style="display:flex;align-items: center;justify-content: center;flex-direction: column;">
+                
+                <div id="buttons" style="display:flex; flex-direction: column;">
+                    <script>
+                        function checkDates(frequencyChoice){
+                            //implement conflict checking
+                            document.getElementById("calendar").style.display = "flex";
+                            let buttons = document.getElementById("buttons").children;
+                            Array.from(buttons).forEach((button)=>{
+                                if(button.id!==frequencyChoice){
+                                    button.style.display = "none";
+                                }
+                            });
+                            document.getElementById("label").innerText = "What Day?"
+                        }
+                        let cleaningOptions = [
+                            {
+                                frequency: "One Cleaning",
+                                price: 175,
+                                note: "2 Hours",
+                                short:"one",
+
+                            },
+                            {
+                                frequency: "Monthly",
+                                price: 175,
+                                note: "2 Hours",
+                                short:"monthly",
+                            },
+                            {
+                                frequency: "Weekly",
+                                price: 175,
+                                note: "2 Hours",
+                                short:"weekly"
+                            },
+                            {
+                                frequency: "Bi-Weekly",
+                                price: 175,
+                                note: "2 Hours",
+                                short:"biweekly"
+                            }
+                        ]
+                        let buttons = cleaningOptions.map((option) => {
+                            return (
+                                `<button id="${option.short}" onClick=checkDates("${option.short}")>
+                                    <div>
+                                    <div style="display:flex;align-items: flex-start; flex-direction:column;margin-right:10vw; padding:5px">
+                                        <div>
+                                            <h4 style="display:flex">
+                                                ${option.frequency} - <p>${option.note}</p>
+                                            </h4>
+                                        </div>
+                                        <div>
+                                            <p>
+                                                $${option.price.toString()}.00
+                                            </p>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </button>`)
+                        })
+                        document.getElementById("buttons").innerHTML = buttons;
+                    </script>
+                </div>
+            </div>
+            <div id="calendar" style="display:none; width:unset">
+            </div>
+        </div>
+    </div>
+</div>
+    <script type='text/javascript' src='./calendar.js'></script>
+    <script>
+        dycalendar.draw({
+            target: '#calendar',
+            type: 'month',
+            dayformat: 'full',
+            monthformat: 'full',
+            highlighttargetdate: true,
+            prevnextbutton: 'show'
+
+        })
+    </script>
+</body>
+
+</html>
