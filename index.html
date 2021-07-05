@@ -4,6 +4,7 @@
 <head>
     <link rel="stylesheet" href="glass.css">
     <link rel="stylesheet" href="glassCal.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
@@ -15,7 +16,7 @@
     <div id="background">
         <div style="display:flex;justify-content: center;flex-direction: column;">
             <div >
-                <h3 id="label">
+                <h3 class="label" id="label">
                     How often?
                 </h3>
             </div>
@@ -64,12 +65,12 @@
                         ]
                         let buttons = cleaningOptions.map((option) => {
                             return (
-                                `<button id="${option.short}" onClick=checkDates("${option.short}")>
+                                `<button class="button" id="${option.short}" onClick=checkDates("${option.short}")>
                                     <div>
                                     <div style="display:flex;align-items: flex-start; flex-direction:column;margin-right:10vw; padding:5px">
                                         <div>
                                             <h4 style="display:flex">
-                                                ${option.frequency} - <p>${option.note}</p>
+                                                ${option.frequency} - ${option.note}
                                             </h4>
                                         </div>
                                         <div>
