@@ -1,7 +1,7 @@
 .label{
 position: absolute;
 }
-.button{
+.buttonAdapt{
     border: 1px solid rgba(255,0,208,.87);
     background-color: rgba(0,0,0,0);
     font-family: classico-urw;
