@@ -12,3 +12,6 @@ position: absolute;
     text-transform: uppercase;
     color: rgba(255,0,208,.87);
 }
+.buttonItem{
+    margin:1vh;
+}
