@@ -1,7 +1,9 @@
+function chooseTime(day, hour){
+    console.log("heyo");
+    console.log("He chose...  day: ", day, "hour: ", hour);
+}
 (function (global) {
-    global.hoursAvailable = {
-        21:["1pm","2pm","3pm"]
-    };
+    prepareAvailability();
     "use strict";
     var dycalendar = {}
         , document = global.document
@@ -251,7 +253,7 @@
                 option.year = dateObj.getFullYear();
                 drawCalendar(option);
             }
-            if (e.target.nodeName === "TD"&&/.*[0-9]+.*/g.test(e.target.innerHTML)) {
+            if (e.target.nodeName === "TD" && /.*[0-9]+.*/g.test(e.target.innerHTML)) {
                 drawChooseHours(e.target);
             }
         }
@@ -312,21 +314,49 @@
     }
     onClick();
     global.dycalendar = dycalendar;
+
+    
+
     function drawChooseHours(dayElement) {
         let day = dayElement.innerHTML;
-        let window = 
-        `${day}<div style="display:flex;flex-direction:column;position:absolute">
+        let window =
+            `${day}<div style="display:flex;flex-direction:column;position:absolute">
             <div>
             <h4>
                 ${day}
             </h4>
             </div>
-            ${global.hoursAvailable[day].map(hour=>{
-                return `<div><p>${hour}</p></div>`
+            ${global.hoursAvailable[day].map(hour => {
+                return `<div><p onClick="chooseTime(${day}, '${hour}')">${hour}</p></div>`
             })}
         </div>`;
         console.log("day chosen", day)
         dayElement.innerHTML = window;
+    }
+
+    
+
+    function prepareAvailability() {
+        let hdate = new Date();
+        let retAvailability = {}
+        let currentMonth = hdate.getMonth();
+        //todo implement google calendar
+        retAvailability[hdate.getDate()] = ["1pm", "2pm", "3pm"];
+        [0, 1, 2, 3].forEach((week) => {
+            hdate.setDate(hdate.getDate() + (7 * week))
+            if (hdate.getMonth === currentMonth) {
+                retAvailability[hdate.getDate()] = ["1pm", "2pm", "3pm"];
+            }
+        })
+
+        global.hoursAvailable = retAvailability;
+        // let hoursAvailable = {};
+        // let holderDate = new Date();
+        // holderDate.setDate(0);
+        // [...Array(holderDate.getDate()).keys()].forEach((day)=>{
+        //     hoursAvailable[day] = ["1pm","2pm","3pm"]
+        // })
+        // global.hoursAvailable = hoursAvailable;
     }
 }(typeof window !== "undefined" ? window : this));
 
