@@ -1,4 +1,5 @@
-function chooseTime(day, hour){
+function chooseTime(day, hour, parent){
+    //inject into parent
     console.log("heyo");
     console.log("He chose...  day: ", day, "hour: ", hour);
 }
@@ -327,7 +328,7 @@ function chooseTime(day, hour){
             </h4>
             </div>
             ${global.hoursAvailable[day].map(hour => {
-                return `<div><p onClick="chooseTime(${day}, '${hour}')">${hour}</p></div>`
+                return `<div id="${}"><p onClick="chooseTime(${day}, '${hour}', this)">${hour}</p></div>`
             })}
         </div>`;
         console.log("day chosen", day)
