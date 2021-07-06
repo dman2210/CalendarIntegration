@@ -14,7 +14,7 @@
     position: relative;
     width: 400px;
     min-height: 400px;
-    background: rgba(255,255,255,.1);
+    background: rgba(233,232,227,.1);
     box-shadow: 0 25px 45px rgba(0,0,0,.1);
     border: 1px solid rgba(255,255,255,.5);
     border-right: 1px solid rgba(255,255,255,.2);
@@ -38,32 +38,32 @@
 }
 
 #calendar table td {
-    color: #fff;
+    color: rgb(0, 0, 0);
     padding: 10px;
     border-radius: 5px;
     cursor: pointer
 }
 
 #calendar table td:hover {
-    background: #fff;
-    color: #111!important
+    background: rgb(0, 0, 0);
+    color: rgb(255, 255, 255)!important
 }
 
 #calendar table tr:nth-child(1) td {
-    background: #fff;
-    color: #111;
+    background: rgb(0, 0, 0);
+    color: rgb(236, 236, 236);
     border-radius: 5px;
     font-weight: 600
 }
 
 .dycalendar-target-date {
-    background: #fff;
-    color: #111
+    background: rgb(0, 0, 0);
+    color: rgb(247, 247, 247)
 }
 
 .dycalendar-prev-next-btn.prev-btn {
-    background: #fff;
-    color: #111;
+    background: rgb(0, 0, 0);
+    color: rgb(216, 216, 216);
     width: 44px;
     height: 38px;
     border-radius: 4px;
@@ -74,8 +74,8 @@
 }
 
 .dycalendar-prev-next-btn.next-btn {
-    background: #fff;
-    color: #111;
+    background: rgb(0, 0, 0);
+    color: rgb(241, 241, 241);
     width: 44px;
     height: 38px;
     border-radius: 4px;
@@ -86,7 +86,7 @@
 }
 
 .dycalendar-span-month-year {
-    color: #fff;
+    color: rgb(0, 0, 0);
     font-size: 1.5rem;
     font-weight: 600
 }

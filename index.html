@@ -14,59 +14,60 @@
         </h1>
     </div>
     <div id="background">
-        <div style="display:flex;justify-content: center;flex-direction: column;">
-            <div id="labelandappt">
-                <div class="label">
-                    <h3 id="label">
-                        How often?
-                    </h3>
-                </div>
-                <div style="display:flex;justify-content: center;">
-                    <div style="display:flex;align-items: center;justify-content: center;flex-direction: column;">
+        <div id="main" style="display:flex;justify-content: center;flex-direction: column;">
+            <div id="label" class="label">
+                <h3 style="text-align: center;">
+                    How often?
+                </h3>
+            </div>
+            <div style="display:flex;justify-content: center;">
+                <div style="display:flex;align-items: center;justify-content: center;flex-direction: column;">
 
-                        <div id="buttons" style="display:flex; flex-direction: column;">
-                            <script>
-                                function checkDates(frequencyChoice) {
-                                    //implement conflict checking
-                                    document.getElementById("calendar").style.display = "flex";
-                                    let buttons = document.getElementById("buttons").children;
-                                    Array.from(buttons).forEach((button) => {
-                                        if (button.id !== frequencyChoice) {
-                                            button.style.display = "none";
-                                        }
-                                    });
-                                    document.getElementById("label").innerText = "What Day?"
-                                }
-                                let cleaningOptions = [
-                                    {
-                                        frequency: "One Cleaning",
-                                        price: 175,
-                                        note: "2 Hours",
-                                        short: "one",
-
-                                    },
-                                    {
-                                        frequency: "Monthly",
-                                        price: 175,
-                                        note: "2 Hours",
-                                        short: "monthly",
-                                    },
-                                    {
-                                        frequency: "Weekly",
-                                        price: 175,
-                                        note: "2 Hours",
-                                        short: "weekly"
-                                    },
-                                    {
-                                        frequency: "Bi-Weekly",
-                                        price: 175,
-                                        note: "2 Hours",
-                                        short: "biweekly"
+                    <div id="buttons" style="display:flex; flex-direction: column;">
+                        <script>
+                            function checkDates(frequencyChoice) {
+                                //implement conflict checking
+                                document.getElementById("calendar").style.display = "flex";
+                                // document.getElementById("label").style.position = "unset";
+                                document.getElementById("main").style.flexDirection = "unset";
+                                let buttons = document.getElementById("buttons").children;
+                                Array.from(buttons).forEach((button) => {
+                                    if (button.id !== frequencyChoice) {
+                                        button.style.display = "none";
                                     }
-                                ]
-                                let buttons = cleaningOptions.map((option) => {
-                                    return (
-                                        `<button class="buttonAdapt" id="${option.short}" onClick=checkDates("${option.short}")>
+                                });
+                                document.getElementById("label").innerText = "What Day?"
+                            }
+                            let cleaningOptions = [
+                                {
+                                    frequency: "One Cleaning",
+                                    price: 175,
+                                    note: "2 Hours",
+                                    short: "one",
+
+                                },
+                                {
+                                    frequency: "Monthly",
+                                    price: 175,
+                                    note: "2 Hours",
+                                    short: "monthly",
+                                },
+                                {
+                                    frequency: "Weekly",
+                                    price: 175,
+                                    note: "2 Hours",
+                                    short: "weekly"
+                                },
+                                {
+                                    frequency: "Bi-Weekly",
+                                    price: 175,
+                                    note: "2 Hours",
+                                    short: "biweekly"
+                                }
+                            ]
+                            let buttons = cleaningOptions.map((option) => {
+                                return (
+                                    `<button class="buttonAdapt" id="${option.short}" onClick=checkDates("${option.short}")>
                                     <div>
                                     <div style="display:flex;align-items: flex-start; flex-direction:column;margin-right:10vw; padding:5px">
                                         <div class="buttonItem">
@@ -82,16 +83,16 @@
                                     </div>
                                     </div>
                                 </button>`)
-                                })
-                                document.getElementById("buttons").innerHTML = buttons;
-                            </script>
-                        </div>
+                            })
+                            document.getElementById("buttons").innerHTML = buttons;
+                        </script>
                     </div>
                 </div>
-                <div id="calendar" style="display:none; width:unset">
-                </div>
+
             </div>
+            <div id="calendar" style="display:none; width:unset"></div>
         </div>
+    </div>
     </div>
     <script type='text/javascript' src='./calendar.js'></script>
     <script>
