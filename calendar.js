@@ -1,7 +1,15 @@
 function chooseTime(day, hour, parent){
+    triggerAnswer()
     //inject into parent
     console.log("heyo");
     console.log("He chose...  day: ", day, "hour: ", hour);
+}
+function triggerAnswer(){
+    let main = document.getElementById("main");
+    main.innerHTML = `<div><h1>This is where the client answers questions.</h1></div><div><button onClick="checkout()" >Proceed To Payment</button></div>`
+}
+function checkout(){
+    document.getElementById("squareContainer").style.display = "unset";
 }
 (function (global) {
     prepareAvailability();
@@ -26,7 +34,7 @@ function chooseTime(day, hour, parent){
         tr = document.createElement("tr");
         for (c = 0; c <= 6; c = c + 1) {
             td = document.createElement("td");
-            td.innerHTML = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"][c];
+            td.innerHTML = dayName.d[c];
             tr.appendChild(td);
         }
         table.appendChild(tr);
@@ -320,19 +328,12 @@ function chooseTime(day, hour, parent){
 
     function drawChooseHours(dayElement) {
         let day = dayElement.innerHTML;
-        let window =
-            `${day}<div style="display:flex;flex-direction:column;position:absolute">
-            <div>
-            <h4>
-                ${day}
-            </h4>
-            </div>
-            ${global.hoursAvailable[day].map(hour => {
-                return `<div id="${}"><p onClick="chooseTime(${day}, '${hour}', this)">${hour}</p></div>`
-            })}
-        </div>`;
-        console.log("day chosen", day)
-        dayElement.innerHTML = window;
+        let content = `<div class="buttonItem"><h4>${day}</h4></div>${global.hoursAvailable[day].map(hour => {
+            return `<div class="buttonItem"><p onClick="chooseTime(${day}, '${hour}', this)">${hour}</p></div>`
+        })}`;
+        console.log(content);
+        document.getElementById("hours").innerHTML = content;
+        document.getElementById("hoursWrapper").style.display = "block";
     }
 
     
