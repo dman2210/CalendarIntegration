@@ -10,6 +10,8 @@ function triggerAnswer(){
 }
 function checkout(){
     document.getElementById("squareContainer").style.display = "unset";
+    let main = document.getElementById("main");
+    main.innerHTML = "";
 }
 (function (global) {
     prepareAvailability();
