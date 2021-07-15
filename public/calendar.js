@@ -1,14 +1,75 @@
-function chooseTime(day, hour, parent){
+function chooseTime(day, hour, parent) {
     triggerAnswer()
     //inject into parent
     console.log("heyo");
     console.log("He chose...  day: ", day, "hour: ", hour);
 }
-function triggerAnswer(){
-    let main = document.getElementById("main");
-    main.innerHTML = `<div><h1>This is where the client answers questions.</h1></div><div><button onClick="checkout()" >Proceed To Payment</button></div>`
+function prepareCustomer(event, values) {
+    let customerDetails = {
+        givenName: values.first.value,
+        familyName: values.last.value,
+        emailAddress: values.email.value,
+        phoneNumber: values.phone.value,
+        address: values.address.value,
+    }
+    event.preventDefault();
+    document.customerDetails = customerDetails;
+    checkout();
 }
-function checkout(){
+function triggerAnswer() {
+    let main = document.getElementById("main");
+    let form =
+        `<form onsubmit="prepareCustomer(event, this)"> <div style="display:flex;justify-content: center;flex-direction: column;">
+        <h2>Customer Profile</h2>
+        <div style="display:flex;justify-content:space-between">
+            <div><h4>FIRST NAME</h4>
+            <input name="first" required class="textInput" type="text"></input>
+            </div>
+            <div>
+                <h4>LAST NAME</h4>
+            <input name="last" required class="textInput" type="text"></input>
+            </div>
+        </div>
+        <h4>PHONE</h4>
+        <input name="phone" required pattern=".*([0-9]{3}).*([0-9]{3}).*([0-9]{4}).*" 
+        oninvalid="this.setCustomValidity('Please match one of these formats: ##########,   ###-###-####,   (###) ###-####')" 
+        onvalid="this.setCustomValidity('')" 
+        class="textInput" 
+        type="tel"></input>
+        <h4>EMAIL</h4>
+        <input name="email" required pattern=".+@.+\.+." 
+        oninvalid="this.setCustomValidity('Please match one of these formats: ##########,   ###-###-####,   (###) ###-####')" 
+        onvalid="this.setCustomValidity('')"  class="textInput" type="email"></input>
+        <h4>ADDRESS</h4>
+        <input name="address" required class="textInput" type="text"></input>
+        <h4>Should a vacuum be brought to this session?</h4>
+        <div>
+            <input type="radio" id="vacuum" name="vacuumSel" value="true" required>
+                <label for="html">YES</label><br>
+                    <input type="radio" id="noVacuum" name="vacuumSel" value="false">
+                        <label for="css">NO</label><br>
+        </div>
+        <h4>Do you request gloves be worn during your session?</h4>
+        <div>
+            <input type="radio" id="gloves" name="gloveSel" value="true" required>
+                <label for="html">YES</label><br>
+                    <input type="radio" id="noGloves" name="gloveSel" value="false">
+                        <label for="css">NO</label><br>
+        </div>
+        <h4>Do you request that a mask be worn during your session?</h4>
+        <div>
+            <input type="radio" id="mask" name="maskSel" value="true" required>
+                <label for="html">YES</label><br>
+                    <input type="radio" id="noMask" name="maskSel" value="false">
+                        <label for="css">NO</label><br>
+        </div>
+        <h4>Parking instructions or other applicable information:</h4>
+        <textarea class="textInput" name="instructions"></textarea>
+        <input style="margin-top:5px" type="submit" value="Submit" type="submit"></input>
+    </div></form>`;
+    main.innerHTML = form;
+}
+function checkout() {
     document.getElementById("squareContainer").style.display = "unset";
     let main = document.getElementById("main");
     main.innerHTML = "";
@@ -326,7 +387,7 @@ function checkout(){
     onClick();
     global.dycalendar = dycalendar;
 
-    
+
 
     function drawChooseHours(dayElement) {
         let day = dayElement.innerHTML;
@@ -338,7 +399,7 @@ function checkout(){
         document.getElementById("hoursWrapper").style.display = "block";
     }
 
-    
+
 
     function prepareAvailability() {
         let hdate = new Date();
@@ -354,13 +415,6 @@ function checkout(){
         })
 
         global.hoursAvailable = retAvailability;
-        // let hoursAvailable = {};
-        // let holderDate = new Date();
-        // holderDate.setDate(0);
-        // [...Array(holderDate.getDate()).keys()].forEach((day)=>{
-        //     hoursAvailable[day] = ["1pm","2pm","3pm"]
-        // })
-        // global.hoursAvailable = hoursAvailable;
     }
 }(typeof window !== "undefined" ? window : this));
 

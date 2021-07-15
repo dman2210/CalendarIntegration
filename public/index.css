@@ -21,3 +21,6 @@ position: absolute;
 .hourContainer{
 color: black;
 }
+.textInput{
+    margin:5px;
+}
