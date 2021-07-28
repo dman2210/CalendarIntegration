@@ -10,6 +10,9 @@
 </head>
 
 <body>
+    <!-- <div id="loaderContainer" class="coverUp">
+        <div class="loader"></div>
+    </div> -->
     <div style="display:flex;align-items: center;justify-content: center;">
         <h1>
             Book Appointment
@@ -37,7 +40,7 @@
                     <div id="buttons" style="display:flex; flex-direction: column;">
                         <script>
                             function checkDates(frequencyChoice) {
-                                document.subOptions = {frequency:frequencyChoice};
+                                document.subOptions = { frequency: frequencyChoice };
                                 //implement conflict checking
                                 document.getElementById("calendar").style.display = "flex";
                                 // document.getElementById("label").style.position = "unset";
@@ -49,6 +52,8 @@
                                     }
                                 });
                                 document.getElementById("label").innerText = "What Day?"
+                                history.pushState({ page: "calendaropened", busyHours: hoursBusy }, "", "");
+                                hoursAvailable = filterByFrequency(frequencyChoice);
                             }
                             let cleaningOptions = [
                                 {
@@ -110,16 +115,9 @@
     </div>
     <script type='text/javascript' src='./calendar.js'></script>
     <script>
-        dycalendar.draw({
-            target: '#calendar',
-            type: 'month',
-            dayformat: 'full',
-            monthformat: 'full',
-            highlighttargetdate: true,
-            prevnextbutton: 'show'
-
-        })
+        history.pushState({ page: "original" }, "", "")
     </script>
+    <script type='text/javascript' src='./state.js'></script>
 </body>
 
 </html>

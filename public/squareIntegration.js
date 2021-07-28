@@ -1,4 +1,5 @@
-var subURL = 'https://calendar-integration-backend.vercel.app/api/subscribe';
+// var subURL = 'https://calendar-integration-backend.vercel.app/api/subscribe';
+var subURL = "http://localhost:3000/api/subscribe";
 const appId = 'sandbox-sq0idb-k47NFyfiTnNf1wkfFcHAvg';
 const locationId = 'LXSNHMQ7X5J6G';
 
@@ -11,21 +12,21 @@ async function initializeCard(payments) {
 
 async function finishTransaction(token) {
     console.log('running transaction...');
-    let body = JSON.stringify({customerDetails:document.customerDetails, token:token, subOptions: document.subOptions,});
+    let body = JSON.stringify({ customerDetails: document.customerDetails, token: token, subOptions: document.subOptions, });
     console.log(body);
     const subscriptionResponse = await fetch(subURL, {
-        method:'POST',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body,
     });
     console.log(subscriptionResponse);
-    if(subscriptionResponse.ok){
+    if (subscriptionResponse.ok) {
         return true;
-    }else{
-        console.log("error! customer response: "+subscriptionResponse);
-        return "error! customer response: "+subscriptionResponse;
+    } else {
+        console.log("error! subscription response: " + JSON.stringify(subscriptionResponse));
+        return "error! subscription response: " + JSON.stringify(subscriptionResponse);
     }
 
 
@@ -103,17 +104,17 @@ async function runSquare() {
             console.log("sending request...");
             main.innerHTML = "Setting up cleaning...;"
             const paymentResults = await finishTransaction(token);
-            if(paymentResults===true){
+            if (paymentResults === true) {
                 console.log("request success");
                 displayPaymentResults('SUCCESS');
                 main.innerHTML = `<h1>Payment success!! Receipt has been emailed with scheduling info.</h1>`;
-            }else{
+            } else {
                 console.log("request error");
-            displayPaymentResults('ERROR');
-            
-            main.innerHTML = `<h1>There was an error</h1>`;
+                displayPaymentResults('ERROR');
+
+                main.innerHTML = `<h1>There was an error</h1>`;
             }
-            
+
         } catch (e) {
             cardButton.disabled = false;
             displayPaymentResults('FAILURE');
@@ -126,3 +127,65 @@ async function runSquare() {
         await handlePaymentMethodSubmission(event, card);
     });
 };
+
+//this is a big nasty one. refactor if you can. email me at dman2210@gmail.com
+function filterByFrequency(frequency) {
+    if (frequency !== "one") {
+        let newHoursAvailable = JSON.parse(JSON.stringify(hoursAvailable));
+        let frequencyMap = {
+            daily: 1,
+            monthly: 28,
+            weekly: 7,
+            biweekly: 14,
+
+        }
+        let step = frequencyMap[frequency].step;
+        let activeDay = new Date();
+        let eoyear = false;
+        // console.log(activeDay.getMonth(), hoursAvailable[activeDay.getMonth()])
+        let first = Number(Object.keys(hoursAvailable[activeDay.getMonth()])[0]) + 1;
+        // console.log(Math.min(Object.keys(hoursAvailable[activeDay.getMonth()]).map((day)=>{return Number(day)})))
+        console.log(Object.keys(hoursAvailable[activeDay.getMonth()]))
+        console.log("hours: ", hoursAvailable[activeDay.getMonth()])
+        console.log("active day 1", activeDay.getDate());
+        console.log("first", first);
+        activeDay.setDate(first);
+        console.log("active day 2", activeDay.getDate());
+        let available;
+        for (let i = 0; i < step; i++) {
+            activeDay.setDate(activeDay.getDate() + i)
+            console.log(activeDay.getMonth());
+            console.log("active day 3", activeDay.getDate());
+            console.log(hoursAvailable[activeDay.getMonth()]);
+            console.log(hoursAvailable[activeDay.getMonth()][activeDay.getDate()]);
+            //get the hours for the first available 
+            available = hoursAvailable[activeDay.getMonth()][activeDay.getDate()];
+            let newDate = new Date(activeDay.getTime());
+            while (eoyear == false) {
+                let day = hoursAvailable[newDate.getMonth()][newDate.getDate()];
+                available.forEach(
+                    (time, index) => {
+                        if (!day.includes(time)) {
+                            //deletes current item
+                            available.splice(index, 1);
+                        }
+
+                    }
+                )
+                //set future
+                newHoursAvailable[newDate.getMonth()][newDate.getDate()] = available;
+                //step
+                newDate.setDate(newDate.getDate() + step);
+                //check for eoyear
+                if (newDate.getMonth() === activeDay.getMonth() && newDate.getFullYear() !== activeDay.getFullYear()) {
+                    eoyear = true;
+                }
+            }
+            //set active date
+            newHoursAvailable[activeDay.getMonth()][activeDay.getDate()] = available;
+        }
+        return newHoursAvailable;
+    } else {
+        return hoursAvailable;
+    }
+}

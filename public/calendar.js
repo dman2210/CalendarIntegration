@@ -1,8 +1,19 @@
-function chooseTime(day, hour, parent) {
+// let appointmentsURL = "https://calendar-integration-backend.vercel.app/api/listAppointments"
+let appointmentsURL = "http://localhost:3000/api/appointments";
+function chooseTime(day, time, parent) {
     triggerAnswer()
     //inject into parent
+    let date = new Date();
+    date.setMonth(monthName.indexOf(document.getElementsByClassName("dycalendar-span-month-year")[0].innerHTML));
+    date.setDate(day);
+    let timePieces = time.split(":");
+    let lastPieces = timePieces[1].split(" ");
+    date.setHours(lastPieces[1] === "AM" ? timePieces[0] : timePieces[0] + 12);
+    date.setMinutes(lastPieces[0]);
+    let formattedTime = date.toISOString();
+    document.subOptions.start = formattedTime;
     console.log("heyo");
-    console.log("He chose...  day: ", day, "hour: ", hour);
+    console.log("He chose...  day: ", day, "time: ", time);
 }
 function prepareCustomer(event, values) {
     let customerDetails = {
@@ -74,8 +85,9 @@ function checkout() {
     let main = document.getElementById("main");
     main.innerHTML = "";
 }
-(function (global) {
-    prepareAvailability();
+(async function (global) {
+    global.calendarLoaded = false;
+    await prepareAvailability();
     "use strict";
     var dycalendar = {}
         , document = global.document
@@ -91,6 +103,16 @@ function checkout() {
             dd: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
             ddd: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
         };
+    const formatTime = (date) => {
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        let ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        let strTime = hours + ':' + minutes + ' ' + ampm;
+        return strTime;
+    };
     function createMonthTable(data, option) {
         var table, tr, td, r, c, count;
         table = document.createElement("table");
@@ -133,7 +155,7 @@ function checkout() {
                 }
                 td = document.createElement('td');
                 td.innerHTML = count;
-                td.onClick = () => { console.log("hello there. this day is ", count); }
+                // td.onClick = () => { console.log("hello there. this day is ", count); }
                 if (data.today.date === count && data.today.monthIndex === data.monthIndex && option.highlighttoday === true) {
                     td.setAttribute("class", "dycalendar-today-date");
                 }
@@ -386,36 +408,149 @@ function checkout() {
     }
     onClick();
     global.dycalendar = dycalendar;
-
-
+    global.calendarLoaded = true;
+    dycalendar.draw({
+        target: '#calendar',
+        type: 'month',
+        dayformat: 'full',
+        monthformat: 'full',
+        highlighttargetdate: true,
+        prevnextbutton: 'show'
+    })
+    // document.getElementById("loaderContainer").style.display = "none";
 
     function drawChooseHours(dayElement) {
         let day = dayElement.innerHTML;
-        let content = `<div class="buttonItem"><h4>${day}</h4></div>${global.hoursAvailable[day].map(hour => {
-            return `<div class="buttonItem"><p onClick="chooseTime(${day}, '${hour}', this)">${hour}</p></div>`
-        })}`;
-        console.log(content);
-        document.getElementById("hours").innerHTML = content;
-        document.getElementById("hoursWrapper").style.display = "block";
+        let month = monthName.indexOf(document.getElementsByClassName("dycalendar-span-month-year")[0].innerHTML);
+        console.log("month", month);
+        let dayBusy = global.hoursBusy[month][day];
+        //walk through each half. check for all day then to end of day
+        //check each half hour , add html for it.
+        let bod = new Date();
+        let eod = new Date();
+        eod.setMonth(month);
+        bod.setMonth(month);
+        eod.setDate(day);
+        bod.setDate(day);
+        eod.setHours(22);
+        eod.setMinutes(59);
+        eod.setSeconds(0)
+        eod.setMilliseconds(0);
+        bod.setHours(0);
+        bod.setMinutes(2);
+        let dayAvailability = [];
+        let dateSetter = new Date(bod);
+        dateSetter.setMilliseconds(0);
+        dateSetter.setMinutes(0);
+        dateSetter.setSeconds(0);
+        while (dateSetter.getDate() === day) {
+            let eoappt = new Date()
+            eoappt.setHours(eoappt.getHours() + 2);
+            let busyBlock = {};
+            busyBlock.conflict = false;
+            dayBusy.forEach(
+                (busy, index) => {
+                    //check if beginning of appt is in busy and two hours later.
+                    //busy needs to be reparsed as object?
+                    if (dateSetter.getDate() === busy.start.getDate()) {
+                        //current and end is earlier than start of busy
+                        if (!(dateSetter < busy.start && eoappt < busy.start)) {
+                            busyBlock.index = index;
+                            busyBlock.conflict = true;
+                        }
+                    }
+                }
+            )
+            if (!busyBlock.conflict) {
+                //insert
+                dayAvailability.push(formatTime(dateSetter));
+                //increment
+                dateSetter.setMinutes(dayAvailability.getMinutes() + 30);
+            } else {
+                //set to end of conflict
+                dateSetter.setTime(busy[busyBlock.index].getTime());
+            }
+
+        }
+        if (dayAvailability.length > 0) {
+            let content = `<div class="buttonItem"><h4>${day}</h4></div>${dayAvailability.map(hour => {
+                return `<div class="buttonItem"><p onClick="chooseTime(${day}, '${hour}', this)">${hour}</p></div>`
+            })}`;
+            console.log(content);
+            document.getElementById("hours").innerHTML = content;
+            document.getElementById("hoursWrapper").style.display = "block";
+        }
     }
 
+    async function prepareAvailability() {
 
-
-    function prepareAvailability() {
-        let hdate = new Date();
-        let retAvailability = {}
-        let currentMonth = hdate.getMonth();
-        //todo implement google calendar
-        retAvailability[hdate.getDate()] = ["1pm", "2pm", "3pm"];
-        [0, 1, 2, 3].forEach((week) => {
-            hdate.setDate(hdate.getDate() + (7 * week))
-            if (hdate.getMonth === currentMonth) {
-                retAvailability[hdate.getDate()] = ["1pm", "2pm", "3pm"];
+        let promises = [];
+        let start = new Date();
+        let original = new Date();
+        let end = new Date();
+        end.setMonth(end.getMonth() + 2);
+        let eoy = false;
+        while (eoy === false) {
+            console.log("dates: ",start, end);
+            promises.push(await fetch(appointmentsURL + "?start=" + encodeURIComponent(start.toISOString()) + "&end=" + encodeURIComponent(end.toISOString())));
+            start.setMonth(start.getMonth() + 2);
+            end.setMonth(start.getMonth() + 2)
+            if (end.getMonth() === original.getMonth() && start.getFullYear() !== original.getMonth()) {
+                eoy = true;
             }
-        })
+        }
+        console.log("resolving...")
+        await Promise.resolve(promises).then((arrayOfBusies) => {
+            let hoursBusy = [];
+            for (let i = 0; i < 12; i++) {
+                let month = {}
+                hoursBusy.push(month);
+            }
+            arrayOfBusies.forEach(
+                
+                (busy) => {
+                    busy = busy.body;
+                    console.log(busy);
+                    busy.forEach(
+                        (block, index) => {
+                            console.log("index: ", index)
+                            let startDate = new Date(block.start);
+                            let endDate = new Date(block.end);
+                            console.log("month", startDate.getMonth())
+                            let blockObject = { start: startDate, end: endDate }
+                            //pushes on to the relevant day of the relevant month.
+                            if (!hoursBusy[startDate.getMonth()][startDate.getDate()]) {
+                                console.log("not in array yet. adding")
+                                hoursBusy[startDate.getMonth()][startDate.getDate()] = [blockObject];
+                            } else {
+                                console.log("day already in. adding")
+                                hoursBusy[startDate.getMonth()][startDate.getDate()].push(blockObject)
+                            }
+                            //push the object onto any additional day in a multi day busy
+                            if (startDate.getDate() !== endDate.getDate()) {
+                                let inbet = new Date(startDate.getTime());
+                                while (inbet.getDate() !== endDate.getDate()) {
+                                    console.log("multi day. current month:", inbet.getMonth(), "current day", inbet.getDate())
+                                    inbet.setDate(inbet.getDate() + 1)
+                                    console.log("new month", inbet.getMonth(), "current day", inbet.getDate())
+                                    if (!hoursBusy[inbet.getMonth()][inbet.getDate()]) {
+                                        hoursBusy[inbet.getMonth()][inbet.getDate()] = [blockObject];
+                                    } else {
+                                        hoursBusy[inbet.getMonth()][inbet.getDate()].push(blockObject)
+                                    }
 
-        global.hoursAvailable = retAvailability;
+                                }
+                            }
+
+                        }
+                    );
+                }
+            );
+            global.hoursBusy = hoursBusy
+        });
+        console.log("all done.", global.hoursBusy);
     }
 }(typeof window !== "undefined" ? window : this));
+
 
 
