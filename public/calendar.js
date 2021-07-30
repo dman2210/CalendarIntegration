@@ -1,5 +1,5 @@
-// let appointmentsURL = "https://calendar-integration-backend.vercel.app/api/listAppointments"
-let appointmentsURL = "http://localhost:3000/api/appointments";
+let appointmentsURL = "https://calendar-integration-backend.vercel.app/api/appointments"
+// let appointmentsURL = "http://localhost:3000/api/appointments";
 function chooseTime(day, time, parent) {
     triggerAnswer()
     //inject into parent
@@ -87,7 +87,8 @@ function checkout() {
 }
 (async function (global) {
     global.calendarLoaded = false;
-    await prepareAvailability();
+    global.hoursBusyResolved = false;
+    prepareAvailability().then((times)=>{global.hoursBusy = times});
     "use strict";
     var dycalendar = {}
         , document = global.document
@@ -419,7 +420,10 @@ function checkout() {
     })
     // document.getElementById("loaderContainer").style.display = "none";
 
+
+    //run on click of day
     function drawChooseHours(dayElement) {
+        //need to make sure we look through the whole year
         let day = dayElement.innerHTML;
         let month = monthName.indexOf(document.getElementsByClassName("dycalendar-span-month-year")[0].innerHTML);
         console.log("month", month);
@@ -472,6 +476,7 @@ function checkout() {
             }
 
         }
+        //recheck according to frequency
         if (dayAvailability.length > 0) {
             let content = `<div class="buttonItem"><h4>${day}</h4></div>${dayAvailability.map(hour => {
                 return `<div class="buttonItem"><p onClick="chooseTime(${day}, '${hour}', this)">${hour}</p></div>`
@@ -482,8 +487,9 @@ function checkout() {
         }
     }
 
+//run on page load
     async function prepareAvailability() {
-
+        console.log("start", performance.now());
         let promises = [];
         let start = new Date();
         let original = new Date();
@@ -491,7 +497,7 @@ function checkout() {
         end.setMonth(end.getMonth() + 2);
         let eoy = false;
         while (eoy === false) {
-            console.log("dates: ",start, end);
+            // console.log("dates: ", start, end);
             promises.push(await fetch(appointmentsURL + "?start=" + encodeURIComponent(start.toISOString()) + "&end=" + encodeURIComponent(end.toISOString())));
             start.setMonth(start.getMonth() + 2);
             end.setMonth(start.getMonth() + 2)
@@ -499,56 +505,67 @@ function checkout() {
                 eoy = true;
             }
         }
-        console.log("resolving...")
-        await Promise.resolve(promises).then((arrayOfBusies) => {
-            let hoursBusy = [];
-            for (let i = 0; i < 12; i++) {
-                let month = {}
-                hoursBusy.push(month);
-            }
-            arrayOfBusies.forEach(
-                
-                (busy) => {
-                    busy = busy.body;
-                    console.log(busy);
-                    busy.forEach(
-                        (block, index) => {
-                            console.log("index: ", index)
-                            let startDate = new Date(block.start);
-                            let endDate = new Date(block.end);
-                            console.log("month", startDate.getMonth())
-                            let blockObject = { start: startDate, end: endDate }
-                            //pushes on to the relevant day of the relevant month.
-                            if (!hoursBusy[startDate.getMonth()][startDate.getDate()]) {
-                                console.log("not in array yet. adding")
-                                hoursBusy[startDate.getMonth()][startDate.getDate()] = [blockObject];
-                            } else {
-                                console.log("day already in. adding")
-                                hoursBusy[startDate.getMonth()][startDate.getDate()].push(blockObject)
-                            }
-                            //push the object onto any additional day in a multi day busy
-                            if (startDate.getDate() !== endDate.getDate()) {
-                                let inbet = new Date(startDate.getTime());
-                                while (inbet.getDate() !== endDate.getDate()) {
-                                    console.log("multi day. current month:", inbet.getMonth(), "current day", inbet.getDate())
-                                    inbet.setDate(inbet.getDate() + 1)
-                                    console.log("new month", inbet.getMonth(), "current day", inbet.getDate())
-                                    if (!hoursBusy[inbet.getMonth()][inbet.getDate()]) {
-                                        hoursBusy[inbet.getMonth()][inbet.getDate()] = [blockObject];
-                                    } else {
-                                        hoursBusy[inbet.getMonth()][inbet.getDate()].push(blockObject)
-                                    }
-
-                                }
-                            }
-
+        //last month's call
+        end.setDate(end.getDate()-1);
+        promises.push(await fetch(appointmentsURL + "?start=" + encodeURIComponent(start.toISOString()) + "&end=" + encodeURIComponent(end.toISOString())));
+        // console.log("resolving...")
+        let arrayOfResponses = await Promise.resolve(promises);
+        let arrayOfBusies = [];
+        //extract the data from the responses
+        for (let i = 0; i < arrayOfResponses.length; i++) {
+            arrayOfBusies.push(await arrayOfResponses[i].json().then((json) => {
+                //get the relevant busy array
+                return json.data.calendars[Object.keys(json.data.calendars)[0]].busy;
+            }));
+        }
+        //set up array for the finish
+        let hoursBusy = [];
+        for (let i = 0; i < 12; i++) {
+            let month = {}
+            hoursBusy.push(month);
+        }
+        arrayOfBusies.forEach(
+            (busy) => {
+                // console.log(busy);
+                busy.forEach(
+                    (block, index) => {
+                        // console.log("index: ", index)
+                        let startDate = new Date(block.start);
+                        let endDate = new Date(block.end);
+                        // console.log("month", startDate.getMonth())
+                        let blockObject = { start: startDate, end: endDate }
+                        //pushes on to the relevant day of the relevant month.
+                        if (!hoursBusy[startDate.getMonth()][startDate.getDate()]) {
+                            // console.log("not in array yet. adding")
+                            hoursBusy[startDate.getMonth()][startDate.getDate()] = [blockObject];
+                        } else {
+                            // console.log("day already in. adding")
+                            hoursBusy[startDate.getMonth()][startDate.getDate()].push(blockObject)
                         }
-                    );
-                }
-            );
-            global.hoursBusy = hoursBusy
-        });
-        console.log("all done.", global.hoursBusy);
+                        //push the object onto any additional day in a multi day busy
+                        if (startDate.getDate() !== endDate.getDate()) {
+                            let inbet = new Date(startDate.getTime());
+                            while (inbet.getDate() !== endDate.getDate()) {
+                                // console.log("multi day. current month:", inbet.getMonth(), "current day", inbet.getDate())
+                                inbet.setDate(inbet.getDate() + 1)
+                                // console.log("new month", inbet.getMonth(), "current day", inbet.getDate())
+                                if (!hoursBusy[inbet.getMonth()][inbet.getDate()]) {
+                                    hoursBusy[inbet.getMonth()][inbet.getDate()] = [blockObject];
+                                } else {
+                                    hoursBusy[inbet.getMonth()][inbet.getDate()].push(blockObject)
+                                }
+
+                            }
+                        }
+
+                    }
+                );
+            }
+        );
+        console.log("end", performance.now())
+        global.hoursBusyResolved = true;
+        return hoursBusy;
+        // console.log("all done.", global.hoursBusy);
     }
 }(typeof window !== "undefined" ? window : this));
 
