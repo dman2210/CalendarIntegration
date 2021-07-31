@@ -1,7 +1,26 @@
+.title{
+  margin-bottom: 1vh;
+}
+h2{
+  font-size: 1.57em;
+}
+h3{
+  font-size: 1.17em;
+}
+
+h4{
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
 .label {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+.buttonItemContainer {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
 }
 .buttonAdapt:hover {
   border: 1px solid rgba(255, 0, 208, 0.87);
