@@ -1,5 +1,5 @@
 .title{
-  margin-bottom: 1vh;
+  margin-bottom: 2vh;
 }
 h2{
   font-size: 1.57em;
@@ -50,7 +50,7 @@ h4{
   margin-top: 2.8vh;
 }
 .buttonItem {
-  margin: 1vh;
+  margin: 0.5vh;
   font-size: 1rem;
 }
 .hour {
@@ -125,8 +125,14 @@ h4{
   }
   .buttonsContainer {
     width: 100%;
+    flex-basis: unset;
+    max-width: unset;
   }
   .serviceTitle {
     font-size: 1rem;
+  }
+  .buttonAdapt{
+padding-top: 1vh;
+padding-bottom: 1vh;
   }
 }
