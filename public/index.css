@@ -22,7 +22,7 @@
   font-style: normal;
   letter-spacing: 0.11em;
   line-height: 1.1em;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
 
   padding-top: 1.8vh;
   padding-bottom: 1.8vh;
@@ -90,7 +90,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 .navButton {
   font-family: poppins, sans-serif;
@@ -104,10 +104,10 @@
   .label {
     display: none;
   }
-  .buttonsContainer{
-    width:100%
+  .buttonsContainer {
+    width: 100%;
   }
-  .serviceTitle{
+  .serviceTitle {
     font-size: 1rem;
   }
 }

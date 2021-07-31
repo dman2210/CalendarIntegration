@@ -88,7 +88,8 @@ function checkout() {
 (async function (global) {
     global.calendarLoaded = false;
     global.hoursBusyResolved = false;
-    prepareAvailability().then((times)=>{global.hoursBusy = times});
+    global.hoursBusy = prepareAvailability();
+    prepareAvailability().then((times) => { global.hoursBusy = times });
     "use strict";
     var dycalendar = {}
         , document = global.document
@@ -487,36 +488,14 @@ function checkout() {
         }
     }
 
-//run on page load
+    //run on page load
     async function prepareAvailability() {
-        console.log("start", performance.now());
-        let promises = [];
         let start = new Date();
-        let original = new Date();
-        let end = new Date();
-        end.setMonth(end.getMonth() + 2);
-        let eoy = false;
-        while (eoy === false) {
-            // console.log("dates: ", start, end);
-            promises.push(await fetch(appointmentsURL + "?start=" + encodeURIComponent(start.toISOString()) + "&end=" + encodeURIComponent(end.toISOString())));
-            start.setMonth(start.getMonth() + 2);
-            end.setMonth(start.getMonth() + 2)
-            if (end.getMonth() === original.getMonth() && start.getFullYear() !== original.getMonth()) {
-                eoy = true;
-            }
-        }
-        //last month's call
-        end.setDate(end.getDate()-1);
-        promises.push(await fetch(appointmentsURL + "?start=" + encodeURIComponent(start.toISOString()) + "&end=" + encodeURIComponent(end.toISOString())));
-        // console.log("resolving...")
-        let arrayOfResponses = await Promise.resolve(promises);
+        let arrayOfResponses = await fetch(appointmentsURL + "?all=true&start=" + encodeURIComponent(start.toISOString())).then(async (response)=>{return await response.json()})
         let arrayOfBusies = [];
         //extract the data from the responses
         for (let i = 0; i < arrayOfResponses.length; i++) {
-            arrayOfBusies.push(await arrayOfResponses[i].json().then((json) => {
-                //get the relevant busy array
-                return json.data.calendars[Object.keys(json.data.calendars)[0]].busy;
-            }));
+            arrayOfBusies.push(arrayOfResponses[i].data.calendars[Object.keys(arrayOfResponses[i].data.calendars)[0]].busy);
         }
         //set up array for the finish
         let hoursBusy = [];
