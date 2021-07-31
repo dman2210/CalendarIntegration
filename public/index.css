@@ -135,4 +135,7 @@ h4{
 padding-top: 1vh;
 padding-bottom: 1vh;
   }
+  #background{
+    margin-top:-10px
+  }
 }
