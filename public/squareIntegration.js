@@ -127,9 +127,8 @@ async function runSquare() {
         await handlePaymentMethodSubmission(event, card);
     });
 };
+
 var busyDaysByFrequency;
-// var disabledDays;
-//this is a big nasty one. refactor if you can. email me at dman2210@gmail.com
 function filterByFrequency(frequency) {
     if (frequency === "one") {
         // disableDays();

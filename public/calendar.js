@@ -420,6 +420,135 @@ function checkout() {
         prevnextbutton: 'show'
     })
     // document.getElementById("loaderContainer").style.display = "none";
+    var bookedDays = [];
+    //greys out the days in a month that are booked up according to the frequency that the client chose.
+    function disableBookedDays(month) {
+        bookedDays[month] = [];
+        let bod = new Date();
+        let eod = new Date();
+        eod.setMonth(month);
+        eod.setMonth(eod.getMonth() + 1);
+        eod.setDate(0);
+        let daysInMonth = eod.getDate();
+
+        boa.setMonth(month);
+        boa.setDate(1);
+        boa.setHours(0);
+        boa.setMinutes(2);
+        eod.setMonth(month);
+        eod.setDate(1);
+        eod.setHours(2);
+        eod.setMinutes(0);
+        eod.setSeconds(0)
+        eod.setMilliseconds(0);
+
+        busyDaysByFrequency[month].forEach(
+            (unsortedDay, index) => {
+                let day = cleanDay(unsortedDay);
+                let dayBooked = true;
+                bod.setDate(index);
+                eod.setDate(index);
+                //for each appointment
+                for (let i = 0; i < day.length; i++) {
+                    let appt = day[i];
+                    if (appt !== undefined) {
+                        //if the 
+                        //if start of window is before busy
+                        if (appt.start < bod) {
+                            if (appt.end > eod) {
+                                break;
+                            }
+                            bod.setHours(appt.end.getHours());
+                            for (let j = i + 1; j < day.length; j++) {
+                                //check undefined, null, and if the next appt starts later than the day just in case
+                                if (day[j] !== undefined && day[j] != null && day[j].start.getDate() === bod.getDate()) {
+                                    eod.setHours(day[j].start);
+                                    let difference = (eod.getHours() + eod.getMinutes() / 60) - (bod.getHours() + bod.getMinutes() / 60);
+                                    if (difference >= 2) {
+                                        dayBooked = false;
+                                        break;
+                                    }
+                                } else {
+                                    //earlier appts did not cover all day
+                                    dayBooked = false;
+                                    break;
+                                }
+
+                            }
+
+                        } else {
+                            if (appt.start.getDate() === bod.getDate()) {
+                                if ((appt.getHours() + appt.getMinutes() / 60) - (bod.getHours() + bod.getMinutes() / 60) >= 2) {
+                                    dayBooked = false;
+                                } else {
+                                    bod.setHours(appt.end.getHours());
+                                    for (let j = i + 1; j < day.length; j++) {
+                                        //check undefined, null, and if the next appt starts later than the day just in case
+                                        if (day[j] !== undefined && day[j] != null && day[j].start.getDate() === bod.getDate()) {
+                                            eod.setHours(day[j].start);
+                                            let difference = (eod.getHours() + eod.getMinutes() / 60) - (bod.getHours() + bod.getMinutes() / 60);
+                                            if (difference >= 2) {
+                                                dayBooked = false;
+                                                break;
+                                            }
+                                        } else {
+                                            //earlier appts did not cover all day
+                                            dayBooked = false;
+                                            break;
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (dayBooked) {
+                    bookedDays[month][index] = true;
+                }
+            }
+        )
+    }
+
+    function cleanDay(day) {
+        day.forEach(
+            (time) => {
+                if (time !== undefined && time !== null) {
+                    day.forEach(
+                        (checkTime) => {
+                            if (checkTime !== undefined && time !== null) {
+                                if (relativeSame(time, checkTime)) {
+                                    //remove checkTime
+                                    checkTime = null;
+                                }
+                            }
+                        }
+                    )
+                }
+
+            }
+        )
+        let retDay = day.filter(x => x !== null);
+        return retDay.sort(relativeSort);
+    }
+
+
+    //pass in the starts of the dates
+    function relativeSort(first, second) {
+        // >0 second before first
+        //<=0 first before second
+        let firstNum = first.getDay() * 70 + first.getHours() + first.getMinutes() / 60;
+        let secondNum = second.getDay() * 70 + second.getHours() + second.getMinutes() / 60
+        return firstNum - secondNum;
+    }
+
+    function relativeSame(first, second) {
+        if (first.start.getDay() === second.start.getDay()) {
+            return (first.end.getTime() - first.start.getTime() === second.end.getTime() - second.start.getTime());
+        }
+        return false;
+    }
+
 
 
     //run on click of day
@@ -491,7 +620,7 @@ function checkout() {
     //run on page load
     async function prepareAvailability() {
         let start = new Date();
-        let arrayOfResponses = await fetch(appointmentsURL + "?all=true&start=" + encodeURIComponent(start.toISOString())).then(async (response)=>{return await response.json()})
+        let arrayOfResponses = await fetch(appointmentsURL + "?all=true&start=" + encodeURIComponent(start.toISOString())).then(async (response) => { return await response.json() })
         let arrayOfBusies = [];
         //extract the data from the responses
         for (let i = 0; i < arrayOfResponses.length; i++) {
@@ -541,7 +670,7 @@ function checkout() {
                 );
             }
         );
-        console.log("end", performance.now())
+        // console.log("end", performance.now())
         global.hoursBusyResolved = true;
         return hoursBusy;
         // console.log("all done.", global.hoursBusy);

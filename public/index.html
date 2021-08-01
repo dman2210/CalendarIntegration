@@ -18,7 +18,6 @@
             </form>
             <div id="payment-status-container"></div>
         </div>
-        <script type="text/javascript" src="/squareIntegration.js"></script>
         <div id="main" style="display:flex;justify-content: center;flex-direction: column;">
             <div class="content">
                 <div id="label" class="label">
@@ -42,7 +41,6 @@
 
 
                 <div class="buttonsContainer">
-                    <h2 id="title" class="title">Select a service</h4>
                         <div id="buttons" style="display:flex; flex-direction: column;width:100%">
                             <button class="buttonAdapt" id="one" style="margin-top:0px"
                                 onclick="goTo('calendar', {frequency:'one'})">
@@ -61,7 +59,7 @@
                                     </div>
                                 </div>
                             </button>
-                            <h3 style="margin-top: 2vh;">Loyal Clients Discount (Recurring Plan)</h3>
+                            <h4 style="margin-top: 2vh;">Loyal Clients Discount (Recurring Plans):</h4>
                             <button class="buttonAdapt" id="weekly" onclick="goTo('calendar', {frequency:'weekly'})">
                                 <div>
                                     <div class="buttonItemContainer">
@@ -72,10 +70,7 @@
                                         </div>
                                         <div class="buttonItem">
                                             <p>
-                                                $175.00
-                                            </p>
-                                            <p>
-                                                per week
+                                                $175.00 per week
                                             </p>
                                         </div>
                                     </div>
@@ -91,10 +86,7 @@
                                         </div>
                                         <div class="buttonItem">
                                             <p>
-                                                $175.00
-                                            </p>
-                                            <p>
-                                                every 2 weeks
+                                                $175.00 every 2 weeks
                                             </p>
                                         </div>
                                     </div>
@@ -110,10 +102,7 @@
                                         </div>
                                         <div class="buttonItem">
                                             <p>
-                                                $175.00
-                                            </p>
-                                            <p>
-                                                per Month
+                                                $175.00 per Month
                                             </p>
                                         </div>
                                     </div>
@@ -135,6 +124,7 @@
 " class="buttonAdapt navButton">Back</button>
             </div>
         </div>
+        <script type="text/javascript" src="/squareIntegration.js"></script>
         <script type='text/javascript' src='./calendar.js'></script>
         <script>
             history.pushState({ page: "original" }, "", "")
