@@ -137,7 +137,8 @@ h4{
     max-width: unset;
   }
   .serviceTitle {
-    font-size: 1rem;
+    font-size: 14px;
+    font-weight: 700;
   }
   .buttonAdapt{
 padding-top: 1vh;
@@ -146,5 +147,9 @@ margin-top:2vh;
   }
   #background{
     margin-top:-10px
+  }
+  .buttonItem{
+    font-size: 14px;
+    font-weight: 400;
   }
 }

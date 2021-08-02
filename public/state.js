@@ -18,12 +18,13 @@ function checkDates(frequencyChoice) {
     document.subOptions = { frequency: frequencyChoice };
     //implement conflict checking
     document.getElementById("calendar").style.display = "flex";
-    let title = document.getElementById('title').cloneNode(true);
+    // let title = document.getElementById('title').cloneNode(true);
     document.getElementsByClassName("buttonsContainer")[0].style.display = "none";
 
     // history.pushState({ page: "calendaropened", busyHours: hoursBusy }, "", "");
     waitForHours().then(() => {
         filterByFrequency(frequencyChoice);
+        disableBookedDays((new Date()).getMonth());
         hideLoader();
     });
 }
