@@ -36,7 +36,7 @@
 .dycalendar-month-container {
     padding: 10px;
     text-align: center;
-    font-family: Arial
+    font-family: "Petit Formal Script", cursive;
 }
 
 .dycalendar-month-container div {
@@ -72,7 +72,7 @@
 }
 
 .dycalendar-month-container .dycalendar-today-date,.dycalendar-month-container .dycalendar-target-date {
-    background-color: #111;
+    background-color: #9c00f7;
     color: #fff;
     border-radius: 2px
 }

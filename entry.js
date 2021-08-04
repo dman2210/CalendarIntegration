@@ -9,6 +9,6 @@ var options = {
     cert: fs.readFileSync('cert.pem')
   };
   app.use(express.static(__dirname + '/public'));
-  http.createServer(app).listen(80);
-  https.createServer(options, app).listen(443);
+  http.createServer(app).listen(8080);
+  https.createServer(options, app).listen(4433);
   console.log("server running")

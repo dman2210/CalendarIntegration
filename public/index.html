@@ -41,79 +41,103 @@
 
 
                 <div class="buttonsContainer">
-                        <div id="buttons" style="display:flex; flex-direction: column;width:100%">
-                            <button class="buttonAdapt" id="one" style="margin-top:0px"
-                                onclick="goTo('calendar', {frequency:'one'})">
-                                <div>
-                                    <div class="buttonItemContainer">
-                                        <div class="buttonItem serviceTitle">
-                                            <h4 style="display:flex">
-                                                One-Time Cleaning (2 Hours)
-                                            </h4>
-                                        </div>
-                                        <div class="buttonItem">
-                                            <p>
-                                                2 hours @ $175.00
-                                            </p>
-                                        </div>
+                    <div id="buttons" style="display:flex; flex-direction: column;width:100%">
+                        <button class="buttonAdapt" id="one" style="margin-top:0px"
+                            onclick="goTo('calendar', {frequency:'one'})">
+                            <div>
+                                <div class="buttonItemContainer">
+                                    <div class="buttonItem serviceTitle">
+                                        <h4>
+                                            One-Time Cleaning (
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            2 Hours
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            )
+                                        </h4>
+                                    </div>
+                                    <div class="buttonItem">
+                                        <p>
+                                            2 hours @ $175.00
+                                        </p>
                                     </div>
                                 </div>
-                            </button>
-                            <h4 style="margin-top: 2vh;">Loyal Clients Discount (Recurring Plans):</h4>
-                            <button class="buttonAdapt" id="weekly" onclick="goTo('calendar', {frequency:'weekly'})">
-                                <div>
-                                    <div class="buttonItemContainer">
-                                        <div class="buttonItem serviceTitle">
-                                            <h4 style="display:flex">
-                                                Weekly (2 Hours)
-                                            </h4>
-                                        </div>
-                                        <div class="buttonItem">
-                                            <p>
-                                                $175.00 per week
-                                            </p>
-                                        </div>
+                            </div>
+                        </button>
+                        <h4 style="margin-top: 2vh;">Loyal Clients Discount (Recurring Plans):</h4>
+                        <button class="buttonAdapt" id="weekly" onclick="goTo('calendar', {frequency:'weekly'})">
+                            <div>
+                                <div class="buttonItemContainer">
+                                    <div class="buttonItem serviceTitle">
+                                        <h4>
+                                            Weekly (
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            2 Hours
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            )
+                                        </h4>
+                                    </div>
+                                    <div class="buttonItem">
+                                        <p>
+                                            $175.00 per week
+                                        </p>
                                     </div>
                                 </div>
-                            </button><button class="buttonAdapt" id="biweekly"
-                                onclick="goTo('calendar', {frequency:'biweekly'})">
-                                <div>
-                                    <div class="buttonItemContainer">
-                                        <div class="buttonItem serviceTitle">
-                                            <h4 style="display:flex">
-                                                Bi-Weekly (2 Hours)
-                                            </h4>
-                                        </div>
-                                        <div class="buttonItem">
-                                            <p>
-                                                $175.00 every 2 weeks
-                                            </p>
-                                        </div>
+                            </div>
+                        </button><button class="buttonAdapt" id="biweekly"
+                            onclick="goTo('calendar', {frequency:'biweekly'})">
+                            <div>
+                                <div class="buttonItemContainer">
+                                    <div class="buttonItem serviceTitle">
+                                        <h4>
+                                            Bi-Weekly (
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            2 Hours
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            )
+                                        </h4>
+                                    </div>
+                                    <div class="buttonItem">
+                                        <p>
+                                            $175.00 every 2 weeks
+                                        </p>
                                     </div>
                                 </div>
-                            </button><button class="buttonAdapt" id="monthly"
-                                onclick="goTo('calendar', {frequency:'monthly'})">
-                                <div>
-                                    <div class="buttonItemContainer">
-                                        <div class="buttonItem serviceTitle">
-                                            <h4 style="display:flex">
-                                                Monthly (2 Hours)
-                                            </h4>
-                                        </div>
-                                        <div class="buttonItem">
-                                            <p>
-                                                $175.00 per Month
-                                            </p>
-                                        </div>
+                            </div>
+                        </button><button class="buttonAdapt" id="monthly"
+                            onclick="goTo('calendar', {frequency:'monthly'})">
+                            <div>
+                                <div class="buttonItemContainer">
+                                    <div class="buttonItem serviceTitle">
+                                        <h4>
+                                            Monthly (
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            2 Hours
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            )
+                                        </h4>
+                                    </div>
+                                    <div class="buttonItem">
+                                        <p>
+                                            $175.00 per Month
+                                        </p>
                                     </div>
                                 </div>
-                            </button>
-                        </div>
-                        <div id="hoursWrapper" style="display:none">
-                            <button id="hours" class="buttonAdapt">
+                            </div>
+                        </button>
+                    </div>
+                    <div id="hoursWrapper" style="display:none">
+                        <button id="hours" class="buttonAdapt">
 
-                            </button>
-                        </div>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="navButtonContainer">

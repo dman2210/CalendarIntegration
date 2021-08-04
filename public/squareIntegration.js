@@ -138,7 +138,7 @@ function filterByFrequency(frequency) {
 
 
     let frequencyMap = {
-        monthly: 30,
+        monthly: 28,
         weekly: 7,
         biweekly: 14,
     };
@@ -153,6 +153,7 @@ function filterByFrequency(frequency) {
         while (!(date.getMonth() === originalDate.getMonth() && date.getFullYear() !== originalDate.getFullYear())) {
             busyDaysByFrequency[date.getMonth()][date.getDate()].forEach(
                 (time) => {
+                    //refactor so that the irrelative appt length is taken into account
                     if (!daySet.has(time)) {
                         daySet.add(time);
                         day.push(time);

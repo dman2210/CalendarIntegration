@@ -60,13 +60,17 @@ p{
     font-weight: 600
 }
 
+#calendar table tr:nth-child(1) td.pink {
+    background: #c76afc;
+}
+
 .dycalendar-target-date {
-    background: rgb(0, 0, 0);
-    color: rgb(247, 247, 247)
+    background: #9c00f7;
+    color: rgb(247, 247, 247)!important;
 }
 
 .dycalendar-prev-next-btn.prev-btn {
-    background: rgb(0, 0, 0);
+    background: #9c00f7;
     color: rgb(216, 216, 216);
     width: 44px;
     height: 38px;
@@ -78,7 +82,7 @@ p{
 }
 
 .dycalendar-prev-next-btn.next-btn {
-    background: rgb(0, 0, 0);
+    background: #9c00f7;
     color: rgb(241, 241, 241);
     width: 44px;
     height: 38px;
@@ -90,7 +94,8 @@ p{
 }
 
 .dycalendar-span-month-year {
-    color: rgb(0, 0, 0);
+    color: #9c00f7;
     font-size: 1.5rem;
-    font-weight: 600
+    font-weight: 400;
+    font-family: "Petit Formal Script", cursive;
 }

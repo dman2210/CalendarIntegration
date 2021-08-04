@@ -1,24 +1,35 @@
-@import url('https://fonts.googleapis.com/css?family=Petit+Formal+Script&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Petit+Formal+Script&display=swap");
+#calendar table td.unavailable {
+  color: #a9a9a9;
+}
+#calendar table td.unavailable:hover {
+  background: unset;
+  color: #a9a9a9!important;
+  cursor: not-allowed;
+}
 
-.title{
+.noSpaceLeft {
+  margin-left: -2px;
+}
+.title {
   margin-bottom: 2vh;
 }
-p{
-  font-family: 'Petit Formal Script', cursive;
+p {
+  font-family: "Petit Formal Script", cursive;
 }
-h2{
+h2 {
   font-size: 1.57em;
-  font-family: 'Petit Formal Script', cursive;
+  font-family: "Petit Formal Script", cursive;
 }
-h3{
+h3 {
   font-size: 1.17em;
-  font-family: 'Petit Formal Script', cursive;
+  font-family: "Petit Formal Script", cursive;
 }
 
-h4{
+h4 {
   margin-block-start: 0;
   margin-block-end: 0;
-  font-family: 'Petit Formal Script', cursive;
+  font-family: "Petit Formal Script", cursive;
 }
 .label {
   display: flex;
@@ -47,7 +58,7 @@ h4{
   font-family: classico-urw;
   font-weight: 500;
   font-style: normal;
-  letter-spacing: 0.11em;
+  /* letter-spacing: 0.11em; */
   line-height: 1.1em;
   /* text-transform: uppercase; */
 
@@ -98,6 +109,7 @@ h4{
 }
 .serviceTitle {
   font-size: 1.13rem;
+  display: flex;
 }
 .activeStatus {
   color: rgba(255, 0, 208, 0.87);
@@ -122,8 +134,14 @@ h4{
 .navButton {
   font-family: poppins, sans-serif;
 }
+.pink {
+  background: #c76afc;
+}
 
 @media (max-width: 600px) {
+  h4 {
+    font-weight: 400;
+  }
   .content {
     flex-direction: column;
     align-items: center;
@@ -136,20 +154,20 @@ h4{
     flex-basis: unset;
     max-width: unset;
   }
-  .serviceTitle {
-    font-size: 14px;
-    font-weight: 700;
+
+  .buttonAdapt {
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    margin-top: 2vh;
   }
-  .buttonAdapt{
-padding-top: 1vh;
-padding-bottom: 1vh;
-margin-top:2vh;
+  #background {
+    margin-top: -10px;
   }
-  #background{
-    margin-top:-10px
-  }
-  .buttonItem{
+  .buttonItem {
     font-size: 14px;
     font-weight: 400;
+  }
+  .serviceTitle {
+    font-size: 14px;
   }
 }

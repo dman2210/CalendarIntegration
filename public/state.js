@@ -1,15 +1,16 @@
+var toDo = [];
 function goTo(state, data) {
     let stateMap = {
         calendar: {
             do: () => { checkDates(data.frequency) },
-            statusId:"calendarStatus",
-            step:1
+            statusId: "calendarStatus",
+            step: 1
         }
     }
     let newState = stateMap[state];
     newState.do();
     changeStatus(newState.statusId);
-    if(!newState===1){
+    if (!newState === 1) {
         document.getElementById("backButton").style.display = "inline-block"
     }
 }
@@ -22,19 +23,23 @@ function checkDates(frequencyChoice) {
     document.getElementsByClassName("buttonsContainer")[0].style.display = "none";
 
     // history.pushState({ page: "calendaropened", busyHours: hoursBusy }, "", "");
-    waitForHours().then(() => {
+    if (!hoursBusyResolved) {
+        toDo.push(() => { filterByFrequency(frequencyChoice); });
+        toDo.push(() => { disableBookedDays((new Date()).getMonth()); });
+        toDo.push(() => { hideLoader(); });
+    } else {
         filterByFrequency(frequencyChoice);
         disableBookedDays((new Date()).getMonth());
         hideLoader();
-    });
+    }
 }
 
 function changeStatus(statusId) {
     Array.from(document.getElementById("label").children).forEach(
         (status) => {
-            if(status.id===statusId){
+            if (status.id === statusId) {
                 status.classList.add('activeStatus');
-            }else{
+            } else {
                 status.classList.remove('activeStatus')
             }
         }
@@ -42,13 +47,21 @@ function changeStatus(statusId) {
 }
 async function waitForHours() {
     if (!hoursBusyResolved) {
-        await hoursBusy;
+        if (typeof (hoursBusy) !== undefined && 'hoursBusy' in window) {
+            await hoursBusy;
+        } else {
+            await exponentialWait(waitForHours(), 1);
+        }
     }
     return;
 }
 function hideLoader() {
     document.getElementById("loaderContainer").style.display = "none";
 
+}
+
+async function exponentialWait(func, time) {
+    await setTimeout(func, time * 2);
 }
 
 // var stateChanges = {
