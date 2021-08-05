@@ -14,19 +14,19 @@
 .title {
   margin-bottom: 2vh;
 }
-p {
+div#background p {
   font-family: "Petit Formal Script", cursive;
 }
-h2 {
+div#background h2 {
   font-size: 1.57em;
   font-family: "Petit Formal Script", cursive;
 }
-h3 {
+div#background h3 {
   font-size: 1.17em;
   font-family: "Petit Formal Script", cursive;
 }
 
-h4 {
+div#background h4 {
   margin-block-start: 0;
   margin-block-end: 0;
   font-family: "Petit Formal Script", cursive;
@@ -142,7 +142,7 @@ h4 {
 }
 
 @media (max-width: 600px) {
-  h4 {
+  div#background h4 {
     font-weight: 400;
   }
   .content {

@@ -165,29 +165,30 @@ function disableBookedDays(month) {
             bookedDays.push({});
         }
     }
-
     let today = new Date();
-    let bod = new Date();
+    //midnight and 2 mins LA time
+    let bod = new Date("Thu, 05 Aug 2021 7:02:14 GMT");
     let eod = new Date();
     eod.setMonth(month);
     // eod.setMonth(eod.getMonth() + 1);
     // eod.setDate(0);
     bod.setMonth(month);
     bod.setDate(1);
-    bod.setHours(0);
-    bod.setMinutes(2);
     eod.setMonth(month);
     eod.setDate(1);
-    eod.setHours(23);
+    eod.setHours(bod.getHours() + 22);
     eod.setMinutes(14);
     eod.setSeconds(0)
     eod.setMilliseconds(0);
+    if (month < today.getMonth()) {
+        bod.setFullYear(bod.getFullYear() + 1);
+        eod.setFullYear(bod.getFullYear());
+    }
     //for each day in month that has appointments
     Object.keys(busyDaysByFrequency[month]).forEach(
         (index) => {
             bod.setDate(index);
             eod.setDate(index);
-            // console.log(eod, today, (eod.getTime() - today.getTime()) / 1000 / 60 / 60);
             if ((index < today.getDate() && month === today.getMonth()) || (eod - today) / 1000 / 60 / 60 < 2) {
                 bookedDays[month][index] = true;
             } else {
@@ -209,7 +210,8 @@ function disableBookedDays(month) {
                                 let dow = appt.start.getDay();
                                 let dowDifference = bod.getDay() - dow
                                 appt.start.setMonth(bod.getMonth());
-                                appt.start.setDate(bod.getDate - dowDifference);
+                                appt.start.setDate(bod.getDate() - dowDifference);
+                                appt.end.setMonth(appt.start.getMonth())
                                 appt.end.setDate(appt.start.getDate() + startEndDifference);
                             }
                             //if start of window is before busy
@@ -642,7 +644,7 @@ function disableBookedDays(month) {
         prevnextbutton: 'show'
     })
 
-    function selectDay(dayElement){
+    function selectDay(dayElement) {
         Array.from(document.getElementsByTagName('tbody')[0].children).forEach(
             (tr, index) => {
                 if (index > 0) {
