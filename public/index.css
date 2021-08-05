@@ -4,7 +4,7 @@
 }
 #calendar table td.unavailable:hover {
   background: unset;
-  color: #a9a9a9!important;
+  color: #a9a9a9 !important;
   cursor: not-allowed;
 }
 
@@ -131,11 +131,14 @@ h4 {
   align-items: center;
   justify-content: center;
 }
-.navButton {
-  font-family: poppins, sans-serif;
-}
 .pink {
   background: #c76afc;
+}
+.dycalendar-month-container > .navButtonContainer {
+  display: none;
+}
+.navButton{
+  font-family: "Petit Formal Script", cursive;
 }
 
 @media (max-width: 600px) {
@@ -169,5 +172,16 @@ h4 {
   }
   .serviceTitle {
     font-size: 14px;
+  }
+  .navButtonContainer {
+    display: flex;
+  }
+  .dycalendar-month-container > .navButtonContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .navButtonContainer > .navButton {
+    margin-top: -10px;
   }
 }

@@ -160,7 +160,7 @@ function disableBookedDays(month) {
         for (let i = 0; i < 12; i++) {
             bookedDays.push({});
         }
-    }else if (bookedDays.length() <= 0) {
+    } else if (bookedDays.length <= 0) {
         for (let i = 0; i < 12; i++) {
             bookedDays.push({});
         }
@@ -188,16 +188,15 @@ function disableBookedDays(month) {
             bod.setDate(index);
             eod.setDate(index);
             // console.log(eod, today, (eod.getTime() - today.getTime()) / 1000 / 60 / 60);
-            if (index < today.getDate() || (eod - today) / 1000 / 60 / 60 < 2) {
+            if ((index < today.getDate() && month === today.getMonth()) || (eod - today) / 1000 / 60 / 60 < 2) {
                 bookedDays[month][index] = true;
             } else {
-
-
                 let step = { monthly: 28, biweekly: 14, weekly: 7 }[document.subOptions.frequency];
                 let day = busyDaysByFrequency[month][index];
 
                 //for each appointment on the day of the current index
                 for (let i = 0; i < Object.keys(day).length; i++) {
+                    //if booked isn't already set
                     if (bookedDays[month][index] === undefined || bookedDays[month][index === null]) {
                         let appt = JSON.parse(JSON.stringify(day[i]));
                         if (appt !== undefined) {
@@ -207,8 +206,10 @@ function disableBookedDays(month) {
                             let startEndDifference = appt.end.getDate() - appt.start.getDate();
                             let daysDifference = (appt.start - bod) / 1000 / 60 / 60 / 24;
                             if (daysDifference >= 7 || daysDifference <= -7) {
-                                daysDifference = daysDifference % step >= 0 ? Math.floor(daysDifference % step) : Math.ceil(daysDifference % step);
-                                appt.start.setDate(bod.getDate() - daysDifference);
+                                let dow = appt.start.getDay();
+                                let dowDifference = bod.getDay() - dow
+                                appt.start.setMonth(bod.getMonth());
+                                appt.start.setDate(bod.getDate - dowDifference);
                                 appt.end.setDate(appt.start.getDate() + startEndDifference);
                             }
                             //if start of window is before busy
@@ -291,8 +292,6 @@ function disableBookedDays(month) {
         (td) => {
             if (bookedDays[month][td.innerHTML] !== undefined && bookedDays[month][td.innerHTML] !== false) {
                 td.classList.add('unavailable')
-            } else if (td.innerHTML.includes('S')) {
-                td.classList.add('pink');
             }
         })
 }
@@ -349,9 +348,10 @@ function disableBookedDays(month) {
             if (data.today.date === count && data.today.monthIndex === data.monthIndex && option.highlighttoday === true) {
                 td.setAttribute("class", "dycalendar-today-date");
             }
-            if (option.date === count && option.month === data.monthIndex && option.highlighttargetdate === true) {
-                td.setAttribute("class", "dycalendar-target-date");
-            }
+            // if (option.date === count && option.month === data.monthIndex && option.highlighttargetdate === true) {
+            //current date
+            // td.setAttribute("class", "dycalendar-target-date");
+            // }
             tr.appendChild(td);
             count = count + 1;
             c = c + 1;
@@ -384,6 +384,14 @@ function disableBookedDays(month) {
         var table, div, container, elem;
         table = createMonthTable(data, option);
         container = document.createElement("div");
+        let button = document.createElement("button");
+        let buttonContainer = document.createElement("div");
+        buttonContainer.classList.add('navButtonContainer');
+        button.classList.add('navButton');
+        button.classList.add('buttonAdapt');
+        button.innerHTML = "< Back";
+        buttonContainer.appendChild(button);
+        container.appendChild(buttonContainer);
         container.setAttribute("class", "dycalendar-month-container");
         div = document.createElement("div");
         div.setAttribute("class", "dycalendar-header");
@@ -558,7 +566,7 @@ function disableBookedDays(month) {
                 option.year = dateObj.getFullYear();
                 drawCalendar(option);
             }
-            if (e.target.nodeName === "TD" && /.*[0-9]+.*/g.test(e.target.innerHTML)) {
+            if ((e.target.nodeName === "TD" && /.*[0-9]+.*/g.test(e.target.innerHTML)) && !Array.from(e.target.classList).includes('unavailable')) {
                 drawChooseHours(e.target);
             }
         }
@@ -617,7 +625,7 @@ function disableBookedDays(month) {
             }
         }
         if (global.hoursBusyResolved) {
-            disableBookedDays(data.month);
+            disableBookedDays(option.month);
         } else {
             console.log("busy hours not complete")
         }
@@ -634,9 +642,23 @@ function disableBookedDays(month) {
         prevnextbutton: 'show'
     })
 
+    function chooseDay(dayElement){
+        Array.from(document.getElementsByTagName('tbody')[0].children).forEach(
+            (tr, index) => {
+                if (index > 0) {
+                    Array.from(tr.children).forEach(
+                        (td) => {
+                            td.classList.remove('dycalendar-target-date')
+                        })
+                }
+            })
+        dayElement.classList.add('dycalendar-target-date');
+    }
+
     //run on click of day
     function drawChooseHours(dayElement) {
         //need to make sure we look through the whole year
+        chooseDay(dayElement);
         let day = dayElement.innerHTML;
         let month = monthName.indexOf(document.getElementsByClassName("dycalendar-span-month-year")[0].innerHTML);
         console.log("month", month);

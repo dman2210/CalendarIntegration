@@ -130,8 +130,8 @@ async function runSquare() {
 
 var busyDaysByFrequency;
 function filterByFrequency(frequency) {
+    busyDaysByFrequency = JSON.parse(JSON.stringify(hoursBusy));
     if (frequency === "one") {
-        // disableDays();
         hideLoader();
         return;
     }
@@ -143,24 +143,39 @@ function filterByFrequency(frequency) {
         biweekly: 14,
     };
     let step = frequencyMap[frequency];
-    busyDaysByFrequency = JSON.parse(JSON.stringify(hoursBusy));
+    //for each time day
     for (let i = 0; i < step; i++) {
         let date = new Date();
         date.setDate(date.getDate() + i);
         let originalDate = new Date(date.getTime());
-        let day = busyDaysByFrequency[date.getMonth()][date.getDate()];
-        let daySet = new Set(day);
-        while (!(date.getMonth() === originalDate.getMonth() && date.getFullYear() !== originalDate.getFullYear())) {
+        let day = JSON.parse(JSON.stringify(busyDaysByFrequency[date.getMonth()][date.getDate()]));
+        let daySet = new Set();
+        day.forEach(
+            (time) => {
+                daySet.add(JSON.stringify(time))
+            }
+        );
+        //for each time slot by step
+        for (let stepped = 0; stepped * step < 364; stepped++) {
             busyDaysByFrequency[date.getMonth()][date.getDate()].forEach(
-                (time) => {
-                    //refactor so that the irrelative appt length is taken into account
-                    if (!daySet.has(time)) {
-                        daySet.add(time);
+                (timeFuture) => {
+                    let time = JSON.parse(JSON.stringify(timeFuture));
+                    time.start = new Date(time.start);
+                    time.end = new Date(time.end);
+                    time.start.setDate(time.start.getDate() - (step * stepped));
+                    time.end.setDate(time.end.getDate() - (step * stepped));
+                    time.start = time.start.toISOString();
+                    time.end = time.end.toISOString();
+                    //loop through to see if time is contained in day already
+                    if (!daySet.has(JSON.stringify(time))) {
+                        daySet.add(JSON.stringify(time));
                         day.push(time);
                     }
                 }
             );
-            busyDaysByFrequency[date.getMonth()][date.getDate()] = day;
+            if (day.length > 0) {
+                busyDaysByFrequency[date.getMonth()][date.getDate()] = day.sort();
+            }
             date.setDate(date.getDate() + step);
         }
     }

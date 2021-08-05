@@ -49,19 +49,15 @@ p{
 }
 
 #calendar table td:hover {
-    background: rgb(0, 0, 0);
+    background: #c76afc;
     color: rgb(255, 255, 255)!important
 }
 
 #calendar table tr:nth-child(1) td {
-    background: rgb(0, 0, 0);
+    background: #c76afc;
     color: rgb(236, 236, 236);
     border-radius: 5px;
     font-weight: 600
-}
-
-#calendar table tr:nth-child(1) td.pink {
-    background: #c76afc;
 }
 
 .dycalendar-target-date {
@@ -94,7 +90,7 @@ p{
 }
 
 .dycalendar-span-month-year {
-    color: #9c00f7;
+    color: #000000;
     font-size: 1.5rem;
     font-weight: 400;
     font-family: "Petit Formal Script", cursive;
