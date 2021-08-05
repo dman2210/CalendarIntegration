@@ -642,7 +642,7 @@ function disableBookedDays(month) {
         prevnextbutton: 'show'
     })
 
-    function chooseDay(dayElement){
+    function selectDay(dayElement){
         Array.from(document.getElementsByTagName('tbody')[0].children).forEach(
             (tr, index) => {
                 if (index > 0) {
@@ -658,7 +658,7 @@ function disableBookedDays(month) {
     //run on click of day
     function drawChooseHours(dayElement) {
         //need to make sure we look through the whole year
-        chooseDay(dayElement);
+        selectDay(dayElement);
         let day = dayElement.innerHTML;
         let month = monthName.indexOf(document.getElementsByClassName("dycalendar-span-month-year")[0].innerHTML);
         console.log("month", month);
