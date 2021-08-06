@@ -180,10 +180,21 @@ function disableBookedDays(month) {
     eod.setMinutes(14);
     eod.setSeconds(0)
     eod.setMilliseconds(0);
-    if (month < today.getMonth()) {
+    let nextYear = month < today.getMonth();
+    if (nextYear) {
         bod.setFullYear(bod.getFullYear() + 1);
         eod.setFullYear(bod.getFullYear());
+    } else if (month === today.getMonth()) {
+        //double block out dates passed in month TODO: Patch this
+        for (let i = 0; i < 7; i++) {
+            if (i < today.getDate()) {
+                bookedDays[month][i] = true;
+            } else {
+                break;
+            }
+        }
     }
+
     //for each day in month that has appointments
     Object.keys(busyDaysByFrequency[month]).forEach(
         (index) => {
@@ -203,12 +214,17 @@ function disableBookedDays(month) {
                         if (appt !== undefined) {
                             appt.start = new Date(appt.start);
                             appt.end = new Date(appt.end);
+                            
                             //set the date into the current month/year/week
                             let startEndDifference = appt.end.getDate() - appt.start.getDate();
                             let daysDifference = (appt.start - bod) / 1000 / 60 / 60 / 24;
                             if (daysDifference >= 7 || daysDifference <= -7) {
                                 let dow = appt.start.getDay();
                                 let dowDifference = bod.getDay() - dow
+                                if (nextYear) {
+                                    appt.start.setFullYear(appt.start.getFullYear() + 1);
+                                    appt.end.setFullYear(appt.start.getFullYear());
+                                }
                                 appt.start.setMonth(bod.getMonth());
                                 appt.start.setDate(bod.getDate() - dowDifference);
                                 appt.end.setMonth(appt.start.getMonth())
@@ -401,6 +417,9 @@ function disableBookedDays(month) {
         if (option.prevnextbutton === "show") {
             elem = document.createElement("span");
             elem.setAttribute("class", "dycalendar-prev-next-btn prev-btn");
+            if ((new Date).getMonth() === option.month) {
+                elem.classList.add('unavailable')
+            }
             elem.setAttribute("data-date", option.date);
             elem.setAttribute("data-month", option.month);
             elem.setAttribute("data-year", option.year);
@@ -419,6 +438,9 @@ function disableBookedDays(month) {
         if (option.prevnextbutton === "show") {
             elem = document.createElement("span");
             elem.setAttribute("class", "dycalendar-prev-next-btn next-btn");
+            if ((new Date()).getMonth() - 1 === option.month) {
+                elem.classList.add('unavailable')
+            }
             elem.setAttribute("data-date", option.date);
             elem.setAttribute("data-month", option.month);
             elem.setAttribute("data-year", option.year);
@@ -536,7 +558,7 @@ function disableBookedDays(month) {
         document.body.onclick = function (e) {
             e = global.event || e;
             var targetDomObject = e.target || e.srcElement, date, month, year, btn, option, dateObj;
-            if ((targetDomObject) && (targetDomObject.classList) && (targetDomObject.classList.contains("dycalendar-prev-next-btn"))) {
+            if ((targetDomObject) && (targetDomObject.classList) && (targetDomObject.classList.contains("dycalendar-prev-next-btn")) && !(targetDomObject.classList.contains('unavailable'))) {
                 date = parseInt(targetDomObject.getAttribute("data-date"));
                 month = parseInt(targetDomObject.getAttribute("data-month"));
                 year = parseInt(targetDomObject.getAttribute("data-year"));
@@ -560,6 +582,7 @@ function disableBookedDays(month) {
                 option.year = year;
                 drawCalendar(option);
             }
+            console.log(targetDomObject);
             if ((targetDomObject) && (targetDomObject.classList) && (targetDomObject.classList.contains("dycalendar-span-month-year"))) {
                 option = JSON.parse(targetDomObject.parentElement.getAttribute("data-option"));
                 dateObj = new Date();

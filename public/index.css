@@ -3,11 +3,14 @@
   color: #a9a9a9;
 }
 #calendar table td.unavailable:hover {
-  background: unset;
   color: #a9a9a9 !important;
-  cursor: not-allowed;
+  cursor: not-allowed!important;
 }
-
+span.unavailable {
+  background: #a9a9a954 !important;
+  color: white !important;
+  cursor: not-allowed !important;
+}
 .noSpaceLeft {
   margin-left: -2px;
 }
@@ -137,7 +140,7 @@ div#background h4 {
 .dycalendar-month-container > .navButtonContainer {
   display: none;
 }
-.navButton{
+.navButton {
   font-family: "Petit Formal Script", cursive;
 }
 
