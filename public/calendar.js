@@ -214,7 +214,7 @@ function disableBookedDays(month) {
                         if (appt !== undefined) {
                             appt.start = new Date(appt.start);
                             appt.end = new Date(appt.end);
-                            
+
                             //set the date into the current month/year/week
                             let startEndDifference = appt.end.getDate() - appt.start.getDate();
                             let daysDifference = (appt.start - bod) / 1000 / 60 / 60 / 24;
@@ -582,7 +582,6 @@ function disableBookedDays(month) {
                 option.year = year;
                 drawCalendar(option);
             }
-            console.log(targetDomObject);
             if ((targetDomObject) && (targetDomObject.classList) && (targetDomObject.classList.contains("dycalendar-span-month-year"))) {
                 option = JSON.parse(targetDomObject.parentElement.getAttribute("data-option"));
                 dateObj = new Date();
@@ -620,6 +619,8 @@ function disableBookedDays(month) {
     }
         ;
     function drawCalendar(option) {
+        document.monthDrawn = option.month;
+        document.yearDrawn = option.year;
         var calendar, calendarHTML, targetedElementBy = "id", targetElem, i, len, elemArr;
         if (option.target[0] === "#") {
             targetedElementBy = "id";
@@ -685,66 +686,103 @@ function disableBookedDays(month) {
         //need to make sure we look through the whole year
         selectDay(dayElement);
         let day = dayElement.innerHTML;
-        let month = monthName.indexOf(document.getElementsByClassName("dycalendar-span-month-year")[0].innerHTML);
-        console.log("month", month);
+        let month = document.monthDrawn;
+
+
         let dayBusy = global.hoursBusy[month][day];
         //walk through each half. check for all day then to end of day
         //check each half hour , add html for it.
-        let bod = new Date();
-        let eod = new Date();
-        eod.setMonth(month);
-        bod.setMonth(month);
-        eod.setDate(day);
-        bod.setDate(day);
-        eod.setHours(22);
-        eod.setMinutes(59);
-        eod.setSeconds(0)
-        eod.setMilliseconds(0);
-        bod.setHours(0);
-        bod.setMinutes(2);
-        let dayAvailability = [];
-        let dateSetter = new Date(bod);
-        dateSetter.setMilliseconds(0);
-        dateSetter.setMinutes(0);
-        dateSetter.setSeconds(0);
-        while (dateSetter.getDate() === day) {
-            let eoappt = new Date()
-            eoappt.setHours(eoappt.getHours() + 2);
-            let busyBlock = {};
-            busyBlock.conflict = false;
-            dayBusy.forEach(
-                (busy, index) => {
-                    //check if beginning of appt is in busy and two hours later.
-                    //busy needs to be reparsed as object?
-                    if (dateSetter.getDate() === busy.start.getDate()) {
-                        //current and end is earlier than start of busy
-                        if (!(dateSetter < busy.start && eoappt < busy.start)) {
-                            busyBlock.index = index;
-                            busyBlock.conflict = true;
-                        }
-                    }
-                }
-            )
-            if (!busyBlock.conflict) {
-                //insert
-                dayAvailability.push(formatTime(dateSetter));
-                //increment
-                dateSetter.setMinutes(dayAvailability.getMinutes() + 30);
-            } else {
-                //set to end of conflict
-                dateSetter.setTime(busy[busyBlock.index].getTime());
+        //minute before midnight tomorrow
+        let mnbmt = new Date();
+        mnbmt.setMonth(month);
+        mnbmt.setDate(day);
+        mnbmt.setMilliseconds(0);
+        mnbmt.setSeconds(0);
+        mnbmt.setMinutes(58)
+        mnbmt.setHours(23)
+        let avai = { start: new Date("Thu, 05 Aug 2021 7:00:00 GMT"), end: new Date() };
+        avai.end.setFullYear(document.yearDrawn);
+        avai.start.setFullYear(document.yearDrawn);
+        avai.end.setMonth(month);
+        avai.start.setMonth(month);
+        avai.end.setDate(day);
+        avai.start.setDate(day);
+        avai.end.setHours(avai.start.getHours() + 2);
+        avai.end.setMinutes(0);
+        avai.end.setSeconds(0)
+        avai.end.setMilliseconds(0);
+        let availabilities = [];
+        let eod = false;
+        console.log("creating potential appts");
+        while (eod === false) {
+            availabilities.push(cloneDateObject(avai));
+            avai.start.setMinutes(avai.start.getMinutes() + 30);
+            avai.end.setMinutes(avai.end.getMinutes() + 30);
+            if (avai.end >= mnbmt) {
+                eod = true;
             }
+        }
+        console.log("remove unavailble")
+        for (let i = 0; i < availabilities.length; i++) {
+            let currAvai = availabilities[i];
+            for (let i = 0; i < busyDaysByFrequency[month][day].length; i++) {
+                let appt = convertToSecondFrame(busyDaysByFrequency[month][day][i], currAvai);
+                if (appt.start <= currAvai.start) {
+                    if (appt.end > currAvai.start) {
+                        //appt is no go. remove.
+                        availabilities[i] = null;
+                    }
+                    //else check next appt
+                } else {
+                    if (appt.start < currAvai.end) {
+                        //no go. remove.
+                        availabilities[i] = null;
+                    }
+                    //else check next appt
+                }
+            }
+        };
+        console.log("map")
+        let apptOptions = availabilities.map(
+            (availability) => {
+                if (availability !== null && availability !== undefined) {
+                    console.log(availability);
+                    return `<div class="buttonItem"><p onClick="chooseTime(${day}, ${availability.start}, this)">${availability.start.getHours()}:${availability.start.getMinutes()}</p></div>`
+                };
+            }
+        );
+        console.log("append")
+        let content = `<div class="buttonItem"><h4>${day}</h4></div>${apptOptions}`;
+        document.getElementById("hours").innerHTML = content;
+        document.getElementById("hoursWrapper").style.display = "block";
 
+    }
+
+    function convertToSecondFrame(appt, avai) {
+        appt.start = new Date(appt.start);
+        appt.end = new Date(appt.end);
+        let startEndDifference = appt.end.getDate() - appt.start.getDate();
+        let daysDifference = (appt.start - avai.start) / 1000 / 60 / 60 / 24;
+        if (daysDifference >= 7 || daysDifference <= -7) {
+            let dow = appt.start.getDay();
+            let dowDifference = avai.start.getDay() - dow
+            if (appt.start.getFullYear() !== avai.start.getFullYear()) {
+                appt.start.setFullYear(avai.start.getFullYear());
+                appt.end.setFullYear(avai.start.getFullYear());
+            }
+            appt.start.setMonth(avai.start.getMonth());
+            appt.start.setDate(avai.start.getDate() - dowDifference);
+            appt.end.setMonth(appt.start.getMonth())
+            appt.end.setDate(appt.start.getDate() + startEndDifference);
         }
-        //recheck according to frequency
-        if (dayAvailability.length > 0) {
-            let content = `<div class="buttonItem"><h4>${day}</h4></div>${dayAvailability.map(hour => {
-                return `<div class="buttonItem"><p onClick="chooseTime(${day}, '${hour}', this)">${hour}</p></div>`
-            })}`;
-            console.log(content);
-            document.getElementById("hours").innerHTML = content;
-            document.getElementById("hoursWrapper").style.display = "block";
-        }
+        return appt;
+    }
+
+    function cloneDateObject(date) {
+        let newObj = JSON.parse(JSON.stringify(date));
+        newObj.start = new Date(newObj.start);
+        newObj.end = new Date(newObj.end);
+        return newObj;
     }
 
     //run on page load
