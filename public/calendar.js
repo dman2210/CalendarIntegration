@@ -67,19 +67,10 @@ prepareAvailability().then((times) => { hoursBusy = times; toDo.forEach(func => 
 
 // let appointmentsURL = "http://localhost:3000/api/appointments";
 function chooseTime(day, time, parent) {
-    triggerAnswer()
-    //inject into parent
-    let date = new Date();
-    date.setMonth(monthName.indexOf(document.getElementsByClassName("dycalendar-span-month-year")[0].innerHTML));
-    date.setDate(day);
-    let timePieces = time.split(":");
-    let lastPieces = timePieces[1].split(" ");
-    date.setHours(lastPieces[1] === "AM" ? timePieces[0] : timePieces[0] + 12);
-    date.setMinutes(lastPieces[0]);
-    let formattedTime = date.toISOString();
-    document.subOptions.start = formattedTime;
-    console.log("heyo");
-    console.log("He chose...  day: ", day, "time: ", time);
+    goToQuestionForm()
+    document.subOptions.start = time;
+    // console.log("heyo");
+    // console.log("He chose...  day: ", day, "time: ", time);
 }
 function prepareCustomer(event, values) {
     let customerDetails = {
@@ -93,7 +84,7 @@ function prepareCustomer(event, values) {
     document.customerDetails = customerDetails;
     checkout();
 }
-function triggerAnswer() {
+function goToQuestionForm() {
     let main = document.getElementById("main");
     let form =
         `<form onsubmit="prepareCustomer(event, this)"> <div style="display:flex;justify-content: center;flex-direction: column;">
@@ -643,6 +634,10 @@ function disableBookedDays(month) {
         }
         if (targetedElementBy === "id") {
             document.getElementById(targetElem).innerHTML = calendarHTML.outerHTML;
+            document.getElementById(targetElem).style.flexDirection = "column";
+            let wrapper = document.createElement('div');
+            wrapper.innerHTML = '<div id="hours" style="display:none;" class="hoursWrapper"></div>'
+            document.getElementById(targetElem).appendChild(wrapper.firstChild);
         } else if (targetedElementBy === "class") {
             elemArr = document.getElementsByClassName(targetElem);
             for (i = 0,
@@ -653,7 +648,7 @@ function disableBookedDays(month) {
         if (global.hoursBusyResolved) {
             disableBookedDays(option.month);
         } else {
-            console.log("busy hours not complete")
+            // console.log("busy hours not complete")
         }
     }
     onClick();
@@ -713,49 +708,52 @@ function disableBookedDays(month) {
         avai.end.setMilliseconds(0);
         let availabilities = [];
         let eod = false;
-        console.log("creating potential appts");
+        // console.log("creating potential appts");
         while (eod === false) {
             availabilities.push(cloneDateObject(avai));
             avai.start.setMinutes(avai.start.getMinutes() + 30);
             avai.end.setMinutes(avai.end.getMinutes() + 30);
-            if (avai.end >= mnbmt) {
+            if (avai.start > mnbmt) {
                 eod = true;
             }
         }
-        console.log("remove unavailble")
+        // console.log("remove unavailble")
         for (let i = 0; i < availabilities.length; i++) {
             let currAvai = availabilities[i];
-            for (let i = 0; i < busyDaysByFrequency[month][day].length; i++) {
-                let appt = convertToSecondFrame(busyDaysByFrequency[month][day][i], currAvai);
+            for (let j = 0; j < busyDaysByFrequency[month][day].length; j++) {
+                let appt = convertToSecondFrame(busyDaysByFrequency[month][day][j], currAvai);
                 if (appt.start <= currAvai.start) {
                     if (appt.end > currAvai.start) {
                         //appt is no go. remove.
                         availabilities[i] = null;
+                        break;
                     }
                     //else check next appt
                 } else {
                     if (appt.start < currAvai.end) {
                         //no go. remove.
                         availabilities[i] = null;
+                        break;
                     }
                     //else check next appt
                 }
             }
         };
-        console.log("map")
+        // console.log("map");
         let apptOptions = availabilities.map(
             (availability) => {
                 if (availability !== null && availability !== undefined) {
                     console.log(availability);
-                    return `<div class="buttonItem"><p onClick="chooseTime(${day}, ${availability.start}, this)">${availability.start.getHours()}:${availability.start.getMinutes()}</p></div>`
+                    return `<button class="buttonAdapt timeButton" onClick="chooseTime(${day}, '${availability.start.toISOString()}', this)"><div class="buttonItem"><p>${formatTime(availability.start)}</p></div></button>`
                 };
             }
         );
-        console.log("append")
-        let content = `<div class="buttonItem"><h4>${day}</h4></div>${apptOptions}`;
+        document.apptOptions = apptOptions;
+        document.availabilities = availabilities;
+        // console.log("append")
+        let content = `<div style="text-align:center;" class="buttonItem"><h4>${day}</h4></div>${apptOptions.join('')}`;
         document.getElementById("hours").innerHTML = content;
-        document.getElementById("hoursWrapper").style.display = "block";
-
+        document.getElementById("hours").style.display = "flex";
     }
 
     function convertToSecondFrame(appt, avai) {
