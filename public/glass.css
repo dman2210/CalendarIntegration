@@ -115,6 +115,6 @@ p {
 
 @media (max-width: 600px) {
   .dycalendar-span-month-year {
-    font-size: 20px;
+    font-size: 16px;
   }
 }
