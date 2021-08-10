@@ -128,159 +128,100 @@ async function runSquare() {
     });
 };
 
-//this is a big nasty one. refactor if you can. email me at dman2210@gmail.com
+var busyDaysByFrequency;
 function filterByFrequency(frequency) {
-    //wait for busy times to come back
-    while (hoursBusyResolved === undefined || hoursBusyResolved === false) {
-
-    }
-    //check for just one appt
-
+    busyDaysByFrequency = JSON.parse(JSON.stringify(hoursBusy));
     if (frequency === "one") {
-        consol.log("only one")
-        hoursAvailable = filterForOne();
         hideLoader();
         return;
     }
-    //else
+
+
     let frequencyMap = {
-        daily: 1,
         monthly: 28,
         weekly: 7,
         biweekly: 14,
-
-    }
-    //set up step and date variables
+    };
     let step = frequencyMap[frequency];
-    let stepDay = new Date();
-    stepDay.setDate(stepDay.getDate() + 1);
-    stepDay.setHours(0);
-    stepDay.setMinutes(0);
-    stepDay.setSeconds(0);
-    stepDay.setMilliseconds(1);
-    let originalDate = new Date(stepDay.getTime());
-    //prepare the holder for the times still available.
-    let currentlyAvailable = [];
-    for (let i = 0; i < 48; i++) {
-        currentlyAvailable.push(new Date(stepDay.getTime()))
-        stepDay.setMinutes(stepDay.getMinutes() + 30);
-    }
-    //prepare for step checking
-
-    hoursAvailable = [];
-    for (let i = 0; i < 12; i++) {
-        hoursAvailable.push([])
-    }
-    let eoyear = false;
-    stepDay.setTime(originalDate.getTime());
-    //goes through the necessary amount of days so all days are hit
+    //for each time day
     for (let i = 0; i < step; i++) {
-        //iterate by step till end of year
-        
-        eoyear = false;
-        while (eoyear === false) {
-            let busyDay = hoursBusy[stepDay.getMonth()][stepDay.getDate()];
-            //iterate over busy times
-            for (let j = 0; j < busyDay.length; j++) {
-                let busyBlock = busyDay[j];
-                //check each remaining time
-                for (let k = 0; k < currentlyAvailable.length; k++) {
-                    let activeDay = currentlyAvailable[k];
-                    let end = new Date(activeDay.getTime());
-                    end.setHours(end.getHours() + 2);
-                    if (busyBlock.start.getDate() === activeDay.getDate()) {
-                        //check for conflict in start and end times
-                        //if start earlier than busyStart or later than busyEnd... same for end
-                        if (!((activeDay < busyBlock.start || activeDay > busyBlock.end) && (end < busyBlock.start || end > busyBlock.end))) {
-                            let lastIndex;
-                            for (let l = k; l < currentlyAvailable.length; l++) {
-                                //check for the next good appt
-                                lastIndex = l;
-                                if ((activeDay < busyBlock.start || activeDay > busyBlock.end) && (end < busyBlock.start || end > busyBlock.end)) {
-                                    lastIndex = lastIndex - 1
-                                    break;
-                                }
-                            }
-                            //remove up to next available appt
-                            currentlyAvailable.splice(k, (lastIndex - k));
-                        }
-                    }
-                }
+        let date = new Date();
+        date.setDate(date.getDate() + i);
+        let originalDate = new Date(date.getTime());
+        let day = JSON.parse(JSON.stringify(busyDaysByFrequency[date.getMonth()][date.getDate()]));
+        let daySet = new Set();
+        day.forEach(
+            (time) => {
+                daySet.add(JSON.stringify(time))
             }
-            //iterate to next step
-            stepDay.setDate(stepDay.getDate() + step);
-            if ((stepDay.getMonth() === originalDate.getMonth() && stepDay.getFullYear() !== originalDate.getFullYear())) {
-                eoyear = true;
-            }
-        }
+        );
+        //for each time slot by step
+        for (let stepped = 0; stepped * step < 364; stepped++) {
+            busyDaysByFrequency[date.getMonth()][date.getDate()].forEach(
+                (timeFuture) => {
+                    let time = JSON.parse(JSON.stringify(timeFuture));
+                    time.start = new Date(time.start);
+                    time.end = new Date(time.end);
+                    time.start.setDate(time.start.getDate() - (step * stepped));
+                    time.end.setDate(time.end.getDate() - (step * stepped));
+                    time.start = time.start.toISOString();
+                    time.end = time.end.toISOString();
+                    //loop through to see if time is contained in day already
+                    if (!daySet.has(JSON.stringify(time))) {
 
-        //iterate to next day
-        stepDay.setTime(originalDate.getTime());
-        stepDay.setDate(stepDay.getDate() + i + 1);
-        let formatted = currentlyAvailable.map(timeDate => formatTime(timeDate));
-        //go back through days and set the hours
-        let activeDay = new Date(stepDay.getTime());
-        activeDay.setDate(activeDay.getDate() - 1)
-        eoyear = false;
-        while (eoyear === false) {
-            hoursAvailable[activeDay.getMonth()][activeDay.getDate()] = formatted;
-            activeDay.setDate(activeDay.getDate() + step);
-            if ((activeDay.getMonth() === originalDate.getMonth() && activeDay.getFullYear() !== originalDate.getFullYear())) {
-                eoyear = true;
+                        daySet.add(JSON.stringify(time));
+                        day.push(time);
+                    }
+
+                }
+            );
+            removeContainingAppts(day);
+            if (day.length > 0) {
+                busyDaysByFrequency[date.getMonth()][date.getDate()] = day.sort();
             }
+            date.setDate(date.getDate() + step);
         }
-        // hoursAvailable[stepDay.getMonth()][stepDay.getDate() - 1].push(formatted);
     }
     hideLoader()
     return;
 }
 
-function hideLoader() {
-    document.getElementById("loaderContainer").style.display = "none";
-
-}
-
-function filterForOne() {
-    //initialize array
-    if (availability === undefined || !availability) {
-        let availability = [];
-        for (let i = 0; i < 12; i++) {
-            availability[i] = [];
+function removeContainingAppts(day) {
+    // for all the appts already accpeted
+    let dayDates = [];
+    day.forEach(
+        (slot) => {
+            let appt = JSON.parse(JSON.stringify(slot));
+            appt.start = new Date(appt.start);
+            appt.end = new Date(appt.end)
+            dayDates.push(appt);
         }
-    }
-    let newDate = new Date();
-    newDate.setMinutes((Math.round(newDate.getMinutes() / 30) * 30) + 30)
-    let end = new Date(newDate.getTime());
-    end.setHours(end.getHours() + 2);
-    let originalDate = new Date(newDAte.getTime());
-    //while not eoyear
-    while (!(newDate.getMonth() === originalDate.getMonth && newDate.getFullYear() !== originalDate.getFullYear())) {
-        let conflict = false;
-        let busyDay = busyHours[newDate.getMonth()][newDate.getDate()];
-        let conflictIndex;
-        //check all busy times for conflict
-        busyDay.forEach(
-            (busyBlock, index) => {
-                if (!conflict && busyBlock.start.getDate() === newDate.getDate()) {
-                    //check for conflict in start and end times
-                    //if start earlier than busyStart or later than busyEnd... same for end
-                    if (!((newDate < busyBlock.start || newDate > busyBlock.end) && (end < busyBlock.start || end > busyBlock.end))) {
-                        conflictIndex = index;
-                        conflict = true;
-                    }
-                }
+    )
+    let remove = [];
+    for (let i = 0; i < dayDates.length; i++) {
+        let date = dayDates[i];
+        for (let j = 0; j < dayDates.length; j++) {
+            let time = dayDates[j];
+            if (time.start <= date.start && time.end > date.end) {
+                // if time contains date in set
+                remove.push(i);
+            } else if (time.start >= date.start && time.end < date.end) {
+                //if date contains time
+                remove.push(j);
+            }
+        }
+        remove.forEach(
+            (time) => {
+                day.splice(time, 1, 0);
             }
         )
-        if (!conflict) {
-            availability[newDate.getMonth()][newDate.getDate()].push(formatTime(newDate));
-            newDate.setMinutes(newDate.getMinutes() + 30);
-            //
-        } else {
-            newDate.setTime(busyDay[index].getTime())
-        }
+        return
     }
-    return availability;
+    return false;
+
+
 }
+
 
 function formatTime(date) {
     let hours = date.getHours();
