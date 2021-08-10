@@ -164,12 +164,21 @@ function filterByFrequency(frequency) {
                     time.end = new Date(time.end);
                     time.start.setDate(time.start.getDate() - (step * stepped));
                     time.end.setDate(time.end.getDate() - (step * stepped));
+                    let containingDate = testApptContainment(time, day);
                     time.start = time.start.toISOString();
                     time.end = time.end.toISOString();
-                    //loop through to see if time is contained in day already
-                    if (!daySet.has(JSON.stringify(time))) {
-                        daySet.add(JSON.stringify(time));
-                        day.push(time);
+                    if (containingDate === false) {
+                        //loop through to see if time is contained in day already
+                        if (!daySet.has(JSON.stringify(time))) {
+
+                            daySet.add(JSON.stringify(time));
+                            day.push(time);
+                        }
+                    } else {
+                        daySet.delete(JSON.stringify(containingDate.replaces));
+                        day.splice(day.indexOf(containingDate.replaces), 1);
+                        daySet.add(JSON.stringify(containingDate.container));
+                        day.push(containingDate.container);
                     }
                 }
             );
@@ -181,6 +190,34 @@ function filterByFrequency(frequency) {
     }
     hideLoader()
     return;
+}
+
+function testApptContainment(time, day) {
+    // for all the appts already accpeted
+    let dayDates = [];
+    day.forEach(
+        (slot) => {
+            let appt = JSON.parse(JSON.stringify(slot));
+            appt.start = new Date(appt.start);
+            appt.end = new Date(appt.end)
+            dayDates.push(appt);
+        }
+    )
+    dayDates.forEach(
+        (date) => {
+            if (time.start <= date.start && time.end > date.end) {
+                // if new contains appt in set
+                return {container:time, replaces:date};
+            } else if (time.start >= date.start && time.end < date.end) {
+                //if set appt contains new
+                return {container:date, replaces:time};
+            }
+            //
+        }
+    )
+    return false;
+
+
 }
 
 

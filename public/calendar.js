@@ -79,6 +79,7 @@ function prepareCustomer(event, values) {
         emailAddress: values.email.value,
         phoneNumber: values.phone.value,
         address: values.address.value,
+        description: values.instructions.value
     }
     event.preventDefault();
     document.customerDetails = customerDetails;
@@ -165,6 +166,7 @@ function disableBookedDays(month) {
     // eod.setDate(0);
     bod.setMonth(month);
     bod.setDate(1);
+    let bodTime = new Date(bod.getTime());
     eod.setMonth(month);
     eod.setDate(1);
     eod.setHours(bod.getHours() + 22);
@@ -190,7 +192,15 @@ function disableBookedDays(month) {
     Object.keys(busyDaysByFrequency[month]).forEach(
         (index) => {
             bod.setDate(index);
+            bod.setHours(bodTime.getHours());
+            bod.setMinutes(0);
+            bod.setSeconds(0);
+            bod.setMilliseconds(0)
             eod.setDate(index);
+            eod.setHours(bodTime.getHours() + 23);
+            eod.setMinutes(0);
+            eod.setSeconds(0)
+            eod.setMilliseconds(0);
             if ((index < today.getDate() && month === today.getMonth()) || (eod - today) / 1000 / 60 / 60 < 2) {
                 bookedDays[month][index] = true;
             } else {
@@ -209,7 +219,7 @@ function disableBookedDays(month) {
                             //set the date into the current month/year/week
                             let startEndDifference = appt.end.getDate() - appt.start.getDate();
                             let daysDifference = (appt.start - bod) / 1000 / 60 / 60 / 24;
-                            if (daysDifference >= 7 || daysDifference <= -7) {
+                            if (daysDifference >= 7 || daysDifference === -7) {
                                 let dow = appt.start.getDay();
                                 let dowDifference = bod.getDay() - dow
                                 if (nextYear) {
@@ -241,6 +251,7 @@ function disableBookedDays(month) {
                                                 bookedDays[month][index] = false;
                                                 break;
                                             }
+
                                         } else {
                                             //earlier appts did not cover all day
                                             bookedDays[month][index] = false;
@@ -261,6 +272,10 @@ function disableBookedDays(month) {
                                     break;
                                 } else {
                                     //loop through rest of appointments in day and check for two hour gaps
+                                    if(appt.end>eod){
+                                        bookedDays[month][index] = true;
+                                        break;
+                                    }
                                     bod.setHours(appt.end.getHours());
                                     for (let j = i + 1; j < day.length; j++) {
                                         //check undefined, null, and if the next appt starts later than the day just in case
@@ -268,11 +283,11 @@ function disableBookedDays(month) {
                                             let nextAppt = JSON.parse(JSON.stringify(day[j]));
                                             nextAppt.start = new Date(nextAppt.start);
                                             nextAppt.end = new Date(nextAppt.end);
-                                            if (nextAppt.start.getDate() === bod.getDate()) {
+                                            if (nextAppt.start.getDate() <= bod.getDate()) {
                                                 eod.setHours(nextAppt.start.getHours());
                                                 let difference = (eod.getHours() + eod.getMinutes() / 60) - (bod.getHours() + bod.getMinutes() / 60);
                                                 if (difference >= 2) {
-                                                    bookedDays[month][index] = false
+                                                    bookedDays[month][index] = true;
                                                     break;
                                                 }
                                             } else {
@@ -379,9 +394,9 @@ function disableBookedDays(month) {
                 if (data.today.date === count && data.today.monthIndex === data.monthIndex && option.highlighttoday === true) {
                     td.setAttribute("class", "dycalendar-today-date");
                 }
-                if (option.date === count && option.month === data.monthIndex && option.highlighttargetdate === true) {
-                    td.setAttribute("class", "dycalendar-target-date");
-                }
+                // if (option.date === count && option.month === data.monthIndex && option.highlighttargetdate === true) {
+                //     td.setAttribute("class", "dycalendar-target-date");
+                // }
                 count = count + 1;
                 tr.appendChild(td);
             }
@@ -689,12 +704,6 @@ function disableBookedDays(month) {
         //check each half hour , add html for it.
         //minute before midnight tomorrow
         let mnbmt = new Date();
-        mnbmt.setMonth(month);
-        mnbmt.setDate(day);
-        mnbmt.setMilliseconds(0);
-        mnbmt.setSeconds(0);
-        mnbmt.setMinutes(58)
-        mnbmt.setHours(23)
         let avai = { start: new Date("Thu, 05 Aug 2021 7:00:00 GMT"), end: new Date() };
         avai.end.setFullYear(document.yearDrawn);
         avai.start.setFullYear(document.yearDrawn);
@@ -702,6 +711,8 @@ function disableBookedDays(month) {
         avai.start.setMonth(month);
         avai.end.setDate(day);
         avai.start.setDate(day);
+        mnbmt.setTime(avai.start.getTime());
+        mnbmt.setDate(mnbmt.getDate() + 1);
         avai.end.setHours(avai.start.getHours() + 2);
         avai.end.setMinutes(0);
         avai.end.setSeconds(0)
@@ -713,7 +724,7 @@ function disableBookedDays(month) {
             availabilities.push(cloneDateObject(avai));
             avai.start.setMinutes(avai.start.getMinutes() + 30);
             avai.end.setMinutes(avai.end.getMinutes() + 30);
-            if (avai.start > mnbmt) {
+            if (avai.start >= mnbmt) {
                 eod = true;
             }
         }
