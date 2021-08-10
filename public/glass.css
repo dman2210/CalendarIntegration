@@ -1,92 +1,120 @@
-@import 'https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap';* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: poppins,sans-serif
+@import "https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap";
+/* div#background * { */
+/* margin: 0;
+  padding: 0;
+  box-sizing: border-box; */
+/* font-family: poppins,sans-serif */
+/* } */
+p {
+  text-align: left;
 }
 
 .box {
-    position: relative;
-    z-index: 1000
+  position: relative;
+  z-index: 1000;
 }
 
 .container {
-    position: relative;
-    width: 400px;
-    min-height: 400px;
-    background: rgba(233,232,227,.1);
-    box-shadow: 0 25px 45px rgba(0,0,0,.1);
-    border: 1px solid rgba(255,255,255,.5);
-    border-right: 1px solid rgba(255,255,255,.2);
-    border-bottom: 1px solid rgba(255,255,255,.2);
-    backdrop-filter: blur(25px);
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center
+  position: relative;
+  width: 400px;
+  min-height: 400px;
+  background: rgba(233, 232, 227, 0.1);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(25px);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #calendar {
-    width: 100%;
-    padding: 20px
+  display:none; 
+  width:unset;
+  max-width: 77%;
+  width: 100%;
+  padding: 20px;
 }
 
 #calendar table {
-    width: 100%;
-    margin-top: 40px;
-    border-spacing: 5px
+  width: 100%;
+  margin-top: 40px;
+  border-spacing: 5px;
 }
 
 #calendar table td {
-    color: rgb(0, 0, 0);
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer
+  color: rgb(0, 0, 0);
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 #calendar table td:hover {
-    background: rgb(0, 0, 0);
-    color: rgb(255, 255, 255)!important
+  background: #efd3ff;
+  color: rgb(255, 255, 255) !important;
 }
 
 #calendar table tr:nth-child(1) td {
-    background: rgb(0, 0, 0);
-    color: rgb(236, 236, 236);
-    border-radius: 5px;
-    font-weight: 600
+  background: #efd3ff;
+  color: white;
+  border-radius: 5px;
+  font-weight: 600;
 }
 
 .dycalendar-target-date {
-    background: rgb(0, 0, 0);
-    color: rgb(247, 247, 247)
+  background: #9c00f7;
+  color: rgb(247, 247, 247) !important;
 }
 
 .dycalendar-prev-next-btn.prev-btn {
-    background: rgb(0, 0, 0);
-    color: rgb(216, 216, 216);
-    width: 44px;
-    height: 38px;
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 25px
+  background: #9c00f7;
+  color: rgb(216, 216, 216);
+  width: 44px;
+  height: 38px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
 }
 
 .dycalendar-prev-next-btn.next-btn {
-    background: rgb(0, 0, 0);
-    color: rgb(241, 241, 241);
-    width: 44px;
-    height: 38px;
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 25px
+  background: #9c00f7;
+  color: rgb(241, 241, 241);
+  width: 44px;
+  height: 38px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
 }
 
 .dycalendar-span-month-year {
-    color: rgb(0, 0, 0);
-    font-size: 1.5rem;
-    font-weight: 600
+  color: #000000;
+  font-size: 1.5em;
+  font-weight: 400;
+  font-family: "Petit Formal Script", cursive;
+}
+
+.dycalendar-span-month-year {
+  color: #000000;
+  font-size: 1.5em;
+  font-weight: 400;
+  font-family: "Petit Formal Script", cursive;
+}
+
+.dycalendar-span-month-year {
+  color: #000000;
+  font-size: 1.5em;
+  font-weight: 400;
+  font-family: "Petit Formal Script", cursive;
+}
+
+@media (max-width: 600px) {
+  .dycalendar-span-month-year {
+    font-size: 16px;
+  }
 }

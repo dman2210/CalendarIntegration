@@ -1,38 +1,68 @@
 <head>
-  <!-- 1: References the Square payment library to initalize the SDK -->
-  <script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
 </head>
 
 <body>
-  <form id="payment-form">
-    <div id="card-container"></div>
-    <button id="card-button" type="button">Pay</button>
-  </form>
-  <!-- Configure the Web Payments SDK and Card payment method -->
   <script type="text/javascript">
-  var locationId = 'LXSNHMQ7X5J6G';
-    async function main() {
-      const payments = Square.payments('sandbox-sq0idb-k47NFyfiTnNf1wkfFcHAvg', locationId);
-      const card = await payments.card();
-      await card.attach('#card-container');
-
-      async function eventHandler(event) {
-        event.preventDefault();
-
-        try {
-          const result = await card.tokenize();
-          if (result.status === 'OK') {
-            console.log(`Payment token is ${result.token}`);
-          }
-        } catch (e) {
-          console.error(e);
+    const trad = async () => {
+      let appointmentsURL = "https://calendar-integration-backend.vercel.app/api/appointments";
+      let startP = performance.now();
+      console.log("start trad", startP);
+      let promises = [];
+      let start = new Date();
+      let original = new Date();
+      let end = new Date();
+      end.setMonth(end.getMonth() + 2);
+      let eoy = false;
+      while (eoy === false) {
+        // console.log("dates: ", start, end);
+        promises.push(await fetch(appointmentsURL +
+          "?start=" +
+          encodeURIComponent(start.toISOString()) +
+          "&end=" +
+          encodeURIComponent(end.toISOString())
+        ));
+        start.setMonth(start.getMonth() + 2);
+        end.setMonth(start.getMonth() + 2)
+        if (end.getMonth() === original.getMonth() && start.getFullYear() !== original.getMonth()) {
+          eoy = true;
         }
-      };
-
-      const cardButton = document.getElementById('card-button');
-      cardButton.addEventListener('click', eventHandler);
+      }
+      //last month's call
+      end.setDate(end.getDate() - 1);
+      promises.push(await fetch(appointmentsURL + "?start=" + encodeURIComponent(start.toISOString()) + "&end=" + encodeURIComponent(end.toISOString())));
+      // console.log("resolving...")
+      let arrayOfResponses = await Promise.resolve(promises);
+      console.log("mid time trad:", performance.now())
+      for(let i =0;i<arrayOfResponses.length;i++){
+        await arrayOfResponses[i].json().then((json)=>{console.log(json)})
+      }
+      let endP = performance.now();
+      console.log("end trad:", endP);
+      console.log("time trad: ", endP - startP);
     }
+    trad();
+  </script>
+  <script>
+    const newFunc = async () => {
+      let startP = performance.now();
+      console.log("start new", startP);
+      let start = new Date();
+      start.setDate(start.getDate() + 1);
+      let end = new Date(start.getTime());
+      end.setMonth(end.getMonth() + 2);
+      // let url = "http://localhost:3000/api/appointments?all=true&start=" + encodeURIComponent(start.toISOString());
+      let url = "https://calendar-integration-backend-git-dylan-dman2210.vercel.app/api/appointments?all=true&start=" + encodeURIComponent(start.toISOString());
+      // + "&end=" + encodeURIComponent(end.toISOString());
 
-    main();
+      let response = await fetch(url);
+      await response.json().then((json)=>{
+        console.log("new response: ", json)
+        let endP = performance.now();
+      console.log("end new:", endP);
+      console.log("time new: ", endP - startP);
+      })
+      
+    }
+    newFunc()
   </script>
 </body>

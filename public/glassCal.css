@@ -36,7 +36,7 @@
 .dycalendar-month-container {
     padding: 10px;
     text-align: center;
-    font-family: Arial
+    font-family: "Petit Formal Script", cursive;
 }
 
 .dycalendar-month-container div {
@@ -72,7 +72,7 @@
 }
 
 .dycalendar-month-container .dycalendar-today-date,.dycalendar-month-container .dycalendar-target-date {
-    background-color: #111;
+    background-color: #9c00f7;
     color: #fff;
     border-radius: 2px
 }
@@ -252,4 +252,62 @@
     -moz-box-shadow: 0 4px 4px 0 #343d46;
     -webkit-box-shadow: 0 4px 4px 0 #343d46;
     box-shadow: 0 4px 4px 0 #343d46
+}
+
+
+/* Additional Classes */
+.navButtonContainer {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.buttonAdapt:hover {
+    border: 1px solid rgba(255, 0, 208, 0.87);
+}
+.buttonAdapt {
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0);
+    font-family: classico-urw;
+    font-weight: 500;
+    font-style: normal;
+    letter-spacing: 0.11em;
+    line-height: 1.1em;
+    text-transform: uppercase;
+
+    padding-top: 1.8vh;
+    padding-bottom: 1.8vh;
+    padding-left: 1.7vw;
+    padding-right: 1.7vw;
+    margin-top: 2.8vh;
+}
+.navButton{
+    font-family: poppins,sans-serif;
+}
+
+.hide{
+    display: none;
+}
+
+.show {
+    display: inherit;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    
+}
+
+a:visited{
+    text-decoration: none;
+    color: inherit;
+}
+
+button:hover{
+    cursor: pointer;
 }

@@ -2,22 +2,14 @@
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
     <link rel="stylesheet" href="glass.css">
     <link rel="stylesheet" href="glassCal.css">
     <link rel="stylesheet" href="index.css">
     <script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
-
 </head>
 
 <body>
-    <div id="loaderContainer" class="coverUp">
-        <div class="loader"></div>
-    </div>
-    <div style="display:flex;align-items: center;justify-content: center;">
-        <h1>
-            Book Appointment
-        </h1>
-    </div>
     <div id="background">
         <div id="squareContainer" style="display:none">
             <form id="payment-form">
@@ -26,145 +18,135 @@
             </form>
             <div id="payment-status-container"></div>
         </div>
-        <script type="text/javascript" src="/squareIntegration.js"></script>
-        <div id="main" style="display:flex;justify-content: center;flex-direction: column;
-        margin-left: auto;
-        padding: 30px 130px;
-        margin-right: auto;
-        box-sizing: border-box;
-        max-width: 1300px;">
+        <div id="main" style="display:flex;justify-content: center;flex-direction: column;">
             <div class="content">
                 <div id="label" class="label">
-                    <h3 class="statusItem activeStatus">
+                    <h3 id="frequencyStatus" class="statusItem activeStatus">
                         Select service
                     </h3>
-                    <h3 class="statusItem">
+                    <h3 id="calendarStatus" class="statusItem">
                         Select date and time
                     </h3>
-                    <h3 class="statusItem">
+                    <h3 id="detailStatus" class="statusItem">
                         Enter your details
                     </h3>
-                    <h3 class="statusItem">
+                    <h3 id="paymentStatus" class="statusItem">
                         Make your payment
                     </h3>
                 </div>
-                <div id="calendar" style="display:none; width:unset"></div>
-
-
-                <div style="display:flex; justify-content: center;flex-direction: column;flex-basis: 77%;
-                max-width: 77%;">
-                    <h2 id="title" class="title">Select a service</h4>
-                        <div id="buttons" style="display:flex; flex-direction: column;width:100%">
-                            <button class="buttonAdapt" id="monthly" style="margin-top:0px" onclick="checkDates("
-                                one")">
-                                <div>
-                                    <div
-                                        style="display:flex;align-items: flex-start; flex-direction:column;margin-right:10vw;">
-                                        <div class="buttonItem serviceTitle">
-                                            <h4 style="display:flex">
-                                                One Cleaning
-                                            </h4>
-                                        </div>
-                                        <div class="buttonItem">
-                                            <p>
-                                                $175.00 · 2 Hours
-                                            </p>
-                                        </div>
+                <div id="loaderContainer" class="coverUp">
+                    <div class="loader"></div>
+                </div>
+                <div id="calendar" ></div>
+                <div class="buttonsContainer">
+                    <div id="buttons" style="display:flex; flex-direction: column;width:100%">
+                        <button class="buttonAdapt" id="one" style="margin-top:0px"
+                            onclick="goTo('calendar', {frequency:'one'})">
+                            <div>
+                                <div class="buttonItemContainer">
+                                    <div class="buttonItem serviceTitle">
+                                        <h4>
+                                            One-Time Cleaning (
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            2 Hours
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            )
+                                        </h4>
+                                    </div>
+                                    <div class="buttonItem">
+                                        <p>
+                                            2 hours @ $175.00
+                                        </p>
                                     </div>
                                 </div>
-                            </button><button class="buttonAdapt" id="monthly" onclick="checkDates(" monthly")">
-                                <div>
-                                    <div
-                                        style="display:flex;align-items: flex-start; flex-direction:column;margin-right:10vw;">
-                                        <div class="buttonItem serviceTitle">
-                                            <h4 style="display:flex">
-                                                Monthly
-                                            </h4>
-                                        </div>
-                                        <div class="buttonItem">
-                                            <p>
-                                                $175.00 · 2 Hours
-                                            </p>
-                                        </div>
+                            </div>
+                        </button>
+                        <h4 style="margin-top: 2vh;">Loyal Clients Discount (Recurring Plans):</h4>
+                        <button class="buttonAdapt" id="weekly" onclick="goTo('calendar', {frequency:'weekly'})">
+                            <div>
+                                <div class="buttonItemContainer">
+                                    <div class="buttonItem serviceTitle">
+                                        <h4>
+                                            Weekly (
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            2 Hours
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            )
+                                        </h4>
+                                    </div>
+                                    <div class="buttonItem">
+                                        <p>
+                                            $175.00 per week
+                                        </p>
                                     </div>
                                 </div>
-                            </button><button class="buttonAdapt" id="weekly" onclick="checkDates(" weekly")">
-                                <div>
-                                    <div
-                                        style="display:flex;align-items: flex-start; flex-direction:column;margin-right:10vw;">
-                                        <div class="buttonItem serviceTitle">
-                                            <h4 style="display:flex">
-                                                Weekly
-                                            </h4>
-                                        </div>
-                                        <div class="buttonItem">
-                                            <p>
-                                                $175.00 · 2 Hours
-                                            </p>
-                                        </div>
+                            </div>
+                        </button><button class="buttonAdapt" id="biweekly"
+                            onclick="goTo('calendar', {frequency:'biweekly'})">
+                            <div>
+                                <div class="buttonItemContainer">
+                                    <div class="buttonItem serviceTitle">
+                                        <h4>
+                                            Bi-Weekly (
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            2 Hours
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            )
+                                        </h4>
+                                    </div>
+                                    <div class="buttonItem">
+                                        <p>
+                                            $175.00 every 2 weeks
+                                        </p>
                                     </div>
                                 </div>
-                            </button><button class="buttonAdapt" id="biweekly" onclick="checkDates(" biweekly")">
-                                <div>
-                                    <div
-                                        style="display:flex;align-items: flex-start; flex-direction:column;margin-right:10vw;">
-                                        <div class="buttonItem serviceTitle">
-                                            <h4 style="display:flex">
-                                                Bi-Weekly
-                                            </h4>
-                                        </div>
-                                        <div class="buttonItem">
-                                            <p>
-                                                $175.00 · 2 Hours
-                                            </p>
-                                        </div>
+                            </div>
+                        </button><button class="buttonAdapt" id="monthly"
+                            onclick="goTo('calendar', {frequency:'monthly'})">
+                            <div>
+                                <div class="buttonItemContainer">
+                                    <div class="buttonItem serviceTitle">
+                                        <h4>
+                                            Monthly (
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            2 Hours
+                                        </h4>
+                                        <h4 class="noSpaceLeft">
+                                            )
+                                        </h4>
+                                    </div>
+                                    <div class="buttonItem">
+                                        <p>
+                                            $175.00 per Month
+                                        </p>
                                     </div>
                                 </div>
-                            </button>
-                            <script>
-                                var hoursAvailable;
-                                function checkDates(frequencyChoice) {
-                                    document.getElementById("loaderContainer").style.display = "flex"
-                                    document.subOptions = { frequency: frequencyChoice };
-                                    //implement conflict checking
-                                    document.getElementById("calendar").style.display = "flex";
-                                    // document.getElementById("label").style.position = "unset";
-                                    document.getElementById("main").style.flexDirection = "unset";
-                                    let buttons = document.getElementById("buttons").children;
-                                    Array.from(buttons).forEach((button) => {
-                                        if (button.id !== frequencyChoice) {
-                                            button.style.display = "none";
-                                        }
-                                    });
-                                    document.getElementById("label").innerText = "What Day?"
-                                    // history.pushState({ page: "calendaropened", busyHours: hoursBusy }, "", "");
-                                    hoursAvailable = filterByFrequency(frequencyChoice);
-                                }
-                            </script>
-                        </div>
-                        <div id="hoursWrapper" style="display:none">
-                            <button id="hours" class="buttonAdapt">
-
-                            </button>
-                        </div>
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="navButtonContainer">
-                <button style="
+                <button id="backButton" style="
     border-color: rgba(255, 0, 208, 0.87);
     color: rgba(255, 0, 208, 0.87);
+    display:none;
 " class="buttonAdapt navButton">Back</button>
-                <button style="
-    background-color: rgba(255, 0, 208, 0.87);
-" class="buttonAdapt navButton">Continue</button>
             </div>
         </div>
-    </div>
-    <script type='text/javascript' src='./calendar.js'></script>
-    <script>
-        history.pushState({ page: "original" }, "", "")
-    </script>
-    <script type='text/javascript' src='./state.js'></script>
+        <script type="text/javascript" src="/squareIntegration.js"></script>
+        <script type='text/javascript' src='./calendar.js'></script>
+        <script>
+            history.pushState({ page: "original" }, "", "")
+        </script>
+        <script type='text/javascript' src='./state.js'></script>
 </body>
 
 </html>

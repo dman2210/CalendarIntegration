@@ -1,10 +1,59 @@
+@import url("https://fonts.googleapis.com/css?family=Petit+Formal+Script&display=swap");
+#calendar table td.unavailable {
+  color: #a9a9a9;
+}
+#calendar table td.unavailable:hover {
+  background: unset;
+  color: #a9a9a9 !important;
+  cursor: not-allowed !important;
+}
+span.unavailable {
+  background: #a9a9a954 !important;
+  color: white !important;
+  cursor: not-allowed !important;
+}
+.noSpaceLeft {
+  margin-left: -2px;
+}
+.title {
+  margin-bottom: 2vh;
+}
+div#background p {
+  font-family: "Petit Formal Script", cursive;
+}
+div#background h2 {
+  font-size: 1.57em;
+  font-family: "Petit Formal Script", cursive;
+}
+div#background h3 {
+  font-size: 1.17em;
+  font-family: "Petit Formal Script", cursive;
+}
+
+div#background h4 {
+  margin-block-start: 0;
+  margin-block-end: 0;
+  font-family: "Petit Formal Script", cursive;
+}
 .label {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
+.buttonItemContainer {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
 .buttonAdapt:hover {
   border: 1px solid rgba(255, 0, 208, 0.87);
+}
+.buttonsContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  flex-basis: 77%;
+  max-width: 77%;
 }
 .buttonAdapt {
   border: 1px solid #d9d9d9;
@@ -13,9 +62,9 @@
   font-family: classico-urw;
   font-weight: 500;
   font-style: normal;
-  letter-spacing: 0.11em;
+  /* letter-spacing: 0.11em; */
   line-height: 1.1em;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
 
   padding-top: 1.8vh;
   padding-bottom: 1.8vh;
@@ -24,7 +73,7 @@
   margin-top: 2.8vh;
 }
 .buttonItem {
-  margin: 1vh;
+  margin: 0.5vh;
   font-size: 1rem;
 }
 .hour {
@@ -64,6 +113,7 @@
 }
 .serviceTitle {
   font-size: 1.13rem;
+  display: flex;
 }
 .activeStatus {
   color: rgba(255, 0, 208, 0.87);
@@ -83,14 +133,60 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
-.navButton{
-  font-family: poppins,sans-serif;
+.pink {
+  background: #c76afc;
+}
+.dycalendar-month-container > .navButtonContainer {
+  display: none;
+}
+.navButton {
+  font-family: "Petit Formal Script", cursive;
 }
 
 @media (max-width: 600px) {
+  div#background h4 {
+    font-weight: 400;
+  }
   .content {
     flex-direction: column;
+    align-items: center;
+  }
+  .label {
+    display: none;
+  }
+  .buttonsContainer {
+    width: 100%;
+    flex-basis: unset;
+    max-width: unset;
+  }
+
+  .buttonAdapt {
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    margin-top: 2vh;
+  }
+  #background {
+    margin-top: -10px;
+  }
+  .buttonItem {
+    font-size: 14px;
+    font-weight: 400;
+  }
+  .serviceTitle {
+    font-size: 14px;
+  }
+  .navButtonContainer {
+    display: flex;
+  }
+  .dycalendar-month-container > .navButtonContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: -57px;
+  }
+  .navButtonContainer > .navButton {
+    margin-top:0;
   }
 }
