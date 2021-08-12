@@ -1,7 +1,23 @@
 window.hoursBusyResolved = false;
 window.hoursBusy;
+window.availableHoursResolved = false;
+window.availableHours;
 window.bookedDays;
+window.done = false;
 let appointmentsURL = "https://calendar-integration-backend.vercel.app/api/appointments"
+let hoursURL = "http://localhost:3000/api/hours";
+async function prepareAvailableHours() {
+    return await fetch(hoursURL).then(
+        async (response) => {
+            console.log(response);
+            if (response.ok) {
+                return await response.json().then(json => { console.log(json); availableHoursResolved = true; return json });
+            } else {
+                console.log(response.error);
+            }
+        }
+    )
+}
 async function prepareAvailability() {
     let start = new Date();
     start.setHours(0);
@@ -23,39 +39,27 @@ async function prepareAvailability() {
     arrayOfBusies.forEach(
         (busy) => {
             // console.log(busy);
-            busy.forEach(
-                (block, index) => {
-                    // console.log("index: ", index)
-                    let startDate = new Date(block.start);
-                    let endDate = new Date(block.end);
-                    // console.log("month", startDate.getMonth())
-                    let blockObject = { start: startDate, end: endDate }
-                    //pushes on to the relevant day of the relevant month.
-                    if (!hoursBusy[startDate.getMonth()][startDate.getDate()]) {
-                        // console.log("not in array yet. adding")
-                        hoursBusy[startDate.getMonth()][startDate.getDate()] = [blockObject];
-                    } else {
-                        // console.log("day already in. adding")
-                        hoursBusy[startDate.getMonth()][startDate.getDate()].push(blockObject)
-                    }
-                    //push the object onto any additional day in a multi day busy
-                    if (startDate.getDate() !== endDate.getDate()) {
-                        let inbet = new Date(startDate.getTime());
-                        while (inbet.getDate() !== endDate.getDate()) {
-                            // console.log("multi day. current month:", inbet.getMonth(), "current day", inbet.getDate())
-                            inbet.setDate(inbet.getDate() + 1)
-                            // console.log("new month", inbet.getMonth(), "current day", inbet.getDate())
-                            if (!hoursBusy[inbet.getMonth()][inbet.getDate()]) {
-                                hoursBusy[inbet.getMonth()][inbet.getDate()] = [blockObject];
-                            } else {
-                                hoursBusy[inbet.getMonth()][inbet.getDate()].push(blockObject)
-                            }
-
-                        }
-                    }
-
+            for (let i = 0; i < busy.length; i++) {
+                // busy.forEach(
+                // (block, index) => {
+                let block = busy[i];
+                // console.log("index: ", index)
+                let startDate = new Date(block.start);
+                let endDate = new Date(block.end);
+                if (startDate.getFullYear() !== start.getFullYear() && startDate.getMonth() === start.getMonth()) {
+                    break;
                 }
-            );
+                // console.log("month", startDate.getMonth())
+                let blockObject = { start: startDate, end: endDate }
+                //pushes on to the relevant day of the relevant month.
+                if (!hoursBusy[startDate.getMonth()][startDate.getDate()]) {
+                    // console.log("not in array yet. adding")
+                    hoursBusy[startDate.getMonth()][startDate.getDate()] = [blockObject];
+                } else {
+                    // console.log("day already in. adding")
+                    hoursBusy[startDate.getMonth()][startDate.getDate()].push(blockObject)
+                }
+            }
         }
     );
     // console.log("end", performance.now())
@@ -63,7 +67,7 @@ async function prepareAvailability() {
     return hoursBusy;
     // console.log("all done.", global.hoursBusy);
 }
-prepareAvailability().then((times) => { hoursBusy = times; toDo.forEach(func => func()) });
+
 
 // let appointmentsURL = "http://localhost:3000/api/appointments";
 function chooseTime(day, time, parent) {
@@ -143,10 +147,8 @@ function checkout() {
     let main = document.getElementById("main");
     main.innerHTML = "";
 }
-// document.getElementById("loaderContainer").style.display = "none";
-// var bookedDays;
-//greys out the days in a month that are booked up according to the frequency that the client chose.
-function disableBookedDays(month) {
+///sets up the dimensions of the booked array
+function prepareBookedDaysArray() {
     if (typeof (bookedDays) === 'undefined') {
         bookedDays = [];
         for (let i = 0; i < 12; i++) {
@@ -157,161 +159,99 @@ function disableBookedDays(month) {
             bookedDays.push({});
         }
     }
-    let today = new Date();
-    //midnight and 2 mins LA time
-    let bod = new Date("Thu, 05 Aug 2021 7:02:14 GMT");
-    let eod = new Date();
-    eod.setMonth(month);
-    // eod.setMonth(eod.getMonth() + 1);
-    // eod.setDate(0);
-    bod.setMonth(month);
-    bod.setDate(1);
-    let bodTime = new Date(bod.getTime());
-    eod.setMonth(month);
-    eod.setDate(1);
-    eod.setHours(bod.getHours() + 22);
-    eod.setMinutes(14);
-    eod.setSeconds(0)
-    eod.setMilliseconds(0);
-    let nextYear = month < today.getMonth();
-    if (nextYear) {
-        bod.setFullYear(bod.getFullYear() + 1);
-        eod.setFullYear(bod.getFullYear());
-    } else if (month === today.getMonth()) {
-        //double block out dates passed in month TODO: Patch this
-        for (let i = 0; i < 7; i++) {
-            if (i < today.getDate()) {
-                bookedDays[month][i] = true;
-            } else {
-                break;
-            }
+}
+///checks for overlap between appt and time that makes the time unbookable
+function checkOverlap(appt, time) {
+    //check if appt start is earlier than time start (appt might overlap from the left)
+    if (appt.start < time.start) {
+        //check if appt starts earlier than time
+        if (appt.end > time.start) {
+            return true;
+            //do not break. need to check rest of appointments
+            //may want to change to removing appts from list
+        } else {
+            //will go to next day because of if at beginning of loop
+            return false;
         }
+    } else {
+        //check if appt start is earlier than end of time slot (partial left overlap)
+        if (appt.start < time.end) {
+            return true;
+            //do not break. need to check rest of appointments
+            //may want to change to removing appts from list
+        } else {
+            //will go to next day because of if at beginning of loop
+            return false;
+        }
+
+
     }
-
-    //for each day in month that has appointments
-    Object.keys(busyDaysByFrequency[month]).forEach(
-        (index) => {
-            bod.setDate(index);
-            bod.setHours(bodTime.getHours());
-            bod.setMinutes(0);
-            bod.setSeconds(0);
-            bod.setMilliseconds(0)
-            eod.setDate(index);
-            eod.setHours(bodTime.getHours() + 23);
-            eod.setMinutes(0);
-            eod.setSeconds(0)
-            eod.setMilliseconds(0);
-            if ((index < today.getDate() && month === today.getMonth()) || (eod - today) / 1000 / 60 / 60 < 2) {
-                bookedDays[month][index] = true;
-            } else {
-                let step = { monthly: 28, biweekly: 14, weekly: 7 }[document.subOptions.frequency];
-                let day = busyDaysByFrequency[month][index];
-
-                //for each appointment on the day of the current index
-                for (let i = 0; i < Object.keys(day).length; i++) {
-                    //if booked isn't already set
-                    if (bookedDays[month][index] === undefined || bookedDays[month][index === null]) {
-                        let appt = JSON.parse(JSON.stringify(day[i]));
-                        if (appt !== undefined) {
-                            appt.start = new Date(appt.start);
-                            appt.end = new Date(appt.end);
-
-                            //set the date into the current month/year/week
-                            let startEndDifference = appt.end.getDate() - appt.start.getDate();
-                            let daysDifference = (appt.start - bod) / 1000 / 60 / 60 / 24;
-                            if (daysDifference >= 7 || daysDifference === -7) {
-                                let dow = appt.start.getDay();
-                                let dowDifference = bod.getDay() - dow
-                                if (nextYear) {
-                                    appt.start.setFullYear(appt.start.getFullYear() + 1);
-                                    appt.end.setFullYear(appt.start.getFullYear());
-                                }
-                                appt.start.setMonth(bod.getMonth());
-                                appt.start.setDate(bod.getDate() - dowDifference);
-                                appt.end.setMonth(appt.start.getMonth())
-                                appt.end.setDate(appt.start.getDate() + startEndDifference);
-                            }
-                            //if start of window is before busy
-                            if (appt.start < bod) {
-                                if (appt.end > eod) {
-                                    bookedDays[month][index] = true;
-                                    break;
-                                }
-                                bod.setHours(appt.end.getHours());
-                                for (let j = i + 1; j <= day.length; j++) {
-                                    //check undefined, null, and if the next appt starts later than the day just in case
-                                    if (day[j] !== undefined && day[j] != null) {
-                                        let nextAppt = JSON.parse(JSON.stringify(day[j]));
-                                        nextAppt.start = new Date(nextAppt.start);
-                                        nextAppt.end = new Date(nextAppt.end);
-                                        if (nextAppt.start.getDate() === bod.getDate()) {
-                                            eod.setHours(nextAppt.start.getHours());
-                                            let difference = (eod.getHours() + eod.getMinutes() / 60) - (bod.getHours() + bod.getMinutes() / 60);
-                                            if (difference >= 2) {
-                                                bookedDays[month][index] = false;
-                                                break;
-                                            }
-
-                                        } else {
-                                            //earlier appts did not cover all day
-                                            bookedDays[month][index] = false;
-                                            break;
-                                        }
-                                    } else {
-                                        //earlier appts did not cover all day
-                                        bookedDays[month][index] = false;
-                                        break;
-                                    }
-
-                                }
-
-                            } else {
-                                //check if 2 hours before the appt
-                                if ((appt.start.getHours() + (appt.start.getMinutes() / 60)) - (bod.getHours() + (bod.getMinutes() / 60)) >= 2) {
-                                    bookedDays[month][index] = false;
-                                    break;
-                                } else {
-                                    //loop through rest of appointments in day and check for two hour gaps
-                                    if(appt.end>eod){
-                                        bookedDays[month][index] = true;
-                                        break;
-                                    }
-                                    bod.setHours(appt.end.getHours());
-                                    for (let j = i + 1; j < day.length; j++) {
-                                        //check undefined, null, and if the next appt starts later than the day just in case
-                                        if (day[j] !== undefined && day[j] != null) {
-                                            let nextAppt = JSON.parse(JSON.stringify(day[j]));
-                                            nextAppt.start = new Date(nextAppt.start);
-                                            nextAppt.end = new Date(nextAppt.end);
-                                            if (nextAppt.start.getDate() <= bod.getDate()) {
-                                                eod.setHours(nextAppt.start.getHours());
-                                                let difference = (eod.getHours() + eod.getMinutes() / 60) - (bod.getHours() + bod.getMinutes() / 60);
-                                                if (difference >= 2) {
-                                                    bookedDays[month][index] = true;
-                                                    break;
-                                                }
-                                            } else {
-                                                //earlier appts did not cover all day
-                                                bookedDays[month][index] = false;
-                                                break;
-                                            }
-                                        } else {
-                                            //earlier appts did not cover all day
-                                            bookedDays[month][index] = false;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
+}
+///greys out the days in a month that are booked up according to the frequency that the client chose.
+function disableBookedDays(month) {
+    prepareBookedDaysArray();
+    let today = new Date();
+    //get days in month
+    let dim = new Date();
+    dim.setMonth(dim.getMonth() + 1);
+    dim.setDate(0);
+    let daysInMonth = dim.getDate();
+    //for each day in month
+    for (let i = 0; i < daysInMonth; i++) {
+        //set up day in month to be checked
+        let dayIndex = i + 1;
+        let date = new Date();
+        date.setMonth(month);
+        date.setDate(dayIndex);
+        //check if day of month less than today
+        if (dayIndex < today.getDate()) {
+            bookedDays[month][dayIndex] = true;
+        } else {
+            //check if bookedDays is set at index already
+            //may want to switch this to not true ie not booked
+            if (bookedDays[month][dayIndex] === undefined || bookedDays[month][dayIndex] === null) {
+                //check if day has available appointments
+                if (availableHours[date.getDay()] !== undefined && availableHours[date.getDay()] !== null) {
+                    //for each available time on that day
+                    for (let j = 0; j < availableHours[date.getDay()].length; j++) {
+                        if (bookedDays[month][dayIndex] === false) {
+                            //bust out if already determined to be not booked
+                            break;
                         }
-                    } else {
-                        break;
+                        let time = new Date(availableHours[date.getDay()]);
+                        time.setMonth(date.getMonth());
+                        time.setDate(date.getDate());
+                        //check if there are appoitnemtns that day
+                        if (busyDaysByFrequency[month][dayIndex] !== undefined && busyDaysByFrequency[month][dayIndex] !== null) {
+                            //day booked by defualt
+                            let bookedFromOverlap = true;
+                            //for each appt 
+                            for (let k = 0; k < busyDaysByFrequency[month][dayIndex].length; k++) {
+                                apptBlock = busyDaysByFrequency[month][dayIndex][k];
+                                let appt = JSON.parse(JSON.stringify(apptBlock));
+                                appt.start = new Date(appt.start);
+                                appt.end = new Date(appt.end);
+                                //check for appt/time overlap
+                                bookedFromOverlap = checkOverlap(appt, time)
+                                bookedDays[month][dayIndex] = bookedFromOverlap;
+                                if (bookedFromOverlap === false) {
+                                    break;
+                                }
+                                //next appt
+                            }
+                        } else {
+                            //no appts
+                            bookedDays[month][dayIndex] = false;
+                        }
                     }
+                } else {
+                    //does not have an available day entry
+                    bookedDays[month][dayIndex] = true;
                 }
             }
-
         }
-    )
+        //next day
+    }
     Array.from(document.getElementsByTagName('td')).forEach(
         (td) => {
             if (bookedDays[month][td.innerHTML] !== undefined && bookedDays[month][td.innerHTML] !== false) {
@@ -319,6 +259,29 @@ function disableBookedDays(month) {
             }
         })
 }
+
+
+prepareAvailability().then(
+    (times) => {
+
+        hoursBusy = times;
+        if (availableHoursResolved === true && !done) {
+            toDo.forEach(func => func());
+            done = true;
+        }
+    }
+);
+prepareAvailableHours().then(
+    (hours) => {
+        // console.log("doing the thing:", hours)
+        availableHours = hours;
+        if (hoursBusyResolved === true && !done) {
+            toDo.forEach(func => func());
+            done = true;
+        }
+    }
+);
+
 (async function (global) {
     global.calendarLoaded = false;
     global.hoursBusyResolved = false;
@@ -660,7 +623,7 @@ function disableBookedDays(month) {
                 elemArr[i].innerHTML = calendarHTML.outerHTML;
             }
         }
-        if (global.hoursBusyResolved) {
+        if (global.hoursBusyResolved && global.availableHoursResolved) {
             disableBookedDays(option.month);
         } else {
             // console.log("busy hours not complete")
@@ -754,7 +717,7 @@ function disableBookedDays(month) {
         let apptOptions = availabilities.map(
             (availability) => {
                 if (availability !== null && availability !== undefined) {
-                    console.log(availability);
+                    // console.log(availability);
                     return `<button class="buttonAdapt timeButton" onClick="chooseTime(${day}, '${availability.start.toISOString()}', this)"><div class="buttonItem"><p>${formatTime(availability.start)}</p></div></button>`
                 };
             }

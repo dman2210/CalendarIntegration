@@ -23,7 +23,7 @@ function checkDates(frequencyChoice) {
     document.getElementsByClassName("buttonsContainer")[0].style.display = "none";
 
     // history.pushState({ page: "calendaropened", busyHours: hoursBusy }, "", "");
-    if (!hoursBusyResolved) {
+    if (!hoursBusyResolved||!availableHoursResolved) {
         toDo.push(() => { filterByFrequency(frequencyChoice); });
         toDo.push(() => { disableBookedDays((new Date()).getMonth()); });
         toDo.push(() => { hideLoader(); });
