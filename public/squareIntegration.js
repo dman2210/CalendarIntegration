@@ -1,5 +1,5 @@
-// var subURL = 'https://calendar-integration-backend.vercel.app/api/subscribe';
-var subURL = "http://localhost:3000/api/subscribe";
+var subURL = 'https://calendar-integration-backend.vercel.app/api/subscribe';
+// var subURL = "http://localhost:3000/api/subscribe";
 const appId = "sandbox-sq0idb-k47NFyfiTnNf1wkfFcHAvg";
 const locationId = "LXSNHMQ7X5J6G";
 
@@ -134,14 +134,19 @@ async function runSquare() {
 }
 
 function insertNoDup(apptsArray, newAppt) {
+    let matched = false;
     for (let i = 0; i < apptsArray.length; i++) {
         let appt = apptsArray[i];
+        appt.start = new Date(appt.start);
+        appt.end = new Date(appt.end);
 
-        if ((appt.start = newAppt.start)) {
-            return;
+        if ((appt.start.getHours() === newAppt.start.getHours()) && (appt.start.getMinutes() === newAppt.start.getMinutes())) {
+            matched = true;
         }
     }
-    apptsArray.push(newAppt);
+    if (!matched) {
+        apptsArray.push(newAppt);
+    }
     return;
 }
 
@@ -153,7 +158,7 @@ function copyAcrossYearByFrequency(sAppt, step) {
         let apptInStep = JSON.parse(JSON.stringify(sAppt));
         apptInStep.start = new Date(apptInStep.start);
         apptInStep.end = new Date(apptInStep.end);
-        let daysDiff = apptInStep.end - apptInStep / 100 / 60 / 60 / 24;
+        let daysDiff = (apptInStep.end - apptInStep.start) / 1000 / 60 / 60 / 24;
         apptInStep.start.setDate(apptInStep.start.getDate() + i * step);
         apptInStep.end.setDate(apptInStep.start.getDate() + daysDiff);
         //if eoy then break
@@ -165,9 +170,7 @@ function copyAcrossYearByFrequency(sAppt, step) {
             busyDaysByFrequency[apptInStep.start.getMonth()][apptInStep.start.getDate()] = [apptInStep];
         } else {
             insertNoDup(
-                busyDaysByFrequency[apptInStep.start.getMonth()][
-                apptInStep.start.getDate()
-                ],
+                busyDaysByFrequency[apptInStep.start.getMonth()][apptInStep.start.getDate()],
                 apptInStep
             );
         }
@@ -178,11 +181,11 @@ function copyAcrossYearByFrequency(sAppt, step) {
 function projectBack(appt, step) {
     //prepare appt by initializing dates
     appt.start = new Date(appt.start);
-    appt.end = new Date(appt.start);
+    appt.end = new Date(appt.end);
     //get today
     let today = new Date();
     //get days between today week and appt
-    let diff = (new Date(appt.start) - today) / 1000 / 60 / 60 / 24;
+    let diff = (new Date(appt.start.getTime()) - today) / 1000 / 60 / 60 / 24;
     diff = diff < 0 ? Math.ceil(diff) : Math.floor(diff);
     let daysBack = diff - (diff % step);
     //copy the appt to keep original
@@ -221,6 +224,7 @@ function filterByFrequency(frequency) {
             //get a day
             let day = busyDaysByFrequency[month][key];
             //for each appt
+            //prepare dates first
             day.forEach((appt) => {
                 let sAppt = projectBack(appt, step);
                 copyAcrossYearByFrequency(sAppt, step);

@@ -5,7 +5,8 @@ window.availableHours;
 window.bookedDays;
 window.done = false;
 let appointmentsURL = "https://calendar-integration-backend.vercel.app/api/appointments"
-let hoursURL = "http://localhost:3000/api/hours";
+// let hoursURL = "http://localhost:3000/api/hours";
+let hoursURL = "https://calendar-integration-backend.vercel.app/api/hours";
 async function prepareAvailableHours() {
     return await fetch(hoursURL).then(
         async (response) => {
@@ -163,7 +164,7 @@ function prepareBookedDaysArray() {
 ///checks for overlap between appt and time that makes the time unbookable
 function checkOverlap(appt, time) {
     //check if appt start is earlier than time start (appt might overlap from the left)
-    if (appt.start < time.start) {
+    if (appt.start <= time.start) {
         //check if appt starts earlier than time
         if (appt.end > time.start) {
             return true;
@@ -203,8 +204,8 @@ function disableBookedDays(month) {
         let date = new Date();
         date.setMonth(month);
         date.setDate(dayIndex);
-        //check if day of month less than today
-        if (dayIndex < today.getDate()) {
+        //check if day of month less than today if on current month
+        if (today.getMonth() === month && dayIndex < today.getDate()) {
             bookedDays[month][dayIndex] = true;
         } else {
             //check if bookedDays is set at index already
@@ -218,26 +219,32 @@ function disableBookedDays(month) {
                             //bust out if already determined to be not booked
                             break;
                         }
-                        let time = new Date(availableHours[date.getDay()]);
-                        time.setMonth(date.getMonth());
-                        time.setDate(date.getDate());
+                        let time = {};
+                        time.start = new Date(availableHours[date.getDay()]);
+                        time.start.setMonth(date.getMonth());
+                        time.start.setDate(date.getDate());
+                        time.end = new Date(time.start.getTime());
+                        time.end.setHours(time.start.getHours() + 2)
                         //check if there are appoitnemtns that day
                         if (busyDaysByFrequency[month][dayIndex] !== undefined && busyDaysByFrequency[month][dayIndex] !== null) {
                             //day booked by defualt
                             let bookedFromOverlap = true;
                             //for each appt 
                             for (let k = 0; k < busyDaysByFrequency[month][dayIndex].length; k++) {
-                                apptBlock = busyDaysByFrequency[month][dayIndex][k];
+                                let apptBlock = busyDaysByFrequency[month][dayIndex][k];
                                 let appt = JSON.parse(JSON.stringify(apptBlock));
                                 appt.start = new Date(appt.start);
                                 appt.end = new Date(appt.end);
                                 //check for appt/time overlap
                                 bookedFromOverlap = checkOverlap(appt, time)
                                 bookedDays[month][dayIndex] = bookedFromOverlap;
-                                if (bookedFromOverlap === false) {
+                                if (bookedFromOverlap === true) {
                                     break;
                                 }
                                 //next appt
+                            }
+                            if (bookedFromOverlap === false) {
+                                break;
                             }
                         } else {
                             //no appts
@@ -656,63 +663,42 @@ prepareAvailableHours().then(
 
     //run on click of day
     function drawChooseHours(dayElement) {
+        let availabilities = [];
         //need to make sure we look through the whole year
         selectDay(dayElement);
         let day = dayElement.innerHTML;
         let month = document.monthDrawn;
-
-
-        let dayBusy = global.hoursBusy[month][day];
-        //walk through each half. check for all day then to end of day
-        //check each half hour , add html for it.
-        //minute before midnight tomorrow
-        let mnbmt = new Date();
-        let avai = { start: new Date("Thu, 05 Aug 2021 7:00:00 GMT"), end: new Date() };
-        avai.end.setFullYear(document.yearDrawn);
-        avai.start.setFullYear(document.yearDrawn);
-        avai.end.setMonth(month);
-        avai.start.setMonth(month);
-        avai.end.setDate(day);
+        //test if clickable
+        let newDay = new Date()
+        newDay.setMonth(month);
+        newDay.setDate(day);
+        let avs = availableHours[newDay.getDay()];
+        let avai = {};
+        avai.start = new Date();
+        avai.end = new Date();
         avai.start.setDate(day);
-        mnbmt.setTime(avai.start.getTime());
-        mnbmt.setDate(mnbmt.getDate() + 1);
-        avai.end.setHours(avai.start.getHours() + 2);
-        avai.end.setMinutes(0);
-        avai.end.setSeconds(0)
-        avai.end.setMilliseconds(0);
-        let availabilities = [];
-        let eod = false;
-        // console.log("creating potential appts");
-        while (eod === false) {
-            availabilities.push(cloneDateObject(avai));
-            avai.start.setMinutes(avai.start.getMinutes() + 30);
-            avai.end.setMinutes(avai.end.getMinutes() + 30);
-            if (avai.start >= mnbmt) {
-                eod = true;
+        avai.end.setDate(day);
+        avai.start.setMonth(month);
+        avai.end.setMonth(month);
+        for (let i = 0; i < avs.length; i++) {
+            let time = new Date(avs[i]);
+            avai.start.setHours(time.getHours());
+            avai.start.setMinutes(time.getMinutes());
+            avai.end.setHours(avai.start.getHours() + 2)
+            avai.end.setMinutes(avai.start.getMinutes());
+            if (busyDaysByFrequency[month][day] !== undefined) {
+                let conflict = false;
+                for (let j = 0; j < busyDaysByFrequency[month][day].length; j++) {
+                    let appt = busyDaysByFrequency[month][day][j];
+                    conflict = checkOverlap(appt, avai);
+                }
+                if (conflict === false) {
+                    availabilities.push(cloneDateObject(avai));
+                }
+            } else {
+                availabilities.push(cloneDateObject(avai));
             }
         }
-        // console.log("remove unavailble")
-        for (let i = 0; i < availabilities.length; i++) {
-            let currAvai = availabilities[i];
-            for (let j = 0; j < busyDaysByFrequency[month][day].length; j++) {
-                let appt = convertToSecondFrame(busyDaysByFrequency[month][day][j], currAvai);
-                if (appt.start <= currAvai.start) {
-                    if (appt.end > currAvai.start) {
-                        //appt is no go. remove.
-                        availabilities[i] = null;
-                        break;
-                    }
-                    //else check next appt
-                } else {
-                    if (appt.start < currAvai.end) {
-                        //no go. remove.
-                        availabilities[i] = null;
-                        break;
-                    }
-                    //else check next appt
-                }
-            }
-        };
         // console.log("map");
         let apptOptions = availabilities.map(
             (availability) => {
@@ -725,7 +711,12 @@ prepareAvailableHours().then(
         document.apptOptions = apptOptions;
         document.availabilities = availabilities;
         // console.log("append")
-        let content = `<div style="text-align:center;" class="buttonItem"><h4>${day}</h4></div>${apptOptions.join('')}`;
+        setOptionsContent(apptOptions)
+
+    }
+
+    function setOptionsContent(apptOptions) {
+        let content = `${apptOptions.join('')}`;
         document.getElementById("hours").innerHTML = content;
         document.getElementById("hours").style.display = "flex";
     }
