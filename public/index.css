@@ -148,6 +148,11 @@ div#background h4 {
 .navButton {
   font-family: "Petit Formal Script", cursive;
 }
+.dycalendar-body {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+}
 
 @media (max-width: 600px) {
   div#background h4 {
