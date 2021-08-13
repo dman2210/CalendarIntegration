@@ -113,6 +113,16 @@ p {
   font-family: "Petit Formal Script", cursive;
 }
 
+
+/* additional classes */
+.hide{
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
 @media (max-width: 600px) {
   .dycalendar-span-month-year {
     font-size: 16px;

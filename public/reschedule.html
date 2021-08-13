@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
@@ -6,6 +7,12 @@
     <link rel="stylesheet" href="glass.css">
     <link rel="stylesheet" href="glassCal.css">
     <script type='text/javascript' src='./reschedule.js'></script>
+    <script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+    <script type="text/javascript" src="/squareIntegration.js"></script>
+    <script>
+        history.pushState({ page: "original" }, "", "")
+    </script>
+    <script type='text/javascript' src='./state.js'></script>
 </head>
 
 <body>
@@ -21,7 +28,7 @@
             </h1>
         </div>
         <div style="display:flex;">
-            <div id='calendar'>
+            <div id='calendar' style='display: block;'>
             </div>
             <div id='time' class='hide'>
             </div>
@@ -45,7 +52,7 @@
                 </div>
             </div>
         </div>
-        <div class="navButtonContainer">
+        <!-- <div class="navButtonContainer">
             <button style="border-color: rgba(255, 0, 208, 0.87);
             color: rgba(255, 0, 208, 0.87);" class="buttonAdapt navButton">
                 <a href=" https://www.lingeriehousekeeper.com/bookappointment">
@@ -56,11 +63,11 @@
                 onclick="displayTime()">
                 Continue
             </button>
-        </div>
+        </div> -->
     </div>
 
     <footer>
-        <style type='text/css'>            
+        <style type='text/css'>
             @font-face {
                 font-family: classico-urw;
                 src: url(https://use.typekit.net/af/e749f8/000000000000000077359ef1/30/l?subset_id=2&fvd=n4&v=3) format("woff2"), url(https://use.typekit.net/af/e749f8/000000000000000077359ef1/30/d?subset_id=2&fvd=n4&v=3) format("woff"), url(https://use.typekit.net/af/e749f8/000000000000000077359ef1/30/a?subset_id=2&fvd=n4&v=3) format("opentype");
@@ -132,3 +139,5 @@
         <script type='text/javascript' src='./calendar.js'></script>
     </footer>
 </body>
+
+</html>

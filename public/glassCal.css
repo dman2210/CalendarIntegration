@@ -289,13 +289,7 @@
     font-family: poppins,sans-serif;
 }
 
-.hide{
-    display: none;
-}
 
-.show {
-    display: inherit;
-}
 
 a {
     text-decoration: none;
