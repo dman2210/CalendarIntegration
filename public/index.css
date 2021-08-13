@@ -1,4 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Petit+Formal+Script&display=swap");
+.hoursWrapper {
+  flex-wrap: wrap;
+}
+
 #calendar table td.unavailable {
   color: #a9a9a9;
 }
@@ -166,6 +170,9 @@ div#background h4 {
     padding-top: 1vh;
     padding-bottom: 1vh;
     margin-top: 2vh;
+    margin-right: 4px;
+    padding-right: initial;
+    padding-left: inital;
   }
   #background {
     margin-top: -10px;
@@ -187,6 +194,6 @@ div#background h4 {
     margin-top: -57px;
   }
   .navButtonContainer > .navButton {
-    margin-top:0;
+    margin-top: 0;
   }
 }
