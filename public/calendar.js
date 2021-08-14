@@ -10,7 +10,7 @@ let hoursURL = "https://calendar-integration-backend.vercel.app/api/hours";
 async function prepareAvailableHours() {
     return await fetch(hoursURL).then(
         async (response) => {
-            console.log(response);
+            // console.log(response);
             if (response.ok) {
                 return await response.json().then(json => { console.log(json); availableHoursResolved = true; return json });
             } else {
@@ -326,7 +326,7 @@ prepareAvailableHours().then(
         button.classList.add('navButton');
         button.classList.add('buttonAdapt');
         button.classList.add('backButton');
-        button.addEventListener('click', ()=>{window.history.back()})
+        button.classList.add('backButtonCalendar');
         button.innerHTML = "< Back";
         buttonContainer.appendChild(button);
         container.appendChild(buttonContainer);
@@ -512,6 +512,9 @@ prepareAvailableHours().then(
             }
             if ((e.target.nodeName === "TD" && /.*[0-9]+.*/g.test(e.target.innerHTML)) && !Array.from(e.target.classList).includes('unavailable')) {
                 drawChooseHours(e.target);
+            }
+            if(e.target.nodeName==="BUTTON"&&Array.from(e.target.classList).includes("backButtonCalendar")){
+                goBack();
             }
         }
             ;

@@ -12,6 +12,9 @@
 <body>
     <div id="background">
         <div id="squareContainer" style="display:none">
+            <button class="buttonAdapt navButton backButton" onclick="goBack()">
+                &lt Back
+            </button>
             <form id="payment-form">
                 <div id="card-container"></div>
                 <button id="card-button" type="button">Pay $1.00</button>
@@ -63,7 +66,11 @@
                                 </div>
                             </div>
                         </button>
-                        <h4 style="margin-top: 2vh;">Loyal Clients Discount (Recurring Plans):</h4>
+                        <div style="display:flex">
+                            <h4 style="margin-top: 2vh;">Loyal Clients Discount (</h4>
+                            <h4 style="margin-top: 2vh;" class="noSpaceLeft">Recurring Plans</h4>
+                            <h4 style="margin-top: 2vh;" class="noSpaceLeft">):</h4>
+                        </div>
                         <button class="buttonAdapt" id="weekly" onclick="goTo('calendar', {frequency:'weekly'})">
                             <div>
                                 <div class="buttonItemContainer">
@@ -134,6 +141,9 @@
                 </div>
             </div>
             <form style="display:none" id="customerForm" onsubmit="prepareCustomer(event, this)">
+                <button class="buttonAdapt navButton backButton" onclick="goBack()">
+                    &lt Back
+                </button>
                 <div style="display:flex;justify-content: center;flex-direction: column;">
                     <h2>Customer Profile</h2>
                     <div style="display:flex;justify-content:space-between">
@@ -180,7 +190,7 @@
                         <h4>State</h4>
                         <h4 style="margin-left: 3px;color:red">*</h4>
                     </div>
-                    <input name="address" required class="textInput" type="text"></input>
+                    <input name="state" required class="textInput" type="text"></input>
                     <div style="display: flex;">
                         <h4>Zip Code</h4>
                         <h4 style="margin-left: 3px;color:red">*</h4>
@@ -208,7 +218,8 @@
                     </div>
                     <h4>Parking instructions or other applicable information:</h4>
                     <textarea class="textInput" name="instructions"></textarea>
-                    <input style="margin-top:5px;font-family: 'Petit Formal Script', cursive;" type="submit" value="Submit" type="submit"></input>
+                    <input style="margin-top:5px;font-family: 'Petit Formal Script', cursive;" type="submit"
+                        value="Submit" type="submit"></input>
                 </div>
             </form>
             <div class="navButtonContainer">
@@ -221,7 +232,7 @@
         <script type="text/javascript" src="/squareIntegration.js"></script>
         <script type='text/javascript' src='./calendar.js'></script>
         <script>
-            history.pushState({ page: "original" }, "", "")
+            history.pushState({ page: "original" }, "", "/")
         </script>
         <script type='text/javascript' src='./state.js'></script>
         <script>

@@ -1,4 +1,5 @@
 window.onpopstate = function (event) {
+    console.log(event.state)
     if (event.state) {
         goTo(event.state.page, event.state.data);
     }
@@ -41,7 +42,7 @@ function showBeginning() {
     document.getElementById("calendar").style.display = "none";
     document.getElementById("loaderContainer").style.display = "none";
     document.getElementsByClassName("buttonsContainer")[0].style.display = "flex";
-    history.pushState({ page: "original" }, "", "")
+    history.pushState({ page: "original" }, "", "/")
 }
 
 
@@ -108,4 +109,8 @@ function hideLoader() {
 
 async function exponentialWait(func, time) {
     await setTimeout(func, time * 2);
+}
+
+function goBack(){
+    window.history.back();
 }
