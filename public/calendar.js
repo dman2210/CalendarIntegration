@@ -326,7 +326,7 @@ prepareAvailableHours().then(
         button.classList.add('navButton');
         button.classList.add('buttonAdapt');
         button.classList.add('backButton');
-        button.onclick = ()=>{window.history.back()};
+        button.addEventListener('click', ()=>{window.history.back()})
         button.innerHTML = "< Back";
         buttonContainer.appendChild(button);
         container.appendChild(buttonContainer);
