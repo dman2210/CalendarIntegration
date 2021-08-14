@@ -200,5 +200,6 @@ div#background h4 {
   }
   .navButtonContainer > .navButton {
     margin-top: 0;
+    padding-right: 5px;
   }
 }
