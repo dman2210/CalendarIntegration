@@ -138,39 +138,68 @@
                     <h2>Customer Profile</h2>
                     <div style="display:flex;justify-content:space-between">
                         <div>
-                            <h4>First Name</h4>
+                            <div style="display: flex;">
+                                <h4>First Name</h4>
+                                <h4 style="margin-left: 3px;color:red">*</h4>
+                            </div>
                             <input name="first" required class="textInput" type="text"></input>
                         </div>
                         <div>
-                            <h4>Last Name</h4>
+                            <div style="display: flex;">
+                                <h4>Last Name</h4>
+                                <h4 style="margin-left: 3px;color:red">*</h4>
+                            </div>
                             <input name="last" required class="textInput" type="text"></input>
                         </div>
                     </div>
-                    <h4>Phone</h4>
+                    <div style="display: flex;">
+                        <h4>Phone</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
+                    </div>
                     <input name="phone" required pattern=".*([0-9]{3}).*([0-9]{3}).*([0-9]{4}).*"
                         oninvalid="this.setCustomValidity('Please match one of these formats: ##########,   ###-###-####,   (###) ###-####')"
                         onvalid="this.setCustomValidity('')" class="textInput" type="tel"></input>
-                    <h4>Email</h4>
+                    <div style="display: flex;">
+                        <h4>Email</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
+                    </div>
                     <input name="email" required pattern=".+@.+\.+.+"
                         oninvalid="this.setCustomValidity('Please match this format: aaa@aa.aaa')"
                         onvalid="this.setCustomValidity('')" class="textInput" type="email"></input>
-                    <h4>Address</h4>
-                    <input name="address" required class="textInput" type="text"></input>
-                    <h4>Should a vacuum be brought to this session?</h4>
-                    <div>
-                        <input type="radio" id="vacuum" name="vacuumSel" value="true" required>
-                        <label for="html">Yes</label><br>
-                        <input type="radio" id="noVacuum" name="vacuumSel" value="false">
-                        <label for="css">No</label><br>
+                    <div style="display: flex;">
+                        <h4>Street Address</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
                     </div>
-                    <h4>Do you request gloves be worn during your session?</h4>
+                    <input name="street" required class="textInput" type="text"></input>
+                    <div style="display: flex;">
+                        <h4>City</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
+                    </div>
+                    <input name="city" required class="textInput" type="text"></input>
+                    <div style="display: flex;">
+                        <h4>State</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
+                    </div>
+                    <input name="address" required class="textInput" type="text"></input>
+                    <div style="display: flex;">
+                        <h4>Zip Code</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
+                    </div>
+                    <input name="zip" required class="textInput" type="text"></input>
+                    <div style="display: flex;">
+                        <h4>Do you request that gloves be worn during your sessions?</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
+                    </div>
                     <div>
                         <input type="radio" id="gloves" name="gloveSel" value="true" required>
                         <label for="html">Yes</label><br>
                         <input type="radio" id="noGloves" name="gloveSel" value="false">
                         <label for="css">No</label><br>
                     </div>
-                    <h4>Do you request that a mask be worn during your session?</h4>
+                    <div style="display: flex;">
+                        <h4>Do you request that a mask be worn during your sessions?</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
+                    </div>
                     <div>
                         <input type="radio" id="mask" name="maskSel" value="true" required>
                         <label for="html">Yes</label><br>
@@ -179,23 +208,26 @@
                     </div>
                     <h4>Parking instructions or other applicable information:</h4>
                     <textarea class="textInput" name="instructions"></textarea>
-                    <input style="margin-top:5px" type="submit" value="Submit" type="submit"></input>
+                    <input style="margin-top:5px;font-family: 'Petit Formal Script', cursive;" type="submit" value="Submit" type="submit"></input>
                 </div>
             </form>
             <div class="navButtonContainer">
-                <button id="backButton" style="
-    border-color: rgba(255, 0, 208, 0.87);
-    color: rgba(255, 0, 208, 0.87);
-    display:none;
-" class="buttonAdapt navButton">Back</button>
+                <button id="backButton" style="display:none;" class="buttonAdapt navButton"
+                    onclick="window.history.back()">
+                    Back
+                </button>
             </div>
         </div>
+
         <script type="text/javascript" src="/squareIntegration.js"></script>
         <script type='text/javascript' src='./calendar.js'></script>
         <script>
             history.pushState({ page: "original" }, "", "")
         </script>
         <script type='text/javascript' src='./state.js'></script>
+        <script>
+            document.getElementById('calendar').style.marginTop = "100px"
+        </script>
 </body>
 
 </html>

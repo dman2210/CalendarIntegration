@@ -128,6 +128,7 @@ async function runSquare() {
     }
 
     const cardButton = document.getElementById("card-button");
+    cardButton.classList.add('buttonAdapt');
     cardButton.addEventListener("click", async function (event) {
         await handlePaymentMethodSubmission(event, card);
     });

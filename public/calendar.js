@@ -83,7 +83,7 @@ function prepareCustomer(event, values) {
         familyName: values.last.value,
         emailAddress: values.email.value,
         phoneNumber: values.phone.value,
-        address: values.address.value,
+        address: values.street.value+" "+values.city.value+" "+values.state.value+" "+values.zip.value,
         description: values.instructions.value
     }
     event.preventDefault();
@@ -284,10 +284,10 @@ prepareAvailableHours().then(
             if (data.today.date === count && data.today.monthIndex === data.monthIndex && option.highlighttoday === true) {
                 td.setAttribute("class", "dycalendar-today-date");
             }
-            // if (option.date === count && option.month === data.monthIndex && option.highlighttargetdate === true) {
-            //current date
-            // td.setAttribute("class", "dycalendar-target-date");
-            // }
+            if (option.date === count && option.month === data.monthIndex && option.highlighttargetdate === true) {
+            // current date
+            td.setAttribute("class", "dycalendar-current-date");
+            }
             tr.appendChild(td);
             count = count + 1;
             c = c + 1;
@@ -306,9 +306,9 @@ prepareAvailableHours().then(
                 if (data.today.date === count && data.today.monthIndex === data.monthIndex && option.highlighttoday === true) {
                     td.setAttribute("class", "dycalendar-today-date");
                 }
-                // if (option.date === count && option.month === data.monthIndex && option.highlighttargetdate === true) {
-                //     td.setAttribute("class", "dycalendar-target-date");
-                // }
+                if (option.date === count && option.month === data.monthIndex && option.highlighttargetdate === true) {
+                    td.setAttribute("class", "dycalendar-current-date");
+                }
                 count = count + 1;
                 tr.appendChild(td);
             }
@@ -325,6 +325,8 @@ prepareAvailableHours().then(
         buttonContainer.classList.add('navButtonContainer');
         button.classList.add('navButton');
         button.classList.add('buttonAdapt');
+        button.classList.add('backButton');
+        button.onclick = "window.history.back()";
         button.innerHTML = "< Back";
         buttonContainer.appendChild(button);
         container.appendChild(buttonContainer);
