@@ -1,4 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Petit+Formal+Script&display=swap");
+.loyaltyLabel{
+  display: flex;
+}
 .hoursWrapper {
   flex-wrap: wrap;
 }
@@ -219,5 +222,8 @@ div#background h4 {
   #calendar table td:hover {
     background: #9c00f7;
     color: rgb(255, 255, 255) !important;
+  }
+  .loyaltyLabel{
+    flex-direction: column;
   }
 }

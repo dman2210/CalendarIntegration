@@ -1,30 +1,30 @@
 window.onpopstate = function (event) {
-    console.log(event.state)
+    // console.log(event.state)
     if (event.state) {
-        goTo(event.state.page, event.state.data);
+        goTo(event.state.page, event.state.data, true);
     }
 }
 
 var toDo = [];
-function goTo(state, data) {
+function goTo(state, data, block) {
     let stateMap = {
         original: {
-            do: () => { showBeginning() },
+            do: () => { showBeginning(block) },
             statusId: "frequencyStatus",
             step: 1
         },
         calendar: {
-            do: () => { checkDates(data.frequency) },
+            do: () => { checkDates(data.frequency, block) },
             statusId: "calendarStatus",
             step: 2
         },
         form: {
-            do: () => { goToQuestionForm() },
+            do: () => { goToQuestionForm(block) },
             statusId: "detailStatus",
             step: 3
         },
         payment: {
-            do: () => { checkout() },
+            do: () => { checkout(block) },
             statusId: "paymentStatus",
             step: 4
         },
@@ -37,16 +37,18 @@ function goTo(state, data) {
         document.getElementById("backButton").style.display = "inline-block"
     }
 }
-function showBeginning() {
+function showBeginning(block) {
     document.getElementById("content").style.display = "flex";
     document.getElementById("calendar").style.display = "none";
     document.getElementById("loaderContainer").style.display = "none";
     document.getElementsByClassName("buttonsContainer")[0].style.display = "flex";
-    history.pushState({ page: "original" }, "", "/")
+    if (!block) {
+        history.pushState({ page: "original" }, "", "/")
+    }
 }
 
 
-function checkDates(frequencyChoice) {
+function checkDates(frequencyChoice, block) {
     document.getElementById("content").style.display = "flex";
     document.getElementById('customerForm').style.display = "none";
     document.getElementById("loaderContainer").style.display = "flex";
@@ -66,13 +68,17 @@ function checkDates(frequencyChoice) {
         disableBookedDays((new Date()).getMonth());
         hideLoader();
     }
-    history.pushState({ page: "calendar", data: { frequency: frequencyChoice } }, "", "");
+    if (!block) {
+        history.pushState({ page: "calendar", data: { frequency: frequencyChoice } }, "", "");
+    }
 }
-function goToQuestionForm() {
+function goToQuestionForm(block) {
     document.getElementById("squareContainer").style.display = "none";
     document.getElementById("content").style.display = "none";
     document.getElementById('customerForm').style.display = "block";
-    history.pushState({ page: "form" }, "", "")
+    if (!block) {
+        history.pushState({ page: "form" }, "", "")
+    }
 }
 
 function checkout() {
@@ -111,6 +117,6 @@ async function exponentialWait(func, time) {
     await setTimeout(func, time * 2);
 }
 
-function goBack(){
+function goBack() {
     window.history.back();
 }
