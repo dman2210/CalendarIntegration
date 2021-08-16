@@ -224,6 +224,6 @@ div#background h4 {
     color: rgb(255, 255, 255) !important;
   }
   .loyaltyLabel{
-    flex-direction: column;
+    font-size:3.4vw
   }
 }
