@@ -1,4 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Petit+Formal+Script&display=swap");
+div h2 {
+  text-transform: none;
+}
 .loyaltyLabel{
   display: flex;
 }
@@ -6,7 +9,7 @@
   flex-wrap: wrap;
 }
 .dycalendar-current-date{
-  background:  #a9a9a9;
+  background:  #a9a9a954;
   color: rgb(0, 0, 0) !important;
 }
 button.backButton {

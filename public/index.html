@@ -172,14 +172,14 @@
                     </div>
                     <input name="phone" required pattern=".*([0-9]{3}).*([0-9]{3}).*([0-9]{4}).*"
                         oninvalid="this.setCustomValidity('Please match one of these formats: ##########,   ###-###-####,   (###) ###-####')"
-                        onvalid="this.setCustomValidity('')" class="textInput" type="tel"></input>
+                        oninput="this.setCustomValidity('')" class="textInput" type="tel"></input>
                     <div style="display: flex;">
                         <h4>Email</h4>
                         <h4 style="margin-left: 3px;color:red">*</h4>
                     </div>
                     <input name="email" required pattern=".+@.+\.+.+"
                         oninvalid="this.setCustomValidity('Please match this format: aaa@aa.aaa')"
-                        onvalid="this.setCustomValidity('')" class="textInput" type="email"></input>
+                        oninput="this.setCustomValidity('')" class="textInput" type="email"></input>
                     <div style="display: flex;">
                         <h4>Street Address</h4>
                         <h4 style="margin-left: 3px;color:red">*</h4>
@@ -222,7 +222,7 @@
                     </div>
                     <h4>Parking instructions or other applicable information:</h4>
                     <textarea class="textInput" name="instructions"></textarea>
-                    <input style="margin-top:5px;font-family: 'Petit Formal Script', cursive;" type="submit"
+                    <input class="buttonAdapt" style="margin-top:5px;font-family: 'Petit Formal Script', cursive;" type="submit"
                         value="Submit" type="submit"></input>
                 </div>
             </form>
