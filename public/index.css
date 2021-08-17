@@ -2,14 +2,20 @@
 div h2 {
   text-transform: none;
 }
-.loyaltyLabel{
+button#card-button {
+    padding-right: 1.7vw;
+}
+#squareContainer > button {
+  margin-bottom: 2vh;
+}
+.loyaltyLabel {
   display: flex;
 }
 .hoursWrapper {
   flex-wrap: wrap;
 }
-.dycalendar-current-date{
-  background:  #a9a9a954;
+.dycalendar-current-date {
+  background: #a9a9a954;
   color: rgb(0, 0, 0) !important;
 }
 button.backButton {
@@ -35,7 +41,7 @@ span.unavailable {
 .title {
   margin-bottom: 2vh;
 }
-label{
+label {
   font-family: "Petit Formal Script", cursive;
 }
 div#background p {
@@ -44,6 +50,7 @@ div#background p {
 div#background h2 {
   font-size: 1.57em;
   font-family: "Petit Formal Script", cursive;
+  margin-top: revert;
 }
 div#background h3 {
   font-size: 1.17em;
@@ -105,6 +112,13 @@ div#background h4 {
 }
 .textInput {
   margin: 5px;
+  font-family: "Petit Formal Script";
+}
+[name="first"] {
+  max-width: 100%;
+}
+[name="last"] {
+  max-width: 90%;
 }
 .loader {
   border: 16px solid #f3f3f3; /* Light grey */
@@ -197,7 +211,7 @@ div#background h4 {
     padding-left: inital;
   }
   #background {
-    margin-top: -10px;
+    /* margin-top: -10px; */
   }
   .buttonItem {
     font-size: 14px;
@@ -226,7 +240,7 @@ div#background h4 {
     background: #9c00f7;
     color: rgb(255, 255, 255) !important;
   }
-  .loyaltyLabel{
-    font-size:3.4vw
+  .loyaltyLabel {
+    font-size: 3.4vw;
   }
 }
