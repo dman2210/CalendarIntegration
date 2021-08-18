@@ -83,7 +83,7 @@ function prepareCustomer(event, values) {
         familyName: values.last.value,
         emailAddress: values.email.value,
         phoneNumber: values.phone.value,
-        address: values.street.value+" "+values.city.value+" "+values.state.value+" "+values.zip.value,
+        address: values.street.value + " " + values.city.value + " " + values.state.value + " " + values.zip.value,
         description: values.instructions.value
     }
     event.preventDefault();
@@ -285,8 +285,8 @@ prepareAvailableHours().then(
                 td.setAttribute("class", "dycalendar-today-date");
             }
             if (option.date === count && option.month === data.monthIndex && option.highlighttargetdate === true) {
-            // current date
-            td.setAttribute("class", "dycalendar-current-date");
+                // current date
+                td.setAttribute("class", "dycalendar-current-date");
             }
             tr.appendChild(td);
             count = count + 1;
@@ -511,9 +511,10 @@ prepareAvailableHours().then(
                 drawCalendar(option);
             }
             if ((e.target.nodeName === "TD" && /.*[0-9]+.*/g.test(e.target.innerHTML)) && !Array.from(e.target.classList).includes('unavailable')) {
+                selectDay(e.target);
                 drawChooseHours(e.target);
             }
-            if(e.target.nodeName==="BUTTON"&&Array.from(e.target.classList).includes("backButtonCalendar")){
+            if (e.target.nodeName === "BUTTON" && Array.from(e.target.classList).includes("backButtonCalendar")) {
                 goBack();
             }
         }
@@ -596,14 +597,9 @@ prepareAvailableHours().then(
     })
 
     function selectDay(dayElement) {
-        Array.from(document.getElementsByTagName('tbody')[0].children).forEach(
-            (tr, index) => {
-                if (index > 0) {
-                    Array.from(tr.children).forEach(
-                        (td) => {
-                            td.classList.remove('dycalendar-target-date')
-                        })
-                }
+        Array.from(document.getElementsByClassName('dycalendar-target-date')).forEach(
+            (td) => {
+                td.classList.remove('dycalendar-target-date')
             })
         dayElement.classList.add('dycalendar-target-date');
     }
@@ -612,7 +608,6 @@ prepareAvailableHours().then(
     function drawChooseHours(dayElement) {
         let availabilities = [];
         //need to make sure we look through the whole year
-        selectDay(dayElement);
         let day = dayElement.innerHTML;
         let month = document.monthDrawn;
         //test if clickable

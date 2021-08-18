@@ -16,7 +16,7 @@ button#card-button {
 }
 .dycalendar-current-date {
   background: #a9a9a954;
-  color: rgb(0, 0, 0) !important;
+  color: white !important;
 }
 button.backButton {
   border-color: #9c00f7;
@@ -235,6 +235,7 @@ div#background h4 {
   }
   button.backButton {
     font-size: 12px;
+    padding: 1.7vw;
   }
   #calendar table td:hover {
     background: #9c00f7;
