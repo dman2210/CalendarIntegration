@@ -72,8 +72,8 @@ async function prepareAvailability() {
 
 // let appointmentsURL = "http://localhost:3000/api/appointments";
 function chooseTime(day, time, parent) {
-    goTo("form");
     document.subOptions.start = time;
+    goTo("form");
     // console.log("heyo");
     // console.log("He chose...  day: ", day, "time: ", time);
 }

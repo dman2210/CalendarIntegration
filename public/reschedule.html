@@ -5,130 +5,56 @@
     <meta content="width=device-width" name="viewport" />
     <link rel="stylesheet" href="glass.css">
     <link rel="stylesheet" href="glassCal.css">
-    <script type='text/javascript' src='./reschedule.js'></script>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="reschedule.css">
 </head>
 
 <body>
-    <div style="display:flex;justify-content: center;flex-direction: column;
-    margin-left: auto;
-    padding: 30px 130px;
-    margin-right: auto;
-    box-sizing: border-box;
-    max-width: 1300px;">
-        <div style="display:flex;align-items: center;justify-content: center;">
-            <h1>
-                Reschedule Appointment
-            </h1>
+    <div style="display:flex;align-items: center;justify-content: center;">
+        <h1>
+            Reschedule Appointment
+        </h1>
+    </div>
+    <div class="mainContainer">
+        <div id="loaderContainer" class="coverUp">
+            <div class="loader"></div>
         </div>
-        <div style="display:flex;">
+        <div id="calOldTime">
             <div id='calendar'>
             </div>
-            <div id='time' class='hide'>
-            </div>
+
             <div id='scheduleDetails'>
-                <h2 style="padding-bottom:15px">Schedule Details</h2>
+                <h2 style="padding-bottom:15px">Current Appointment</h2>
                 <div style="display:flex; padding-bottom:10px;">
-                    <p style="font-weight: bold;">Service:</p>
-                    <p></p>
+                    <p>Date:</p>
+                    <p id="currApptDate"></p>
                 </div>
                 <div style="display:flex; padding-bottom:10px;">
-                    <p style="font-weight: bold;">Where:</p>
-                    <p></p>
-                </div>
-                <div style="display:flex; padding-bottom:10px;">
-                    <p style="font-weight: bold;">Date:</p>
-                    <p></p>
-                </div>
-                <div style="display:flex; padding-bottom:10px;">
-                    <p style="font-weight: bold;">Time:</p>
-                    <p></p>
+                    <p>Time:</p>
+                    <p id="currApptTime"></p>
                 </div>
             </div>
         </div>
-        <div class="navButtonContainer">
-            <button style="border-color: rgba(255, 0, 208, 0.87);
-            color: rgba(255, 0, 208, 0.87);" class="buttonAdapt navButton">
-                <a href=" https://www.lingeriehousekeeper.com/bookappointment">
-                    Cancel
-                </a>
-            </button>
-            <button style="background-color: rgba(255, 0, 208, 0.87);" class="buttonAdapt navButton"
-                onclick="displayTime()">
-                Continue
+        <div id="submit" style="display:none">
+            <h2 style="padding-bottom:15px">New Appointment</h2>
+            <div style="display:flex; padding-bottom:10px;">
+                <p>Date:</p>
+                <p id="newApptDate">
+                </p>
+            </div>
+            <div style="display:flex; padding-bottom:10px;">
+                <p>Time:</p>
+                <p id="newApptTime"></p>
+            </div>
+            <button class="buttonAdapt" onclick="submitChanges()">
+                <div class="buttonItem">
+                    <p>Submit</p>
+                </div>
             </button>
         </div>
     </div>
-
     <footer>
-        <style type='text/css'>            
-            @font-face {
-                font-family: classico-urw;
-                src: url(https://use.typekit.net/af/e749f8/000000000000000077359ef1/30/l?subset_id=2&fvd=n4&v=3) format("woff2"), url(https://use.typekit.net/af/e749f8/000000000000000077359ef1/30/d?subset_id=2&fvd=n4&v=3) format("woff"), url(https://use.typekit.net/af/e749f8/000000000000000077359ef1/30/a?subset_id=2&fvd=n4&v=3) format("opentype");
-                font-weight: 400;
-                font-style: normal;
-                font-display: auto;
-            }
-
-            @font-face {
-                font-family: classico-urw;
-                src: url(https://use.typekit.net/af/1d9a3d/000000000000000077359ef5/30/l?subset_id=2&fvd=n5&v=3) format("woff2"), url(https://use.typekit.net/af/1d9a3d/000000000000000077359ef5/30/d?subset_id=2&fvd=n5&v=3) format("woff"), url(https://use.typekit.net/af/1d9a3d/000000000000000077359ef5/30/a?subset_id=2&fvd=n5&v=3) format("opentype");
-                font-weight: 500;
-                font-style: normal;
-                font-display: auto;
-            }
-
-            @font-face {
-                font-family: classico-urw;
-                src: url(https://use.typekit.net/af/030e54/000000000000000077359ef9/30/l?subset_id=2&fvd=n7&v=3) format("woff2"), url(https://use.typekit.net/af/030e54/000000000000000077359ef9/30/d?subset_id=2&fvd=n7&v=3) format("woff"), url(https://use.typekit.net/af/030e54/000000000000000077359ef9/30/a?subset_id=2&fvd=n7&v=3) format("opentype");
-                font-weight: 700;
-                font-style: normal;
-                font-display: auto;
-            }
-
-            @font-face {
-                font-family: classico-urw;
-                src: url(https://use.typekit.net/af/d115f4/000000000000000077359f02/30/l?subset_id=2&fvd=i5&v=3) format("woff2"), url(https://use.typekit.net/af/d115f4/000000000000000077359f02/30/d?subset_id=2&fvd=i5&v=3) format("woff"), url(https://use.typekit.net/af/d115f4/000000000000000077359f02/30/a?subset_id=2&fvd=i5&v=3) format("opentype");
-                font-weight: 500;
-                font-style: italic;
-                font-display: auto;
-            }
-
-            @font-face {
-                font-family: classico-urw;
-                src: url(https://use.typekit.net/af/70f7ef/000000000000000077359f04/30/l?subset_id=2&fvd=i7&v=3) format("woff2"), url(https://use.typekit.net/af/70f7ef/000000000000000077359f04/30/d?subset_id=2&fvd=i7&v=3) format("woff"), url(https://use.typekit.net/af/70f7ef/000000000000000077359f04/30/a?subset_id=2&fvd=i7&v=3) format("opentype");
-                font-weight: 700;
-                font-style: italic;
-                font-display: auto;
-            }
-        </style>
-        <style type='text/css'>
-            h2 {
-                font-family: classico-urw;
-            }
-
-            h3 {
-                font-family: classico-urw;
-                color: #bbb;
-            }
-
-            .label {
-                color: #bbb;
-            }
-
-
-            .solid {
-                width: 100%;
-                border-top: 1px solid #bbb;
-                margin-left: 5px;
-                margin-right: 5px;
-            }
-
-            .detailRow {
-                display: flex;
-                width: 100%;
-                justify-content: space-between;
-            }
-        </style>
         <script type='text/javascript' src='./calendar.js'></script>
+        <script type='text/javascript' src='./reschedule.js'></script>
     </footer>
 </body>

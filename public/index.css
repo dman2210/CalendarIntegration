@@ -112,7 +112,7 @@ div#background h4 {
 }
 .textInput {
   margin: 5px;
-  font-family: "Petit Formal Script";
+  font-family: "Petit Formal Script", cursive;
 }
 [name="first"] {
   max-width: 100%;
