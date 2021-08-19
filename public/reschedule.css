@@ -1,7 +1,7 @@
 div#calendar {
   display: block;
 }
-* {
+#main * {
   font-family: "Petit Formal Script", cursive;
 }
 .backButtonCalendar {
