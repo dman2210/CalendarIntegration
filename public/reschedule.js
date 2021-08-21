@@ -32,7 +32,7 @@ function showCurrent() {
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     let months = ["January", "February", "March", "April", "May", "June", "July",
         "August", "September", "October", "November", "December"];
-    let currDate = new Date(queryParams.get('current'));
+    let currDate = new Date(queryParams.get('start'));
     document.getElementById('currApptDate').innerHTML = `${days[currDate.getDay()]} ${currDate.getDate()} ${months[currDate.getMonth()]} ${currDate.getFullYear()}`
     document.getElementById('currApptDate').style.marginLeft = "1vw";
     document.getElementById('currApptTime').innerHTML = formatTime(currDate);
@@ -54,8 +54,17 @@ function showChangeSubmit() {
 }
 
 //replaces all the html with a notice
-function submitChanges() {
-    alert('implement this')
+async function submitChanges() {
+    document.getElementById('loader').style.display = 'flex';
+    let url = "https://calendar-integration-backend.vercel.app/api/appointments?action=reschedule";
+    let start = queryParams.get('start');
+    let endDate = new Date(start);
+    endDate.setHours(startDate.getHours() + 2);
+    let eventID = queryParams.get('eventID');
+    let body = { start: start, end: endDate.toISOString(), eventID: eventID };
+    await fetch(url, { method: "POST", body: JSON.stringify(body) });
+    document.getElementById('loaderContainer').style.display = 'none';
+    document.getElementById('mainContainer').innerHTML = '<h2>Your appointment has been moved.</h2>'
 }
 
 //helper

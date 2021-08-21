@@ -20,6 +20,37 @@ function formatTime(date) {
     let strTime = hours + ":" + minutes + " " + ampm;
     return strTime;
 }
-function cancelOne(){
-    alert('implement this')
+async function cancelOne(){
+    document.getElementById('loaderContainer').style.display = flex;
+    let url = "https://calendar-integration-backend.vercel.app/api/appointments?action=cancel";
+    let customerID = queryParams.get('customerID');
+    let eventID = queryParams.get('eventID');
+    let body = {customerID:customerID, eventID:eventID};
+    await fetch(url, {method:"POST", body:JSON.stringify(body)});
+    document.getElementById('loaderContainer').style.display = 'none';
+    document.getElementById('confirm').innerHTML = '<h2>Your appointment has been cancelled.</h2>'
+}
+
+function promptCancelAll(){
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('prompt').style.display = 'flex';
+    document.getElementById('loaderContainer').style.display = 'flex';
+}
+
+function closePrompt(){
+    document.getElementById('loader').style.display = 'flex';
+    document.getElementById('prompt').style.display = 'none';
+    document.getElementById('loaderContainer').style.display = 'none';
+}
+
+async function cancelAll(){
+    document.getElementById('loader').style.display = 'flex';
+    document.getElementById('prompt').style.display = 'none';
+    let url = "https://calendar-integration-backend.vercel.app/api/appointments?action=cancel";
+    let customerID = queryParams.get('customerID');
+    let eventID = "all"
+    let body = {customerID:customerID, eventID:eventID};
+    await fetch(url, {method:"POST", body:JSON.stringify(body)});
+    document.getElementById('loaderContainer').style.display = 'none';
+    document.getElementById('confirm').innerHTML = '<h2>Your subscription has been cancelled.</h2>'
 }

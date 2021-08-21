@@ -3,3 +3,6 @@
     flex-direction: column;
     align-items: center;
 }
+#confirm *{
+    font-family: "Petit Formal Script", cursive !important;
+}

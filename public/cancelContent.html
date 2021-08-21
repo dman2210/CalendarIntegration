@@ -10,6 +10,14 @@
 
 <body>
     <div id="confirm" style="font-family: Petit Formal Script, cursive;">
+        <div id="loaderContainer" class="coverUp" style="display:none">
+            <div id="loader" class="loader"></div>
+            <div id="prompt" class="cancelAllPrompt">
+                <h2>Are you sure you want to cancel your subscription?</h2>
+                <button id="cancelAll" class="buttonAdapt" onclick="cancelAll()">Yes - Cancel Subscription</button>
+                <button id="closePrompt" class="buttonAdapt" onclick="closePrompt()">No</button>
+            </div>
+        </div>
         <h2>
             Do you want to cancel this appointment?
         </h2>
@@ -24,7 +32,8 @@
                 <p id="currApptTime"></p>
             </div>
         </div>
-        <button class="buttonAdapt" onclick="cancelOne()">Cancel Appointment</button>
+        <button id="cancelOne" class="buttonAdapt" onclick="cancelOne()">Cancel Appointment</button>
+        <button id="prompt" class="buttonAdapt" onclick="promptCancelAll()">Cancel Subscription</button>
     </div>
 </body>
 <footer>
