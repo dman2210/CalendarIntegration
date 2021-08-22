@@ -1,0 +1,21 @@
+.mainContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#mainContainer * {
+  font-family: "Petit Formal Script", cursive !important;
+}
+#payment-form {
+  display: flex;
+  flex-direction: column;
+}
+#squareContainer {
+  width: 60vw;
+}
+#card-button {
+  width: 12vw;
+  align-self: center;
+}

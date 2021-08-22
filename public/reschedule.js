@@ -55,16 +55,22 @@ function showChangeSubmit() {
 
 //replaces all the html with a notice
 async function submitChanges() {
-    document.getElementById('loader').style.display = 'flex';
-    let url = "https://calendar-integration-backend.vercel.app/api/appointments?action=reschedule";
-    let start = queryParams.get('start');
+    document.getElementById('loaderContainer').style.display = 'flex';
+    // let url = "https://calendar-integration-backend.vercel.app/api/appointments?action=reschedule";
+    let url = "http://localhost:3000/api/appointments?action=reschedule"
+    let start = new Date(queryParams.get('start'));
     let endDate = new Date(start);
-    endDate.setHours(startDate.getHours() + 2);
+    endDate.setHours(start.getHours() + 2);
     let eventID = queryParams.get('eventID');
     let body = { start: start, end: endDate.toISOString(), eventID: eventID };
-    await fetch(url, { method: "POST", body: JSON.stringify(body) });
+    let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
-    document.getElementById('mainContainer').innerHTML = '<h2>Your appointment has been moved.</h2>'
+    if (respo.ok) {
+        document.getElementById('mainContainer').innerHTML = '<h2>Your appointment has been moved. An email confirmation will be sent.</h2>'
+    } else {
+        document.getElementById('mainContainer').innerHTML = '<h2>There has been an error.</h2>'
+    }
+
 }
 
 //helper

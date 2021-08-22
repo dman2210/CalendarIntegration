@@ -12,18 +12,18 @@ async function initializeCard(payments) {
 
 async function finishTransaction(token) {
     console.log("running transaction...");
-    let body = JSON.stringify({
+    let body = {
         customerDetails: document.customerDetails,
         token: token,
         subOptions: document.subOptions,
-    });
-    console.log(body);
+    };
+    // console.log(body);
     const subscriptionResponse = await fetch(subURL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body,
+        body:JSON.stringify(body)
     });
     console.log(subscriptionResponse);
     if (subscriptionResponse.ok) {
