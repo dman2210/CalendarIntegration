@@ -1,0 +1,32 @@
+div#calendar {
+  display: block;
+}
+#main * {
+  font-family: "Petit Formal Script", cursive !important;
+}
+.backButtonCalendar {
+  display: none;
+}
+.mainContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+#calOldTime{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.selectedTime {
+  border: 1px solid rgba(255, 0, 208, 0.87);
+}
+button.buttonAdapt{
+  margin-right: 1.5vw;
+}
+@media (max-width: 600px) {
+  #calOldTime {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+}

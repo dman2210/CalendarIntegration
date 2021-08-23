@@ -1,8 +1,27 @@
 @import url("https://fonts.googleapis.com/css?family=Petit+Formal+Script&display=swap");
+div h2 {
+  text-transform: none;
+}
+button#card-button {
+    padding-right: 1.7vw;
+}
+#squareContainer > button {
+  margin-bottom: 2vh;
+}
+.loyaltyLabel {
+  display: flex;
+}
 .hoursWrapper {
   flex-wrap: wrap;
 }
-
+.dycalendar-current-date {
+  background: #a9a9a954;
+  color: white !important;
+}
+button.backButton {
+  border-color: #9c00f7;
+  color: #9c00f7;
+}
 #calendar table td.unavailable {
   color: #a9a9a9;
 }
@@ -17,10 +36,13 @@ span.unavailable {
   cursor: not-allowed !important;
 }
 .noSpaceLeft {
-  margin-left: -2px;
+  margin-left: -4px;
 }
 .title {
   margin-bottom: 2vh;
+}
+label {
+  font-family: "Petit Formal Script", cursive;
 }
 div#background p {
   font-family: "Petit Formal Script", cursive;
@@ -28,6 +50,7 @@ div#background p {
 div#background h2 {
   font-size: 1.57em;
   font-family: "Petit Formal Script", cursive;
+  margin-top: revert;
 }
 div#background h3 {
   font-size: 1.17em;
@@ -75,6 +98,7 @@ div#background h4 {
   padding-left: 1.7vw;
   padding-right: 1.7vw;
   margin-top: 2.8vh;
+  font-family: "Petit Formal Script", cursive;
 }
 .buttonItem {
   margin: 0.5vh;
@@ -88,6 +112,13 @@ div#background h4 {
 }
 .textInput {
   margin: 5px;
+  font-family: "Petit Formal Script", cursive;
+}
+[name="first"] {
+  max-width: 100%;
+}
+[name="last"] {
+  max-width: 90%;
 }
 .loader {
   border: 16px solid #f3f3f3; /* Light grey */
@@ -148,6 +179,11 @@ div#background h4 {
 .navButton {
   font-family: "Petit Formal Script", cursive;
 }
+.dycalendar-body {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+}
 
 @media (max-width: 600px) {
   div#background h4 {
@@ -175,7 +211,7 @@ div#background h4 {
     padding-left: inital;
   }
   #background {
-    margin-top: -10px;
+    /* margin-top: -10px; */
   }
   .buttonItem {
     font-size: 14px;
@@ -195,5 +231,17 @@ div#background h4 {
   }
   .navButtonContainer > .navButton {
     margin-top: 0;
+    padding-right: 5px;
+  }
+  button.backButton {
+    font-size: 12px;
+    padding: 1.7vw;
+  }
+  #calendar table td:hover {
+    background: #9c00f7;
+    color: rgb(255, 255, 255) !important;
+  }
+  .loyaltyLabel {
+    font-size: 3.4vw;
   }
 }

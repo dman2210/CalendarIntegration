@@ -12,14 +12,17 @@
 <body>
     <div id="background">
         <div id="squareContainer" style="display:none">
+            <button class="buttonAdapt navButton backButton" onclick="goBack()">
+                &lt Back
+            </button>
             <form id="payment-form">
                 <div id="card-container"></div>
-                <button id="card-button" type="button">Pay $1.00</button>
+                <button id="card-button" type="button">Submit Payment</button>
             </form>
             <div id="payment-status-container"></div>
         </div>
         <div id="main" style="display:flex;justify-content: center;flex-direction: column;">
-            <div class="content">
+            <div id="content" class="content">
                 <div id="label" class="label">
                     <h3 id="frequencyStatus" class="statusItem activeStatus">
                         Select service
@@ -37,7 +40,7 @@
                 <div id="loaderContainer" class="coverUp">
                     <div class="loader"></div>
                 </div>
-                <div id="calendar" ></div>
+                <div id="calendar"></div>
                 <div class="buttonsContainer">
                     <div id="buttons" style="display:flex; flex-direction: column;width:100%">
                         <button class="buttonAdapt" id="one" style="margin-top:0px"
@@ -63,7 +66,15 @@
                                 </div>
                             </div>
                         </button>
-                        <h4 style="margin-top: 2vh;">Loyal Clients Discount (Recurring Plans):</h4>
+                        <div class="loyaltyLabel">
+                            <h4 style="margin-top: 2vh;margin-right: 6px;">Loyal Clients Discount </h4>
+                            <div style="display: flex;align-items: center;">
+                                <h4 style="margin-top: 2vh;">(</h4>
+                                <h4 style="margin-top: 2vh;" class="noSpaceLeft">Recurring Plans</h4>
+                                <h4 style="margin-top: 2vh;" class="noSpaceLeft">):</h4>
+                            </div>
+
+                        </div>
                         <button class="buttonAdapt" id="weekly" onclick="goTo('calendar', {frequency:'weekly'})">
                             <div>
                                 <div class="buttonItemContainer">
@@ -124,7 +135,7 @@
                                     </div>
                                     <div class="buttonItem">
                                         <p>
-                                            $100.00 per Month
+                                            $100.00 every 4 weeks
                                         </p>
                                     </div>
                                 </div>
@@ -133,20 +144,103 @@
                     </div>
                 </div>
             </div>
+            <form style="display:none" id="customerForm" onsubmit="prepareCustomer(event, this)">
+                <button class="buttonAdapt navButton backButton" onclick="goBack()">
+                    &lt Back
+                </button>
+                <div style="display:flex;justify-content: center;flex-direction: column;">
+                    <h2>Customer Profile</h2>
+                    <div style="display:flex;justify-content:space-between">
+                        <div style="max-width: 40%;">
+                            <div style="display: flex;">
+                                <h4>First Name</h4>
+                                <h4 style="margin-left: 3px;color:red">*</h4>
+                            </div>
+                            <input name="first" required class="textInput" type="text"></input>
+                        </div>
+                        <div style="max-width: 50%;">
+                            <div style="display: flex;">
+                                <h4>Last Name</h4>
+                                <h4 style="margin-left: 3px;color:red">*</h4>
+                            </div>
+                            <input name="last" required class="textInput" type="text"></input>
+                        </div>
+                    </div>
+                    <div style="display: flex;">
+                        <h4>Phone</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
+                    </div>
+                    <input name="phone" required pattern=".*([0-9]{3}).*([0-9]{3}).*([0-9]{4}).*"
+                        oninvalid="this.setCustomValidity('Please match one of these formats: ##########,   ###-###-####,   (###) ###-####')"
+                        oninput="this.setCustomValidity('')" class="textInput" type="tel"></input>
+                    <div style="display: flex;">
+                        <h4>Email</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
+                    </div>
+                    <input name="email" required pattern=".+@.+\.+.+"
+                        oninvalid="this.setCustomValidity('Please match this format: aaa@aa.aaa')"
+                        oninput="this.setCustomValidity('')" class="textInput" type="email"></input>
+                    <div style="display: flex;">
+                        <h4>Street Address</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
+                    </div>
+                    <input name="street" required class="textInput" type="text"></input>
+                    <div style="display: flex;">
+                        <h4>City</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
+                    </div>
+                    <input name="city" required class="textInput" type="text"></input>
+                    <div style="display: flex;">
+                        <h4>State</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
+                    </div>
+                    <input name="state" required class="textInput" type="text"></input>
+                    <div style="display: flex;">
+                        <h4>Zip Code</h4>
+                        <h4 style="margin-left: 3px;color:red">*</h4>
+                    </div>
+                    <input name="zip" required class="textInput" type="text"></input>
+                    <div style="display: flex;">
+                        <h4>Do you request that gloves be worn during your sessions?<span style="margin-left: 3px;color:red">*</span></h4>
+                        
+                    </div>
+                    <div>
+                        <input type="radio" id="gloves" name="gloveSel" value="true" required>
+                        <label for="html">Yes</label><br>
+                        <input type="radio" id="noGloves" name="gloveSel" value="false">
+                        <label for="css">No</label><br>
+                    </div>
+                    <div style="display: flex;">
+                        <h4>Do you request that a mask be worn during your sessions?<span style="margin-left: 3px;color:red">*</span></h4>
+                    </div>
+                    <div>
+                        <input type="radio" id="mask" name="maskSel" value="true" required>
+                        <label for="html">Yes</label><br>
+                        <input type="radio" id="noMask" name="maskSel" value="false">
+                        <label for="css">No</label><br>
+                    </div>
+                    <h4>Parking instructions or any other applicable information:</h4>
+                    <textarea class="textInput" name="instructions"></textarea>
+                    <input class="buttonAdapt" style="margin-top:5px;font-family: 'Petit Formal Script', cursive;" type="submit"
+                        value="Submit" type="submit"></input>
+                </div>
+            </form>
             <div class="navButtonContainer">
-                <button id="backButton" style="
-    border-color: rgba(255, 0, 208, 0.87);
-    color: rgba(255, 0, 208, 0.87);
-    display:none;
-" class="buttonAdapt navButton">Back</button>
+                <button id="backButton" style="display:none;" class="buttonAdapt navButton"
+                    onclick="window.history.back()">
+                    Back
+                </button>
             </div>
         </div>
         <script type="text/javascript" src="/squareIntegration.js"></script>
         <script type='text/javascript' src='./calendar.js'></script>
         <script>
-            history.pushState({ page: "original" }, "", "")
+            history.pushState({ page: "original" }, "", "/")
         </script>
         <script type='text/javascript' src='./state.js'></script>
+        <script>
+            document.getElementById('calendar').style.marginTop = "100px"
+        </script>
 </body>
 
 </html>

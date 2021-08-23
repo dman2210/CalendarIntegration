@@ -1,11 +1,34 @@
+window.onpopstate = function (event) {
+    // console.log(event.state)
+    if (event.state) {
+        goTo(event.state.page, event.state.data, true);
+    }
+}
+
 var toDo = [];
-function goTo(state, data) {
+function goTo(state, data, block) {
     let stateMap = {
-        calendar: {
-            do: () => { checkDates(data.frequency) },
-            statusId: "calendarStatus",
+        original: {
+            do: () => { showBeginning(block) },
+            statusId: "frequencyStatus",
             step: 1
-        }
+        },
+        calendar: {
+            do: () => { checkDates(data.frequency, block) },
+            statusId: "calendarStatus",
+            step: 2
+        },
+        form: {
+            do: () => { goToQuestionForm(block) },
+            statusId: "detailStatus",
+            step: 3
+        },
+        payment: {
+            do: () => { checkout(block) },
+            statusId: "paymentStatus",
+            step: 4
+        },
+
     }
     let newState = stateMap[state];
     newState.do();
@@ -14,7 +37,20 @@ function goTo(state, data) {
         document.getElementById("backButton").style.display = "inline-block"
     }
 }
-function checkDates(frequencyChoice) {
+function showBeginning(block) {
+    document.getElementById("content").style.display = "flex";
+    document.getElementById("calendar").style.display = "none";
+    document.getElementById("loaderContainer").style.display = "none";
+    document.getElementsByClassName("buttonsContainer")[0].style.display = "flex";
+    if (!block) {
+        history.pushState({ page: "original" }, "", "/")
+    }
+}
+
+
+function checkDates(frequencyChoice, block) {
+    document.getElementById("content").style.display = "flex";
+    document.getElementById('customerForm').style.display = "none";
     document.getElementById("loaderContainer").style.display = "flex";
     document.subOptions = { frequency: frequencyChoice };
     //implement conflict checking
@@ -22,8 +58,8 @@ function checkDates(frequencyChoice) {
     // let title = document.getElementById('title').cloneNode(true);
     document.getElementsByClassName("buttonsContainer")[0].style.display = "none";
 
-    // history.pushState({ page: "calendaropened", busyHours: hoursBusy }, "", "");
-    if (!hoursBusyResolved||!availableHoursResolved) {
+
+    if (!hoursBusyResolved || !availableHoursResolved) {
         toDo.push(() => { filterByFrequency(frequencyChoice); });
         toDo.push(() => { disableBookedDays((new Date()).getMonth()); });
         toDo.push(() => { hideLoader(); });
@@ -32,6 +68,23 @@ function checkDates(frequencyChoice) {
         disableBookedDays((new Date()).getMonth());
         hideLoader();
     }
+    if (!block) {
+        history.pushState({ page: "calendar", data: { frequency: frequencyChoice } }, "", "");
+    }
+}
+function goToQuestionForm(block) {
+    document.getElementById("squareContainer").style.display = "none";
+    document.getElementById("content").style.display = "none";
+    document.getElementById('customerForm').style.display = "block";
+    if (!block) {
+        history.pushState({ page: "form" }, "", "")
+    }
+}
+
+function checkout() {
+    document.getElementById("squareContainer").style.display = "unset";
+    document.getElementById("customerForm").style.display = "none";
+    history.pushState({ page: "payment" }, "", "")
 }
 
 function changeStatus(statusId) {
@@ -64,66 +117,6 @@ async function exponentialWait(func, time) {
     await setTimeout(func, time * 2);
 }
 
-// var stateChanges = {
-//     original: function () {
-//         document.getElementById("main").style.flexDirection = "column";
-//         document.getElementById("calendar").style.display = "none";
-//         let buttons = document.getElementById("buttons").children;
-//         Array.from(buttons).forEach((button) => {
-//             button.style.display = "flex";
-//         });
-//         document.getElementById("label").innerText = "How Often?"
-//     },
-// }
-// window.onpopstate = function (event) {
-//     console.log("running state change")
-//     stateChanges[event.state.page]();
-//     hoursAvailable = event.state.hours;
-// }
-// let cleaningOptions = [
-                            //     {
-                            //         frequency: "One Cleaning",
-                            //         price: 175,
-                            //         note: "2 Hours",
-                            //         short: "one",
-
-                            //     },
-                            //     {
-                            //         frequency: "Monthly",
-                            //         price: 175,
-                            //         note: "2 Hours",
-                            //         short: "monthly",
-                            //     },
-                            //     {
-                            //         frequency: "Weekly",
-                            //         price: 175,
-                            //         note: "2 Hours",
-                            //         short: "weekly"
-                            //     },
-                            //     {
-                            //         frequency: "Bi-Weekly",
-                            //         price: 175,
-                            //         note: "2 Hours",
-                            //         short: "biweekly"
-                            //     }
-                            // ]
-                            // let buttons = cleaningOptions.map((option) => {
-                            //     return (
-                            //         `<button class="buttonAdapt" id="${option.short}" onClick=checkDates("${option.short}")>
-                            //         <div>
-                            //         <div style="display:flex;align-items: flex-start; flex-direction:column;margin-right:10vw;">
-                            //             <div class="buttonItem serviceTitle">
-                            //                 <h4 style="display:flex">
-                            //                     ${option.frequency}
-                            //                 </h4>
-                            //             </div>
-                            //             <div class="buttonItem">
-                            //                 <p>
-                            //                     $${option.price.toString()}.00 · ${option.note}
-                            //                 </p>
-                            //             </div>
-                            //         </div>
-                            //         </div>
-                            //     </button>`)
-                            // })
-                            // document.getElementById("buttons").innerHTML = buttons;
+function goBack() {
+    window.history.back();
+}

@@ -10,7 +10,7 @@ let hoursURL = "https://calendar-integration-backend.vercel.app/api/hours";
 async function prepareAvailableHours() {
     return await fetch(hoursURL).then(
         async (response) => {
-            console.log(response);
+            // console.log(response);
             if (response.ok) {
                 return await response.json().then(json => { console.log(json); availableHoursResolved = true; return json });
             } else {
@@ -72,8 +72,8 @@ async function prepareAvailability() {
 
 // let appointmentsURL = "http://localhost:3000/api/appointments";
 function chooseTime(day, time, parent) {
-    goToQuestionForm()
     document.subOptions.start = time;
+    goTo("form");
     // console.log("heyo");
     // console.log("He chose...  day: ", day, "time: ", time);
 }
@@ -83,70 +83,12 @@ function prepareCustomer(event, values) {
         familyName: values.last.value,
         emailAddress: values.email.value,
         phoneNumber: values.phone.value,
-        address: values.address.value,
+        address: values.street.value + " " + values.city.value + " " + values.state.value + " " + values.zip.value,
         description: values.instructions.value
     }
     event.preventDefault();
     document.customerDetails = customerDetails;
-    checkout();
-}
-function goToQuestionForm() {
-    let main = document.getElementById("main");
-    let form =
-        `<form onsubmit="prepareCustomer(event, this)"> <div style="display:flex;justify-content: center;flex-direction: column;">
-        <h2>Customer Profile</h2>
-        <div style="display:flex;justify-content:space-between">
-            <div><h4>FIRST NAME</h4>
-            <input name="first" required class="textInput" type="text"></input>
-            </div>
-            <div>
-                <h4>LAST NAME</h4>
-            <input name="last" required class="textInput" type="text"></input>
-            </div>
-        </div>
-        <h4>PHONE</h4>
-        <input name="phone" required pattern=".*([0-9]{3}).*([0-9]{3}).*([0-9]{4}).*" 
-        oninvalid="this.setCustomValidity('Please match one of these formats: ##########,   ###-###-####,   (###) ###-####')" 
-        onvalid="this.setCustomValidity('')" 
-        class="textInput" 
-        type="tel"></input>
-        <h4>EMAIL</h4>
-        <input name="email" required pattern=".+@.+\.+." 
-        oninvalid="this.setCustomValidity('Please match one of these formats: ##########,   ###-###-####,   (###) ###-####')" 
-        onvalid="this.setCustomValidity('')"  class="textInput" type="email"></input>
-        <h4>ADDRESS</h4>
-        <input name="address" required class="textInput" type="text"></input>
-        <h4>Should a vacuum be brought to this session?</h4>
-        <div>
-            <input type="radio" id="vacuum" name="vacuumSel" value="true" required>
-                <label for="html">YES</label><br>
-                    <input type="radio" id="noVacuum" name="vacuumSel" value="false">
-                        <label for="css">NO</label><br>
-        </div>
-        <h4>Do you request gloves be worn during your session?</h4>
-        <div>
-            <input type="radio" id="gloves" name="gloveSel" value="true" required>
-                <label for="html">YES</label><br>
-                    <input type="radio" id="noGloves" name="gloveSel" value="false">
-                        <label for="css">NO</label><br>
-        </div>
-        <h4>Do you request that a mask be worn during your session?</h4>
-        <div>
-            <input type="radio" id="mask" name="maskSel" value="true" required>
-                <label for="html">YES</label><br>
-                    <input type="radio" id="noMask" name="maskSel" value="false">
-                        <label for="css">NO</label><br>
-        </div>
-        <h4>Parking instructions or other applicable information:</h4>
-        <textarea class="textInput" name="instructions"></textarea>
-        <input style="margin-top:5px" type="submit" value="Submit" type="submit"></input>
-    </div></form>`;
-    main.innerHTML = form;
-}
-function checkout() {
-    document.getElementById("squareContainer").style.display = "unset";
-    let main = document.getElementById("main");
-    main.innerHTML = "";
+    goTo("payment");
 }
 ///sets up the dimensions of the booked array
 function prepareBookedDaysArray() {
@@ -342,10 +284,10 @@ prepareAvailableHours().then(
             if (data.today.date === count && data.today.monthIndex === data.monthIndex && option.highlighttoday === true) {
                 td.setAttribute("class", "dycalendar-today-date");
             }
-            // if (option.date === count && option.month === data.monthIndex && option.highlighttargetdate === true) {
-            //current date
-            // td.setAttribute("class", "dycalendar-target-date");
-            // }
+            if (option.date === count && option.month === data.monthIndex && option.highlighttargetdate === true) {
+                // current date
+                td.setAttribute("class", "dycalendar-current-date");
+            }
             tr.appendChild(td);
             count = count + 1;
             c = c + 1;
@@ -364,9 +306,9 @@ prepareAvailableHours().then(
                 if (data.today.date === count && data.today.monthIndex === data.monthIndex && option.highlighttoday === true) {
                     td.setAttribute("class", "dycalendar-today-date");
                 }
-                // if (option.date === count && option.month === data.monthIndex && option.highlighttargetdate === true) {
-                //     td.setAttribute("class", "dycalendar-target-date");
-                // }
+                if (option.date === count && option.month === data.monthIndex && option.highlighttargetdate === true) {
+                    td.setAttribute("class", "dycalendar-current-date");
+                }
                 count = count + 1;
                 tr.appendChild(td);
             }
@@ -383,6 +325,8 @@ prepareAvailableHours().then(
         buttonContainer.classList.add('navButtonContainer');
         button.classList.add('navButton');
         button.classList.add('buttonAdapt');
+        button.classList.add('backButton');
+        button.classList.add('backButtonCalendar');
         button.innerHTML = "< Back";
         buttonContainer.appendChild(button);
         container.appendChild(buttonContainer);
@@ -567,7 +511,11 @@ prepareAvailableHours().then(
                 drawCalendar(option);
             }
             if ((e.target.nodeName === "TD" && /.*[0-9]+.*/g.test(e.target.innerHTML)) && !Array.from(e.target.classList).includes('unavailable')) {
+                selectDay(e.target);
                 drawChooseHours(e.target);
+            }
+            if (e.target.nodeName === "BUTTON" && Array.from(e.target.classList).includes("backButtonCalendar")) {
+                goBack();
             }
         }
             ;
@@ -649,14 +597,9 @@ prepareAvailableHours().then(
     })
 
     function selectDay(dayElement) {
-        Array.from(document.getElementsByTagName('tbody')[0].children).forEach(
-            (tr, index) => {
-                if (index > 0) {
-                    Array.from(tr.children).forEach(
-                        (td) => {
-                            td.classList.remove('dycalendar-target-date')
-                        })
-                }
+        Array.from(document.getElementsByClassName('dycalendar-target-date')).forEach(
+            (td) => {
+                td.classList.remove('dycalendar-target-date')
             })
         dayElement.classList.add('dycalendar-target-date');
     }
@@ -665,7 +608,6 @@ prepareAvailableHours().then(
     function drawChooseHours(dayElement) {
         let availabilities = [];
         //need to make sure we look through the whole year
-        selectDay(dayElement);
         let day = dayElement.innerHTML;
         let month = document.monthDrawn;
         //test if clickable
