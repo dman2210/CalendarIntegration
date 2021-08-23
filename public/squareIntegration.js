@@ -25,7 +25,7 @@ async function finishTransaction(token) {
         },
         body:JSON.stringify(body)
     });
-    console.log(subscriptionResponse);
+    // console.log(subscriptionResponse);
     if (subscriptionResponse.ok) {
         return true;
     } else {
@@ -42,7 +42,7 @@ async function finishTransaction(token) {
 
 async function tokenize(paymentMethod) {
     const tokenResult = await paymentMethod.tokenize();
-    console.log(tokenResult);
+    // console.log(tokenResult);
     if (tokenResult.status === "OK") {
         return tokenResult.token;
     } else {
@@ -108,7 +108,7 @@ async function runSquare() {
             cardButton.disabled = true;
             const token = await tokenize(paymentMethod);
             console.log("sending request...");
-            main.innerHTML = "Setting up cleaning...;";
+            main.innerHTML = "Setting up cleaning...";
             const paymentResults = await finishTransaction(token);
             if (paymentResults === true) {
                 console.log("request success");

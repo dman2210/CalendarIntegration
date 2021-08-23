@@ -1,9 +1,12 @@
 @import url("https://fonts.googleapis.com/css?family=Petit+Formal+Script&display=swap");
+.background * {
+  font-family: "Petit Formal Script", cursive;
+}
 div h2 {
   text-transform: none;
 }
 button#card-button {
-    padding-right: 1.7vw;
+  padding-right: 1.7vw;
 }
 #squareContainer > button {
   margin-bottom: 2vh;
@@ -209,9 +212,6 @@ div#background h4 {
     margin-right: 4px;
     padding-right: initial;
     padding-left: inital;
-  }
-  #background {
-    /* margin-top: -10px; */
   }
   .buttonItem {
     font-size: 14px;

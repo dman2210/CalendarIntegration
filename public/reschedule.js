@@ -20,7 +20,7 @@ if (!hoursBusyResolved || !availableHoursResolved) {
 //form is passed in as string
 function goTo() {
     let time = document.subOptions.start;
-    console.log(formatTime(new Date(time)))
+    // console.log(formatTime(new Date(time)))
     Array.from(document.getElementsByTagName('button')).find(
         el => el.firstChild
             && el.firstChild.firstChild
@@ -56,19 +56,21 @@ function showChangeSubmit() {
 //replaces all the html with a notice
 async function submitChanges() {
     document.getElementById('loaderContainer').style.display = 'flex';
-    // let url = "https://calendar-integration-backend.vercel.app/api/appointments?action=reschedule";
-    let url = "http://localhost:3000/api/appointments?action=reschedule"
-    let start = new Date(queryParams.get('start'));
+    let url = "https://calendar-integration-backend.vercel.app/api/appointments?action=reschedule";
+    // let url = "http://localhost:3000/api/appointments?action=reschedule"
+    let start = new Date(document.subOptions.start);
+    // console.log(start);
     let endDate = new Date(start);
     endDate.setHours(start.getHours() + 2);
+    // console.log(endDate);
     let eventID = queryParams.get('eventID');
-    let body = { start: start, end: endDate.toISOString(), eventID: eventID };
+    let body = { start: start.toISOString(), end: endDate.toISOString(), eventID: eventID };
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
     if (respo.ok) {
-        document.getElementById('mainContainer').innerHTML = '<h2>Your appointment has been moved. An email confirmation will be sent.</h2>'
+        document.getElementById('mainContainer').innerHTML = '<h2>Your appointment has been moved. Sending confirmation...</h2>'
     } else {
-        document.getElementById('mainContainer').innerHTML = '<h2>There has been an error.</h2>'
+        document.getElementById('mainContainer').innerHTML = '<h2>There was an error.</h2>'
     }
 
 }

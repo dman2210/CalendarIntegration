@@ -6,3 +6,10 @@
 #confirm *{
     font-family: "Petit Formal Script", cursive !important;
 }
+div#prompt{
+    padding: 2vw;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: 20px;
+}

@@ -1,10 +1,10 @@
-document.getElementById('main').innerHTML=
-`<div style="display:flex;align-items: center;justify-content: center;">
-<h1>
-    Reschedule Appointment
-</h1>
+document.getElementById('main').innerHTML =
+    `<div id="mainContainer" class="mainContainer">
+<div style="display:flex;align-items: center;justify-content: center;">
+    <h1>
+        Reschedule Appointment
+    </h1>
 </div>
-<div class="mainContainer">
 <div id="loaderContainer" class="coverUp">
     <div class="loader"></div>
 </div>

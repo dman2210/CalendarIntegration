@@ -12,7 +12,9 @@ async function prepareAvailableHours() {
         async (response) => {
             // console.log(response);
             if (response.ok) {
-                return await response.json().then(json => { console.log(json); availableHoursResolved = true; return json });
+                return await response.json().then(json => {
+                    // console.log(json); 
+                    availableHoursResolved = true; return json });
             } else {
                 console.log(response.error);
             }

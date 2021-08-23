@@ -41,7 +41,7 @@ async function finishTransaction(token) {
 
 async function tokenize(paymentMethod) {
     const tokenResult = await paymentMethod.tokenize();
-    console.log(tokenResult);
+    // console.log(tokenResult);
     if (tokenResult.status === "OK") {
         return tokenResult.token;
     } else {
