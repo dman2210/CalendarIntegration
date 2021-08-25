@@ -1,4 +1,4 @@
-var subURL = 'https://calendar-integration-backend.vercel.app/api/changeCard';
+var changeCardURL = 'https://calendar-integration-backend.vercel.app/api/changeCard';
 // var subURL = "http://localhost:3000/api/changeCard";
 const appId = "sandbox-sq0idb-k47NFyfiTnNf1wkfFcHAvg";
 const locationId = "LXSNHMQ7X5J6G";
@@ -16,8 +16,9 @@ async function finishTransaction(token) {
     let data = {
         customerID: queryParams.get('customerID'),
         token: token,
+        who: queryParams.get('who')
     }
-    const changeCardResponse = await fetch(subURL, {
+    const changeCardResponse = await fetch(changeCardURL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

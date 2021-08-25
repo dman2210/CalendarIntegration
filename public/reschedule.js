@@ -64,7 +64,18 @@ async function submitChanges() {
     endDate.setHours(start.getHours() + 2);
     // console.log(endDate);
     let eventID = queryParams.get('eventID');
-    let body = { start: start.toISOString(), end: endDate.toISOString(), eventID: eventID };
+    let body = { start: start.toISOString(), 
+        current: start.toISOString(),
+        end: endDate.toISOString(), 
+        eventID: eventID,
+    where:queryParams.get('where'),
+when:formatTime(start) + " (Pacific Daylight Time)";
+who:queryParams.get('who'),
+customerID: queryParams.get('customerID'),
+email: queryParams.get('email'),
+googleCalLink: ,
+icalLink:,
+ };
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
     if (respo.ok) {
