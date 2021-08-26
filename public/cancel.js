@@ -34,13 +34,13 @@ async function cancelOne() {
         body[item] = queryParams.get(item);
     })
     console.log('body', body)
-    // let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
+    let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
-    // if (respo.ok) {
-    //     document.getElementById('confirm').innerHTML = '<h2>Your appointment has been cancelled.</h2>'
-    // } else {
-    //     document.getElementById('confirm').innerHTML = '<h2>There was an error.</h2>'
-    // }
+    if (respo.ok) {
+        document.getElementById('confirm').innerHTML = '<h2>Your appointment has been cancelled.</h2>'
+    } else {
+        document.getElementById('confirm').innerHTML = '<h2>There was an error.</h2>'
+    }
 }
 
 function promptCancelAll() {
@@ -67,7 +67,7 @@ async function cancelAll() {
         body[item] = queryParams.get(item);
     })
     console.log(body)
-    // await fetch(url, { method: "POST", body: JSON.stringify(body) });
+    await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
     document.getElementById('confirm').innerHTML = '<h2>Your subscription has been cancelled. You may recieve one last invoice. If so, please ignore it.</h2>'
 }

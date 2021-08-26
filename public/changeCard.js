@@ -18,26 +18,28 @@ async function finishTransaction(token) {
         token: token,
         who: queryParams.get('who')
     }
-    const changeCardResponse = await fetch(changeCardURL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data)
-    });
-    console.log(changeCardResponse);
-    if (changeCardResponse.ok) {
-        return true;
-    } else {
-        console.log(
-            "error! response: " +
-            JSON.stringify(changeCardResponse)
-        );
-        return (
-            "error! response: " +
-            JSON.stringify(changeCardResponse)
-        );
-    }
+    ['customerID', 'token', 'email', "who"].forEach((item) => { data[item = queryParams.get(item)] })
+    console.log(data)
+    // const changeCardResponse = await fetch(changeCardURL, {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(data)
+    // });
+    // console.log(changeCardResponse);
+    // if (changeCardResponse.ok) {
+    //     return true;
+    // } else {
+    //     console.log(
+    //         "error! response: " +
+    //         JSON.stringify(changeCardResponse)
+    //     );
+    //     return (
+    //         "error! response: " +
+    //         JSON.stringify(changeCardResponse)
+    //     );
+    // }
 }
 
 async function tokenize(paymentMethod) {
