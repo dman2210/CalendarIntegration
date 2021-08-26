@@ -106,6 +106,7 @@ async function submitChanges() {
         googleCalLink: googleLink,
         icalLink: icalLink,
     };
+    console.log("body", body)
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
     if (respo.ok) {
