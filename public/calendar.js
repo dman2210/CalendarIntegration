@@ -164,7 +164,7 @@ function disableBookedDays(month) {
                             break;
                         }
                         let time = {};
-                        time.start = new Date(availableHours[date.getDay()]);
+                        time.start = new Date(availableHours[date.getDay()][j]);
                         time.start.setMonth(date.getMonth());
                         time.start.setDate(date.getDate());
                         time.end = new Date(time.start.getTime());

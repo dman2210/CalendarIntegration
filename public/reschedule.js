@@ -93,6 +93,7 @@ async function submitChanges() {
         "&dates=" + (start).toISOString().replace(/-|:|\./g, '') +
         "/" + (endDate).toISOString().replace(/-|:|\./g, '') +
         "recur" + encodeURIComponent(recurrence);
+    // ["where", "when", "who", "customerID", "googleCalLink", "icalLink", "eventID", "current", "frequency", "email"]
     let body = {
         start: start.toISOString(),
         current: start.toISOString(),
@@ -105,6 +106,8 @@ async function submitChanges() {
         email: queryParams.get('email'),
         googleCalLink: googleLink,
         icalLink: icalLink,
+        frequency: queryParams.get('frequencyChoice,'),
+        email: queryParams.get('email')
     };
     console.log("body", body)
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
