@@ -32,7 +32,7 @@ function showCurrent() {
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     let months = ["January", "February", "March", "April", "May", "June", "July",
         "August", "September", "October", "November", "December"];
-    let currDate = new Date(queryParams.get('start'));
+    let currDate = new Date(queryParams.get('now'));
     document.getElementById('currApptDate').innerHTML = `${days[currDate.getDay()]} ${currDate.getDate()} ${months[currDate.getMonth()]} ${currDate.getFullYear()}`
     document.getElementById('currApptDate').style.marginLeft = "1vw";
     document.getElementById('currApptTime').innerHTML = formatTime(currDate);
