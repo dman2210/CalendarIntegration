@@ -27,6 +27,7 @@ async function cancelOne() {
     let customerID = queryParams.get('customerID');
     let eventID = queryParams.get('eventID');
     let body = { customerID: customerID, id: eventID };
+    console.log('body', body)
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
     if (respo.ok) {
@@ -53,9 +54,10 @@ async function cancelAll() {
     document.getElementById('prompt').style.display = 'none';
     let url = "https://calendar-integration-backend.vercel.app/api/appointments?action=cancel";
     // let url = "http://localhost:3000/api/appointments?action=cancel";
-    let customerID = queryParams.get('customerID');await skipNextInvoice(body.customerID);
+    let customerID = queryParams.get('customerID'); await skipNextInvoice(body.customerID);
     let eventID = "all"
     let body = { customerID: customerID, id: eventID };
+    console.log(body)
     await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
     document.getElementById('confirm').innerHTML = '<h2>Your subscription has been cancelled. You may recieve one last invoice. If so, please ignore it.</h2>'

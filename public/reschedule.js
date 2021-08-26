@@ -93,14 +93,13 @@ async function submitChanges() {
         "&dates=" + (start).toISOString().replace(/-|:|\./g, '') +
         "/" + (endDate).toISOString().replace(/-|:|\./g, '') +
         "recur" + encodeURIComponent(recurrence);
-    // ["where", "when", "who", "customerID", "googleCalLink", "icalLink", "eventID", "current", "frequency", "email"]
     let body = {
         start: start.toISOString(),
         current: start.toISOString(),
         end: endDate.toISOString(),
         eventID: eventID,
         where: queryParams.get('where'),
-        when: formatTime(start) + " (Pacific Daylight Time)",
+        when: start.toDateString().replace(/ \d{4}/, '') + " " + formatTime(start) + " (Pacific Daylight Time)",
         who: queryParams.get('who'),
         customerID: queryParams.get('customerID'),
         email: queryParams.get('email'),
