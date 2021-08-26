@@ -14,11 +14,9 @@ async function initializeCard(payments) {
 async function finishTransaction(token) {
     console.log("running transaction...");
     let data = {
-        customerID: queryParams.get('customerID'),
-        token: token,
-        who: queryParams.get('who')
+        token: token
     }
-    ['customerID', 'token', 'email', "who"].forEach((item) => { data[item = queryParams.get(item)] })
+    ['customerID', 'token', 'email', "who"].forEach((item) => { data[item] = queryParams.get(item) })
     console.log(data)
     // const changeCardResponse = await fetch(changeCardURL, {
     //     method: "POST",
