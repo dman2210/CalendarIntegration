@@ -17,7 +17,7 @@ async function finishTransaction(token) {
         token: token
     }
     let reqs = ["customerID", "token", "email", "who"];
-    reqs.forEach((item) => { if (data[item] === "undefined") { data[item] = queryParams.get(item) } });
+    reqs.forEach((item) => { if (!data[item]) { data[item] = queryParams.get(item) } });
     console.log(data)
     // const changeCardResponse = await fetch(changeCardURL, {
     //     method: "POST",
