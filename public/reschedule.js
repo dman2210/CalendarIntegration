@@ -92,7 +92,7 @@ async function submitChanges() {
         encodeURIComponent(event.title) +
         "&dates=" + (start).toISOString().replace(/-|:|\./g, '') +
         "/" + (endDate).toISOString().replace(/-|:|\./g, '') +
-        "recur" + encodeURIComponent(recurrence);
+        "&recur=" + encodeURIComponent(recurrence);
     let body = {
         start: start.toISOString(),
         current: start.toISOString(),
