@@ -55,6 +55,20 @@ function showChangeSubmit() {
 
 //replaces all the html with a notice
 async function submitChanges() {
+    let freqMap = {
+        "weekly": 1,
+        "biweekly": 2,
+        "monthly": 4
+    }
+    let dayMap = {
+        0: "SU",
+        1: "MO",
+        2: "TU",
+        3: "WE",
+        4: "TH",
+        5: "FR",
+        6: "SA"
+    }
     document.getElementById('loaderContainer').style.display = 'flex';
     let url = "https://calendar-integration-backend.vercel.app/api/appointments?action=reschedule";
     // let url = "http://localhost:3000/api/appointments?action=reschedule"
@@ -64,18 +78,34 @@ async function submitChanges() {
     endDate.setHours(start.getHours() + 2);
     // console.log(endDate);
     let eventID = queryParams.get('eventID');
-    let body = { start: start.toISOString(), 
+    let event = {
+        start: [start.getFullYear(), start.getMonth() + 1, start.getDate(), start.getHours(), start.getMinutes()],
+        duration: { hours: 2, minutes: 0 },
+        title: frequencyChoice.replace(/(\w)/, "$1".toUpperCase()) + " Housekeeping for " + queryParams.get('who'),
+        busyStatus: 'BUSY',
+    }
+    let icalLink = "https://calendar-integration-backend.vercel.app/api/makeICS?event=" +
+        encodeURIComponent(JSON.stringify(event));
+    //create google link
+    let recurrence = `FREQ=WEEKLY;BYDAY=${dayMap[start.getDay()]};INTERVAL=${freqMap[frequencyChoice]}`;
+    let googleLink = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" +
+        encodeURIComponent(event.title) +
+        "&dates=" + (start).toISOString().replace(/-|:|\./g, '') +
+        "/" + (endDate).toISOString().replace(/-|:|\./g, '') +
+        "recur" + encodeURIComponent(recurrence);
+    let body = {
+        start: start.toISOString(),
         current: start.toISOString(),
-        end: endDate.toISOString(), 
+        end: endDate.toISOString(),
         eventID: eventID,
-    where:queryParams.get('where'),
-when:formatTime(start) + " (Pacific Daylight Time)";
-who:queryParams.get('who'),
-customerID: queryParams.get('customerID'),
-email: queryParams.get('email'),
-googleCalLink: ,
-icalLink:,
- };
+        where: queryParams.get('where'),
+        when: formatTime(start) + " (Pacific Daylight Time)",
+        who: queryParams.get('who'),
+        customerID: queryParams.get('customerID'),
+        email: queryParams.get('email'),
+        googleCalLink: googleLink,
+        icalLink: icalLink,
+    };
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
     if (respo.ok) {
