@@ -9,7 +9,7 @@ function showCurrent() {
     document.getElementById('currApptTime').style.marginLeft = "1vw";
 }
 var queryParams = new URLSearchParams(window.location.search);
-showCurrent();
+
 function formatTime(date) {
     let hours = date.getHours();
     let minutes = date.getMinutes();
@@ -61,4 +61,21 @@ async function cancelAll() {
     await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
     document.getElementById('confirm').innerHTML = '<h2>Your subscription has been cancelled. You may recieve one last invoice. If so, please ignore it.</h2>'
+}
+if (document.getElementById('currApptDate') !== undefined && document.getElementById('currApptDate') !== null) {
+    showCurrent();
+} else {
+    tryAgain(showCurrent, 1);
+}
+function tryAgain(num) {
+    if (num % 1000 === 0) {
+        if (document.getElementById('currApptDate') !== undefined && document.getElementById('currApptDate') !== null) {
+            showCurrent();
+        } else {
+            tryAgain(showCurrent, 1);
+        }
+    }
+    else {
+        tryAgain(num + 1);
+    }
 }
