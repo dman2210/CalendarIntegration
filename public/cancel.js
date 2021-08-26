@@ -26,7 +26,13 @@ async function cancelOne() {
     // let url = "http://localhost:3000/api/appointments?action=cancel";
     let customerID = queryParams.get('customerID');
     let eventID = queryParams.get('eventID');
-    let body = { customerID: customerID, id: eventID };
+    let body = {
+        customerID: customerID,
+        id: eventID
+    };
+    ["where", "when", "who", "email", "eventID", "current", "customerID"].forEach((item) => {
+        body[item] = queryParams.get(item);
+    })
     console.log('body', body)
     // let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
