@@ -96,6 +96,7 @@ async function submitChanges() {
     let body = {
         start: start.toISOString(),
         current: start.toISOString(),
+        was: queryParams.get('when'),
         end: endDate.toISOString(),
         eventID: eventID,
         where: queryParams.get('where'),
