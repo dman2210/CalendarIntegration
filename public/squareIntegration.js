@@ -1,5 +1,5 @@
-var subURL = 'https://calendar-integration-backend.vercel.app/api/subscribe';
-// var subURL = "http://localhost:3000/api/subscribe";
+// var subURL = 'https://calendar-integration-backend.vercel.app/api/subscribe';
+var subURL = "http://localhost:3000/api/subscribe";
 const appId = "sandbox-sq0idb-k47NFyfiTnNf1wkfFcHAvg";
 const locationId = "LXSNHMQ7X5J6G";
 
