@@ -175,14 +175,13 @@ div#background h4 {
   display: flex;
   align-items: center;
 }
-
+.nameContainer {
+  width: 45%;
+}
+.nameContainerLast {
+  width: 45%;
+}
 @media (max-width: 600px) {
-  .nameContainer {
-    width: 45%;
-  }
-  .nameContainerLast {
-    width: 45%;
-  }
   [name="first"] {
     max-width: 100%;
   }
