@@ -136,16 +136,47 @@ div#background h4 {
   justify-content: center;
   display: none;
 }
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+
+.serviceTitle {
+  font-size: 1.13rem;
+  display: flex;
 }
+.activeStatus {
+  color: rgba(255, 0, 208, 0.87);
+  border-bottom: 1px solid;
+}
+.statusItem {
+  margin-bottom: 2vh;
+}
+.content {
+  display: flex;
+  justify-content: center;
+  justify-content: space-between;
+}
+.navButtonContainer {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.pink {
+  background: #c76afc;
+}
+.dycalendar-month-container > .navButtonContainer {
+  display: none;
+}
+.navButton {
+  font-family: "Petit Formal Script", cursive;
+}
+.dycalendar-body {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+}
+
 @media (max-width: 600px) {
-  
   .nameContainer {
     width: 45%;
   }
@@ -221,5 +252,13 @@ div#background h4 {
   }
   .loyaltyLabel {
     font-size: 3.4vw;
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
