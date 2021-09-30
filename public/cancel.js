@@ -42,4 +42,4 @@ async function cancelOne() {
         document.getElementById('confirm').innerHTML = '<h2>There was an error.</h2>'
     }
 }
-
+showCurrent();
