@@ -118,12 +118,6 @@ div#background h4 {
   font-family: "Petit Formal Script", cursive;
   width: 100%;
 }
-[name="first"] {
-  max-width: 100%;
-}
-[name="last"] {
-  max-width: 90%;
-}
 .loader {
   border: 16px solid #f3f3f3; /* Light grey */
   border-top: 16px solid #3498db; /* Blue */
@@ -150,51 +144,57 @@ div#background h4 {
     transform: rotate(360deg);
   }
 }
-.serviceTitle {
-  font-size: 1.13rem;
-  display: flex;
-}
-.activeStatus {
-  color: rgba(255, 0, 208, 0.87);
-  border-bottom: 1px solid;
-}
-.statusItem {
-  margin-bottom: 2vh;
-}
-.content {
-  display: flex;
-  justify-content: center;
-  justify-content: space-between;
-}
-.navButtonContainer {
-  width: 100%;
-  padding: 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-.pink {
-  background: #c76afc;
-}
-.dycalendar-month-container > .navButtonContainer {
-  display: none;
-}
-.navButton {
-  font-family: "Petit Formal Script", cursive;
-}
-.dycalendar-body {
-  flex-direction: column;
-  display: flex;
-  align-items: center;
-}
-.nameContainer {
-  width: 45%;
-}
-.nameContainerLast {
-  width: 45%;
-}
 @media (max-width: 600px) {
+  .serviceTitle {
+    font-size: 1.13rem;
+    display: flex;
+  }
+  .activeStatus {
+    color: rgba(255, 0, 208, 0.87);
+    border-bottom: 1px solid;
+  }
+  .statusItem {
+    margin-bottom: 2vh;
+  }
+  .content {
+    display: flex;
+    justify-content: center;
+    justify-content: space-between;
+  }
+  .navButtonContainer {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .pink {
+    background: #c76afc;
+  }
+  .dycalendar-month-container > .navButtonContainer {
+    display: none;
+  }
+  .navButton {
+    font-family: "Petit Formal Script", cursive;
+  }
+  .dycalendar-body {
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+  }
+  .nameContainer {
+    width: 45%;
+  }
+  .nameContainerLast {
+    width: 45%;
+  }
+  [name="first"] {
+    max-width: 100%;
+  }
+  [name="last"] {
+    max-width: 90%;
+  }
   .textInput {
     width: unset;
   }
