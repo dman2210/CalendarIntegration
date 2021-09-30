@@ -145,44 +145,7 @@ div#background h4 {
   }
 }
 @media (max-width: 600px) {
-  .serviceTitle {
-    font-size: 1.13rem;
-    display: flex;
-  }
-  .activeStatus {
-    color: rgba(255, 0, 208, 0.87);
-    border-bottom: 1px solid;
-  }
-  .statusItem {
-    margin-bottom: 2vh;
-  }
-  .content {
-    display: flex;
-    justify-content: center;
-    justify-content: space-between;
-  }
-  .navButtonContainer {
-    width: 100%;
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .pink {
-    background: #c76afc;
-  }
-  .dycalendar-month-container > .navButtonContainer {
-    display: none;
-  }
-  .navButton {
-    font-family: "Petit Formal Script", cursive;
-  }
-  .dycalendar-body {
-    flex-direction: column;
-    display: flex;
-    align-items: center;
-  }
+  
   .nameContainer {
     width: 45%;
   }
