@@ -14,7 +14,8 @@ async function prepareAvailableHours() {
             if (response.ok) {
                 return await response.json().then(json => {
                     // console.log(json); 
-                    availableHoursResolved = true; return json });
+                    availableHoursResolved = true; return json
+                });
             } else {
                 console.log(response.error);
             }
@@ -87,7 +88,7 @@ function prepareCustomer(event, values) {
         phoneNumber: values.phone.value,
         address: values.street.value + " " + values.city.value + " " + values.state.value + " " + values.zip.value,
         gloves: values.gloveSel.value,
-        mask:values.maskSel.value,
+        mask: values.maskSel.value,
         description: values.instructions.value
     }
     event.preventDefault();
@@ -107,8 +108,38 @@ function prepareBookedDaysArray() {
         }
     }
 }
+
+function dateify(date) {
+    let needNew = false;
+    let newDate = { start: null, end: null };
+    if (date.start.constructor.name !== "Date") {
+        needNew = true;
+        newDate.start = new Date(date.start);
+    } else {
+        //in case one part is date
+        newDate.start = date.start;
+    }
+    if (date.end.constructor.name !== "Date") {
+        needNew = true;
+        newDate.end = new Date(date.end);
+    } else {
+        //in case of partial
+        newDate.end = date.end;
+    }
+    if (needNew) {
+        return newDate;
+    } else {
+        return date;
+    }
+
+
+}
+
 ///checks for overlap between appt and time that makes the time unbookable
-function checkOverlap(appt, time) {
+function checkOverlap(apptC, timeC) {
+    //check that both are dates
+    let appt = dateify(apptC);
+    let time = dateify(timeC);
     //check if appt start is earlier than time start (appt might overlap from the left)
     if (appt.start <= time.start) {
         //check if appt starts earlier than time

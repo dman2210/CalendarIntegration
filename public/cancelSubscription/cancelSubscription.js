@@ -22,10 +22,10 @@ async function cancelAll() {
     ["where", "when", "who", "email", "eventID", "current", "customerID"].forEach((item) => {
         body[item] = queryParams.get(item);
     })
-    console.log(body)
+    // console.log(body)
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     if (respo.ok) {
-        console.log(respo);
+        // console.log(respo);
         document.getElementById('confirm').innerHTML = '<h2>Your subscription has been cancelled. You may recieve one last invoice. If so, please ignore it.</h2>'
     } else {
         console.log(respo);

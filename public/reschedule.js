@@ -109,7 +109,7 @@ async function submitChanges() {
         frequency: queryParams.get('frequencyChoice,'),
         email: queryParams.get('email')
     };
-    console.log("body", body)
+    // console.log("body", body)
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
     if (respo.ok) {
