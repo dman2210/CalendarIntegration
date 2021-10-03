@@ -1,5 +1,5 @@
-// var changeCardURL = 'https://calendar-integration-backend.vercel.app/api/changeCard';
-var changeCardURL = "http://localhost:3000/api/changeCard";
+var changeCardURL = 'https://calendar-integration-backend.vercel.app/api/changeCard';
+// var changeCardURL = "http://localhost:3000/api/changeCard";
 const appId = "sandbox-sq0idb-E1K6rn57m5ZkG78Ou5AnOA";
 const locationId = "L52BJA6BK7T5Q";
 var queryParams = new URLSearchParams(window.location.search);
