@@ -1,5 +1,10 @@
-var changeCardURL = 'https://calendar-integration-backend.vercel.app/api/changeCard';
-// var subURL = "http://localhost:3000/api/changeCard";
+var changeCardURL;
+if (process.env.NODE_ENV === "development") {
+    // var changeCardURL = 'https://calendar-integration-backend.vercel.app/api/changeCard';
+    changeCardURL = "http://localhost:3000/api/changeCard";
+} else {
+    changeCardURL = 'https://calendar-integration-backend.vercel.app/api/changeCard';
+}
 const appId = "sandbox-sq0idb-k47NFyfiTnNf1wkfFcHAvg";
 const locationId = "LXSNHMQ7X5J6G";
 var queryParams = new URLSearchParams(window.location.search);
