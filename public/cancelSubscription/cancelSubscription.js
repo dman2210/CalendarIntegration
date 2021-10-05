@@ -28,7 +28,7 @@ async function cancelAll() {
         // console.log(respo);
         document.getElementById('confirm').innerHTML = '<h2>Your subscription has been cancelled. You may recieve one last invoice. If so, please ignore it.</h2>'
     } else {
-        console.log(respo);
+        console.log(await respo.json());
         document.getElementById('confirm').innerHTML = '<h2>There was an error.</h2>'
     }
     document.getElementById('loaderContainer').style.display = 'none';

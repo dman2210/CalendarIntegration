@@ -34,7 +34,6 @@ function showCurrent() {
         console.log("currDate", currDate, "now", new Date());
         alert("Appointments cannot be cancelled within 24 hours of the appointment time.");
         document.getElementById("mainContainer").innerHTML = "Appointments cannot be cancelled within 24 hours of the appointment time.";
-        window.close();
     } else {
         let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         let months = ["January", "February", "March", "April", "May", "June", "July",
