@@ -30,8 +30,7 @@ function goTo() {
 
 function showCurrent() {
     let currDate = new Date(queryParams.get('now'));
-    if ((new Date() - currDate) / 1000 / 60 / 60 < 24) {
-        console.log("currDate", currDate, "now", new Date());
+    if (Math.abs(new Date() - currDate) / 1000 / 60 / 60 < 24) {
         alert("Appointments cannot be cancelled within 24 hours of the appointment time.");
         document.getElementById("mainContainer").innerHTML = "Appointments cannot be cancelled within 24 hours of the appointment time.";
     } else {
