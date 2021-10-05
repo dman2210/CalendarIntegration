@@ -35,8 +35,10 @@ function showCurrent() {
     let currDate = new Date(queryParams.get('now'));
     document.getElementById('currApptDate').innerHTML = `${days[currDate.getDay()]} ${currDate.getDate()} ${months[currDate.getMonth()]} ${currDate.getFullYear()}`
     document.getElementById('currApptDate').style.marginLeft = "1vw";
+    document.getElementById('currApptDate').style.marginTop = "0";
     document.getElementById('currApptTime').innerHTML = formatTime(currDate);
     document.getElementById('currApptTime').style.marginLeft = "1vw";
+    document.getElementById('currApptTime').style.marginTop = "0";
 }
 
 //changes the details to show new appt details
@@ -48,8 +50,10 @@ function showChangeSubmit() {
     let date = new Date(document.subOptions.start)
     document.getElementById('newApptDate').innerHTML = `${days[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
     document.getElementById('newApptDate').style.marginLeft = "1vw";
+    document.getElementById('newApptDate').style.marginTop = "0";
     document.getElementById('newApptTime').innerHTML = formatTime(date);
     document.getElementById('newApptTime').style.marginLeft = "1vw";
+    document.getElementById('newApptTime').style.marginTop = "0";
     document.getElementById('submit').style.display = "block"
 }
 
@@ -100,7 +104,7 @@ async function submitChanges() {
         end: endDate.toISOString(),
         eventID: eventID,
         where: queryParams.get('where'),
-        when: start.toDateString().replace(/ \d{4}/, '') + " " + formatTime(start) + " (Pacific Daylight Time)",
+        when: start.toDateString().replace(/ \d{4}/, '') + " " + formatTime(start),
         who: queryParams.get('who'),
         customerID: queryParams.get('customerID'),
         email: queryParams.get('email'),
