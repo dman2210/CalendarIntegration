@@ -19,3 +19,11 @@
   width: 12vw;
   align-self: center;
 }
+.changeTitle {
+  margin-bottom: 5vh;
+}
+@media (max-width: 600px) {
+  .changeTitle {
+    margin-bottom: unset;
+  }
+}

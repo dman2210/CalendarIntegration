@@ -13,20 +13,22 @@ div#calendar {
   justify-content: center;
   align-items: center;
 }
-#calOldTime{
+#calOldTime {
   display: flex;
   justify-content: center;
   width: 100%;
+  margin-top: 5vh;
 }
 .selectedTime {
   border: 1px solid rgba(255, 0, 208, 0.87);
 }
-button.buttonAdapt{
+button.buttonAdapt {
   margin-right: 1.5vw;
 }
 @media (max-width: 600px) {
   #calOldTime {
     flex-direction: column-reverse;
     align-items: center;
+    margin-top: unset;
   }
 }
