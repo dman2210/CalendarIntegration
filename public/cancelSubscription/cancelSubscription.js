@@ -22,6 +22,7 @@ async function cancelAll() {
     ["where", "when", "who", "email", "eventID", "current", "customerID"].forEach((item) => {
         body[item] = queryParams.get(item);
     })
+    body.eventID = body.eventID.replace(/_.*/g, "");
     // console.log(body)
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     if (respo.ok) {
