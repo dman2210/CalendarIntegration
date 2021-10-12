@@ -5,8 +5,22 @@
 div h2 {
   text-transform: none;
 }
+div h4 {
+  text-transform: none;
+}
+button {
+  text-transform: none;
+}
 button#card-button {
   padding-right: 1.7vw;
+  border-color: #9c00f7;
+  color: #9c00f7;
+  cursor: pointer;
+}
+button#card-button:hover {
+  border-color: rgba(255, 0, 208, 0.87);
+  color: rgba(255, 0, 208, 0.87);
+  cursor: pointer;
 }
 #squareContainer > button {
   margin-bottom: 2vh;
@@ -22,8 +36,18 @@ button#card-button {
   color: white !important;
 }
 button.backButton {
+  border-color: #a9a9a9;
+  color: #000;
+}
+.buttonAdapt[type="submit"] {
   border-color: #9c00f7;
   color: #9c00f7;
+  cursor: pointer;
+}
+.buttonAdapt[type="submit"]:hover {
+  border-color: rgba(255, 0, 208, 0.87);
+  color: rgba(255, 0, 208, 0.87);
+  cursor: pointer;
 }
 #calendar table td.unavailable {
   color: #a9a9a9;
@@ -94,8 +118,7 @@ div#background h4 {
   font-style: normal;
   /* letter-spacing: 0.11em; */
   line-height: 1.1em;
-  /* text-transform: uppercase; */
-
+  text-transform: none;
   padding-top: 1.8vh;
   padding-bottom: 1.8vh;
   padding-left: 1.7vw;
