@@ -31,4 +31,23 @@ button.buttonAdapt {
     align-items: center;
     margin-top: unset;
   }
+  h1 {
+    text-align: center;
+  }
+  h2 {
+    text-align: center;
+  }
+  #scheduleDetails div {
+    justify-content: center;
+  }
+  #submit div {
+    justify-content: center;
+  }
+  .buttonAdapt {
+    margin-left: 25vw;
+    margin-right: auto;
+  }
+  #hours {
+    justify-content: center;
+  }
 }
