@@ -11,6 +11,9 @@ div h4 {
 button {
   text-transform: none;
 }
+.timeButton {
+  margin-right: 2vw;
+}
 button#card-button {
   padding-right: 1.7vw;
   border-color: #9c00f7;
