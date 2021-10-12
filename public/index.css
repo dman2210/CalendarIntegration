@@ -2,6 +2,9 @@
 .background * {
   font-family: "Petit Formal Script", cursive;
 }
+#main h1 {
+  line-height: 1em;
+}
 div h2 {
   text-transform: none;
 }
