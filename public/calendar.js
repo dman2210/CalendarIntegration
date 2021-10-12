@@ -189,7 +189,7 @@ function disableBookedDays(month) {
             //may want to switch this to not true ie not booked
             if (bookedDays[month][dayIndex] === undefined || bookedDays[month][dayIndex] === null) {
                 //check if day has available appointments
-                if (availableHours[date.getDay()] !== undefined && availableHours[date.getDay()] !== null) {
+                if (availableHours[date.getDay()] !== undefined && availableHours[date.getDay()] !== null && Math.abs(new Date() - date) / 1000 / 60 / 60 > 24) {
                     //for each available time on that day
                     for (let j = 0; j < availableHours[date.getDay()].length; j++) {
                         if (bookedDays[month][dayIndex] === false) {
