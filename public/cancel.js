@@ -1,16 +1,21 @@
 function showCurrent() {
-    let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    let months = ["January", "February", "March", "April", "May", "June", "July",
-        "August", "September", "October", "November", "December"];
     let currDate = new Date(queryParams.get('now'));
-    document.getElementById('currApptDate').innerHTML = `${days[currDate.getDay()]} ${currDate.getDate()} ${months[currDate.getMonth()]} ${currDate.getFullYear()}`
-    document.getElementById('currApptDate').style.marginLeft = "1vw";
-    document.getElementById('currApptDate').style.marginTop = "0";
-    document.getElementById('currApptDate').style.marginBottom = "1vw";
-    document.getElementById('currApptTime').innerHTML = formatTime(currDate);
-    document.getElementById('currApptTime').style.marginLeft = "1vw";
-    document.getElementById('currApptTime').style.marginTop = "0";
-    document.getElementById('currApptTime').style.marginBottom = "1vw";
+    if (Math.abs(new Date() - currDate) / 1000 / 60 / 60 < 24) {
+        document.getElementById("mainContainer").innerHTML = "Appointments cannot be cancelled within 24 hours of the appointment time.";
+    } else {
+        let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        let months = ["January", "February", "March", "April", "May", "June", "July",
+            "August", "September", "October", "November", "December"];
+        document.getElementById('currApptDate').innerHTML = `${days[currDate.getDay()]} ${currDate.getDate()} ${months[currDate.getMonth()]} ${currDate.getFullYear()}`
+        document.getElementById('currApptDate').style.marginLeft = "1vw";
+        document.getElementById('currApptDate').style.marginTop = "0";
+        document.getElementById('currApptDate').style.marginBottom = "1vw";
+        document.getElementById('currApptTime').innerHTML = formatTime(currDate);
+        document.getElementById('currApptTime').style.marginLeft = "1vw";
+        document.getElementById('currApptTime').style.marginTop = "0";
+        document.getElementById('currApptTime').style.marginBottom = "1vw";
+    }
+
 }
 var queryParams = new URLSearchParams(window.location.search);
 

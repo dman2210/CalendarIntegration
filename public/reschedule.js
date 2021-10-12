@@ -31,8 +31,7 @@ function goTo() {
 function showCurrent() {
     let currDate = new Date(queryParams.get('now'));
     if (Math.abs(new Date() - currDate) / 1000 / 60 / 60 < 24) {
-        alert("Appointments cannot be cancelled within 24 hours of the appointment time.");
-        document.getElementById("mainContainer").innerHTML = "Appointments cannot be cancelled within 24 hours of the appointment time.";
+        document.getElementById("mainContainer").innerHTML = "Appointments cannot be rescheduled within 24 hours of the appointment time.";
     } else {
         let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         let months = ["January", "February", "March", "April", "May", "June", "July",
