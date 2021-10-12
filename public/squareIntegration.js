@@ -105,6 +105,7 @@ async function runSquare() {
 
         try {
             let main = document.getElementById("main");
+            main.style.marginTop = "2vh";
             // disable the submit button as we await tokenization and make a payment request.
             cardButton.disabled = true;
             const token = await tokenize(paymentMethod);
@@ -114,7 +115,7 @@ async function runSquare() {
             if (paymentResults === true) {
                 console.log("request success");
                 displayPaymentResults("SUCCESS");
-                main.innerHTML = `<h1>Payment success!! Receipt has been emailed with scheduling info.</h1>`;
+                main.innerHTML = `<h1 >Payment success!! Receipt has been emailed with scheduling info.</h1>`;
             } else {
                 console.log("request error");
                 displayPaymentResults("ERROR");
