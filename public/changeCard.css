@@ -32,4 +32,7 @@ h1.changeTitle {
   #card-button {
     width: 40vw;
   }
+  h1 {
+    text-align: center;
+  }
 }
