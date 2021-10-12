@@ -26,4 +26,7 @@ h1.changeTitle {
   .changeTitle {
     margin-bottom: unset;
   }
+  #cardButton {
+    width: 40vw;
+  }
 }
