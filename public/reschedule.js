@@ -3,7 +3,7 @@ var subURL = 'https://calendar-integration-backend.vercel.app/api/subscribe';
 var toDo = [];
 document.subOptions = {};
 let frequencyChoice = queryParams.get('frequency');
-document.getElementById("Loader").style.display = "flex";
+document.getElementById("loaderContainer").style.display = "flex";
 showCurrent();
 // var subURL = "http://localhost:3000/api/subscribe";
 if (!hoursBusyResolved || !availableHoursResolved) {
@@ -79,7 +79,7 @@ async function submitChanges() {
         5: "FR",
         6: "SA"
     }
-    document.getElementById('Loader').style.display = 'flex';
+    document.getElementById('loaderContainer').style.display = 'flex';
     let url = "https://calendar-integration-backend.vercel.app/api/appointments?action=reschedule";
     // let url = "http://localhost:3000/api/appointments?action=reschedule"
     let start = new Date(document.subOptions.start);
@@ -121,7 +121,7 @@ async function submitChanges() {
     };
     // console.log("body", body)
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
-    document.getElementById('Loader').style.display = 'none';
+    document.getElementById('loaderContainer').style.display = 'none';
     if (respo.ok) {
         document.getElementById('mainContainer').innerHTML = '<h2>Your appointment has been moved. Confirmation sent.</h2>'
     } else {
@@ -284,6 +284,6 @@ function formatTime(date) {
 }
 
 function hideLoader() {
-    document.getElementById("Loader").style.display = "none";
+    document.getElementById("loaderContainer").style.display = "none";
 
 }
