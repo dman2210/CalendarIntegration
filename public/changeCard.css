@@ -19,7 +19,7 @@
   width: 12vw;
   align-self: center;
 }
-.changeTitle {
+h1.changeTitle {
   margin-bottom: 5vh;
 }
 @media (max-width: 600px) {
