@@ -166,11 +166,15 @@ function checkOverlap(apptC, timeC) {
     }
 }
 ///greys out the days in a month that are booked up according to the frequency that the client chose.
-function disableBookedDays(month) {
+function disableBookedDays(month, year) {
+    if (year === undefined || year === null) {
+        year = (new Date()).getFullYear();
+    }
     prepareBookedDaysArray();
     let today = new Date();
     //get days in month
     let dim = new Date();
+    dim.setFullYear(year);
     dim.setMonth(dim.getMonth() + 1);
     dim.setDate(0);
     let daysInMonth = dim.getDate();
@@ -179,6 +183,7 @@ function disableBookedDays(month) {
         //set up day in month to be checked
         let dayIndex = i + 1;
         let date = new Date();
+        date.setFullYear(year)
         date.setMonth(month);
         date.setDate(dayIndex);
         //check if day of month less than today if on current month
@@ -189,7 +194,7 @@ function disableBookedDays(month) {
             //may want to switch this to not true ie not booked
             if (bookedDays[month][dayIndex] === undefined || bookedDays[month][dayIndex] === null) {
                 //check if day has available appointments
-                if (availableHours[date.getDay()] !== undefined && availableHours[date.getDay()] !== null && Math.abs(new Date() - date) / 1000 / 60 / 60 > 24) {
+                if (availableHours[date.getDay()] !== undefined && availableHours[date.getDay()] !== null) {
                     //for each available time on that day
                     for (let j = 0; j < availableHours[date.getDay()].length; j++) {
                         if (bookedDays[month][dayIndex] === false) {
@@ -202,30 +207,35 @@ function disableBookedDays(month) {
                         time.start.setDate(date.getDate());
                         time.end = new Date(time.start.getTime());
                         time.end.setHours(time.start.getHours() + 2)
-                        //check if there are appoitnemtns that day
-                        if (busyDaysByFrequency[month][dayIndex] !== undefined && busyDaysByFrequency[month][dayIndex] !== null) {
-                            //day booked by defualt
-                            let bookedFromOverlap = true;
-                            //for each appt 
-                            for (let k = 0; k < busyDaysByFrequency[month][dayIndex].length; k++) {
-                                let apptBlock = busyDaysByFrequency[month][dayIndex][k];
-                                let appt = JSON.parse(JSON.stringify(apptBlock));
-                                appt.start = new Date(appt.start);
-                                appt.end = new Date(appt.end);
-                                //check for appt/time overlap
-                                bookedFromOverlap = checkOverlap(appt, time)
-                                bookedDays[month][dayIndex] = bookedFromOverlap;
-                                if (bookedFromOverlap === true) {
+                        // check for availability closer than 24hrs
+                        if (Math.round(Math.abs(new Date() - time.start) / 1000 / 60 / 60) < 24) {
+                            bookedDays[month][dayIndex] = true;
+                        } else {
+                            //check if there are appoitnemtns that day
+                            if (busyDaysByFrequency[month][dayIndex] !== undefined && busyDaysByFrequency[month][dayIndex] !== null) {
+                                //day booked by defualt
+                                let bookedFromOverlap = true;
+                                //for each appt 
+                                for (let k = 0; k < busyDaysByFrequency[month][dayIndex].length; k++) {
+                                    let apptBlock = busyDaysByFrequency[month][dayIndex][k];
+                                    let appt = JSON.parse(JSON.stringify(apptBlock));
+                                    appt.start = new Date(appt.start);
+                                    appt.end = new Date(appt.end);
+                                    //check for appt/time overlap
+                                    bookedFromOverlap = checkOverlap(appt, time)
+                                    bookedDays[month][dayIndex] = bookedFromOverlap;
+                                    if (bookedFromOverlap === true) {
+                                        break;
+                                    }
+                                    //next appt
+                                }
+                                if (bookedFromOverlap === false) {
                                     break;
                                 }
-                                //next appt
+                            } else {
+                                //no appts
+                                bookedDays[month][dayIndex] = false;
                             }
-                            if (bookedFromOverlap === false) {
-                                break;
-                            }
-                        } else {
-                            //no appts
-                            bookedDays[month][dayIndex] = false;
                         }
                     }
                 } else {
@@ -614,7 +624,7 @@ prepareAvailableHours().then(
             }
         }
         if (global.hoursBusyResolved && global.availableHoursResolved) {
-            disableBookedDays(option.month);
+            disableBookedDays(option.month, option.year);
         } else {
             // console.log("busy hours not complete")
         }
