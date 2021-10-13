@@ -43,7 +43,7 @@ button.buttonAdapt {
   #submit div {
     justify-content: center;
   }
-  .buttonAdapt {
+  #submit .buttonAdapt {
     margin-left: 25vw;
     margin-right: auto;
   }
