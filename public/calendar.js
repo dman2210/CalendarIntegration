@@ -652,21 +652,25 @@ prepareAvailableHours().then(
 
     //run on click of day
     function drawChooseHours(dayElement) {
+        let year = document.yearDrawn;
         let availabilities = [];
         //need to make sure we look through the whole year
         let day = dayElement.innerHTML;
         let month = document.monthDrawn;
         //test if clickable
         let newDay = new Date()
+        newDay.setFullYear(year);
         newDay.setMonth(month);
         newDay.setDate(day);
         let avs = availableHours[newDay.getDay()];
         let avai = {};
         avai.start = new Date();
         avai.end = new Date();
+        avai.start.setFullYear(year);
         avai.start.setDate(day);
-        avai.end.setDate(day);
         avai.start.setMonth(month);
+        avai.end.setFullYear(year);
+        avai.end.setDate(day);
         avai.end.setMonth(month);
         for (let i = 0; i < avs.length; i++) {
             let time = new Date(avs[i]);
