@@ -89,6 +89,7 @@ function prepareCustomer(event, values) {
         address: values.street.value + " " + values.city.value + " " + values.state.value + " " + values.zip.value,
         gloves: values.gloveSel.value,
         mask: values.maskSel.value,
+        unitNumber: values.unit.value,
         description: values.instructions.value
     }
     event.preventDefault();
