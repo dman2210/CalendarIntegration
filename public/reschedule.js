@@ -115,7 +115,7 @@ async function submitChanges() {
         email: queryParams.get('email'),
         googleCalLink: googleLink,
         icalLink: icalLink,
-        frequency: queryParams.get('frequencyChoice,'),
+        frequency: frequencyChoice,
         email: queryParams.get('email')
     };
     // console.log("body", body)
