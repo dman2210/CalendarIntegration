@@ -98,10 +98,9 @@ async function submitChanges() {
     //create google link
     let recurrence = `FREQ=WEEKLY;BYDAY=${dayMap[start.getDay()]};INTERVAL=${freqMap[frequencyChoice]}`;
     let googleLink = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" +
-        encodeURIComponent(event.title) +
-        "&dates=" + (start).toISOString().replace(/-|:|\./g, '') +
-        "/" + (endDate).toISOString().replace(/-|:|\./g, '') +
-        "&recur=" + encodeURIComponent(recurrence);
+        urlFormat(event.title) +
+        "&dates=" + getDateString(start, endDate) +
+        "&recur=" + (recurrence);
     let body = {
         start: start.toISOString(),
         current: start.toISOString(),
@@ -285,4 +284,48 @@ function formatTime(date) {
 function hideLoader() {
     document.getElementById("loaderContainer").style.display = "none";
 
+}
+
+function urlFormat(str) {
+    var newstr = str.replace(/^\s+/g, "");
+    return encodeURIComponent(newstr.replace(/\s+$/g, ""));
+}
+
+// Add a leading '0' if string is only 1 char
+function stringPad(str) {
+    var newStr = "" + str;
+    if (newStr.length == 1) {
+        newStr = "0" + newStr;
+    }
+    return newStr;
+}
+
+// Converts the given time into UTC, returns this in a string
+function getUTCDateString(y, m, d, h, min) {
+    var timeObj = new Date(y, m - 1, d, h, min);
+    var dateStr = "" + timeObj.getUTCFullYear();
+    dateStr += stringPad(timeObj.getUTCMonth() + 1);
+    dateStr += stringPad(timeObj.getUTCDate());
+    dateStr += "T" + stringPad(timeObj.getUTCHours());
+    dateStr += stringPad(timeObj.getUTCMinutes()) + "00Z";
+    return dateStr;
+}
+
+// Determines the CGI argument for dates parameter based on user input
+function getDateString(start, end) {
+    var dateString = "";
+    dateString += getUTCDateString(
+        start.getFullYear(),
+        start.getMonth() + 1,
+        start.getDate(),
+        start.getHours(),
+        start.getMinutes());
+    dateString += "/";
+    dateString += getUTCDateString(
+        end.getFullYear(),
+        end.getMonth() + 1,
+        end.getDate(),
+        end.getHours(),
+        end.getMinutes());
+    return dateString;
 }
