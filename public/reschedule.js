@@ -115,7 +115,9 @@ async function submitChanges() {
         googleCalLink: googleLink,
         icalLink: icalLink,
         frequency: frequencyChoice,
-        email: queryParams.get('email')
+        email: queryParams.get('email'),
+        mask: queryParams.get("mask"),
+        gloves: queryParams.get("gloves"),
     };
     // console.log("body", body)
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
