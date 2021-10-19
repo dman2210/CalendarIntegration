@@ -127,7 +127,7 @@ async function submitChanges() {
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
     if (respo.ok) {
-        document.getElementById('mainContainer').innerHTML = '<h2>Your appointment has been moved. Confirmation sent.</h2>'
+        document.getElementById('mainContainer').innerHTML = '<h2>Your appointment has been moved. Confirmation sent. Please note that if you have saved this event to your iCal/Google calendar, the original date and time will show up on your calendar until you manually update it.</h2>'
     } else {
         document.getElementById('mainContainer').innerHTML = '<h2>There was an error.</h2>'
     }
