@@ -119,6 +119,10 @@ async function submitChanges() {
         mask: queryParams.get("mask"),
         gloves: queryParams.get("gloves"),
     };
+    let description = queryParams.get('description');
+    if (description !== undefined && description !== null) {
+        body.description = description;
+    }
     // console.log("body", body)
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
