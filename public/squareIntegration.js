@@ -18,14 +18,22 @@ async function finishTransaction(token) {
         token: token,
         subOptions: document.subOptions,
     };
+    let subscriptionResponse = {};
     // console.log(body);
-    const subscriptionResponse = await fetch(subURL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body)
-    });
+    if (await checkAvailable() !== false) {
+        subscriptionResponse = await fetch(subURL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body)
+        });
+    }
+    else {
+        return {
+            error: `<h1>I’m sorry, but your desired appointment time has just been booked by another customer! Please go back to the calendar to select another time.</h1>`
+        }
+    }
     // console.log(subscriptionResponse);
     if (subscriptionResponse.ok) {
         return true;
@@ -35,8 +43,7 @@ async function finishTransaction(token) {
             JSON.stringify(subscriptionResponse)
         );
         return (
-            "error! subscription response: " +
-            JSON.stringify(subscriptionResponse)
+            { error: `<h1>There was an error</h1>` }
         );
     }
 }
@@ -119,8 +126,7 @@ async function runSquare() {
             } else {
                 console.log("request error");
                 displayPaymentResults("ERROR");
-
-                main.innerHTML = `<h1>There was an error</h1>`;
+                main.innerHTML = paymentResults.error;
             }
         } catch (e) {
             cardButton.disabled = false;

@@ -4,7 +4,8 @@ window.onpopstate = function (event) {
         goTo(event.state.page, event.state.data, true);
     }
 }
-
+// var checkUrl = 'http://localhost:3000/api/checkAppt';
+var checkUrl = 'https://calendar-integration-backend.vercel.app/api/checkappt';
 var toDo = [];
 function goTo(state, data, block) {
     let stateMap = {
@@ -72,19 +73,21 @@ function checkDates(frequencyChoice, block) {
         history.pushState({ page: "calendar", data: { frequency: frequencyChoice } }, "", "");
     }
 }
-function goToQuestionForm(block) {
+async function goToQuestionForm(block) {
     document.getElementById("squareContainer").style.display = "none";
     document.getElementById("content").style.display = "none";
     document.getElementById('customerForm').style.display = "block";
     if (!block) {
         history.pushState({ page: "form" }, "", "")
     }
+    await checkAvailable();
 }
 
-function checkout() {
+async function checkout() {
     document.getElementById("squareContainer").style.display = "unset";
     document.getElementById("customerForm").style.display = "none";
     history.pushState({ page: "payment" }, "", "")
+    await checkAvailable();
 }
 
 function changeStatus(statusId) {
@@ -119,4 +122,30 @@ async function exponentialWait(func, time) {
 
 function goBack() {
     window.history.back();
+}
+
+async function checkAvailable() {
+    document.getElementById("loaderContainer").style.display = "flex";
+    let start = document.subOptions.start;
+    await fetch(checkUrl, {
+        method: 'POST', headers: {
+            'Content-Type': 'application/json'
+        }, body: JSON.stringify({ start: start })
+    }).then(
+        async (response) => {
+            await response.json().then(
+
+                (data) => {
+                    console.log("data" + data);
+                    if (data.length > 0) {
+                        //appt has been taken
+                        alert("I’m sorry, but your desired appointment time has just been booked by another customer! Please go back to the calendar to select another time.");
+
+                        return false;
+                    }
+                }
+            )
+        }
+    )
+    hideLoader();
 }
