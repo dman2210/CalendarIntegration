@@ -5,7 +5,7 @@ window.onpopstate = function (event) {
     }
 }
 // var checkUrl = 'http://localhost:3000/api/checkAppt';
-var checkUrl = 'https://calendar-integration-backend.vercel.app/api/checkappt';
+var checkUrl = 'https://calendar-integration-backend.vercel.app/api/checkAppt';
 var toDo = [];
 function goTo(state, data, block) {
     let stateMap = {
