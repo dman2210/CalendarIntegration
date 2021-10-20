@@ -80,14 +80,18 @@ async function goToQuestionForm(block) {
     if (!block) {
         history.pushState({ page: "form" }, "", "")
     }
+    document.getElementById("loaderContainer").style.display = "flex";
     await checkAvailable();
+    hideLoader();
 }
 
 async function checkout() {
     document.getElementById("squareContainer").style.display = "unset";
     document.getElementById("customerForm").style.display = "none";
     history.pushState({ page: "payment" }, "", "")
+    document.getElementById("loaderContainer").style.display = "flex";
     await checkAvailable();
+    hideLoader();
 }
 
 function changeStatus(statusId) {
@@ -125,7 +129,6 @@ function goBack() {
 }
 
 async function checkAvailable() {
-    document.getElementById("loaderContainer").style.display = "flex";
     let start = document.subOptions.start;
     await fetch(checkUrl, {
         method: 'POST', headers: {
@@ -147,5 +150,4 @@ async function checkAvailable() {
             )
         }
     )
-    hideLoader();
 }
