@@ -15,7 +15,18 @@ async function prepareAvailableHours() {
                 return await response.json().then(json => {
                     // console.log(json); 
                     availableHoursResolved = true; return json
-                });
+                }).then(
+                    (rson) => {
+                        Object.keys(rson).forEach(
+                            (key) => {
+                                if (rson[key].length <= 0) {
+                                    delete (rson[key]);
+                                }
+                            }
+                        )
+                        return rson;
+                    }
+                );
             } else {
                 console.log(response.error);
             }
