@@ -101,6 +101,8 @@ async function submitChanges() {
         urlFormat(event.title) +
         "&dates=" + getDateString(start, endDate) +
         "&recur=" + (recurrence);
+
+    let convStart = convertTZ(start, "America/New_York")
     let body = {
         start: start.toISOString(),
         current: start.toISOString(),
@@ -108,7 +110,7 @@ async function submitChanges() {
         end: endDate.toISOString(),
         eventID: eventID,
         where: queryParams.get('where'),
-        when: start.toDateString().replace(/ \d{4}/, '') + " " + formatTime(start),
+        when: convStart.toDateString().replace(/ \d{4}/, '') + " " + formatTime(convStart),
         who: queryParams.get('who'),
         customerID: queryParams.get('customerID'),
         email: queryParams.get('email'),
@@ -132,6 +134,10 @@ async function submitChanges() {
         document.getElementById('mainContainer').innerHTML = '<h2>There was an error.</h2>'
     }
 
+}
+
+function convertTZ(date, tzString) {
+    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", { timeZone: tzString }));
 }
 
 //helper
