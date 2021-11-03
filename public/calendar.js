@@ -689,17 +689,24 @@ prepareAvailableHours().then(
             avai.start.setMinutes(time.getMinutes());
             avai.end.setHours(avai.start.getHours() + 2)
             avai.end.setMinutes(avai.start.getMinutes());
-            if (busyDaysByFrequency[month][day] !== undefined) {
-                let conflict = false;
-                for (let j = 0; j < busyDaysByFrequency[month][day].length; j++) {
-                    let appt = busyDaysByFrequency[month][day][j];
-                    conflict = checkOverlap(appt, avai);
-                }
-                if (conflict === false) {
+            //if not within 48 hours
+            if (clears48(avai.start)) {
+                if (busyDaysByFrequency[month][day] !== undefined) {
+                    let conflict = false;
+                    for (let j = 0; j < busyDaysByFrequency[month][day].length; j++) {
+                        let appt = busyDaysByFrequency[month][day][j];
+                        conflict = checkOverlap(appt, avai);
+                        if (conflict === true) {
+                            break;
+                        }
+                    }
+                    if (conflict === false) {
+
+                        availabilities.push(cloneDateObject(avai));
+                    }
+                } else {
                     availabilities.push(cloneDateObject(avai));
                 }
-            } else {
-                availabilities.push(cloneDateObject(avai));
             }
         }
         // console.log("map");
@@ -722,6 +729,10 @@ prepareAvailableHours().then(
         let content = `${apptOptions.join('')}`;
         document.getElementById("hours").innerHTML = content;
         document.getElementById("hours").style.display = "flex";
+    }
+
+    function clears48(appt) {
+        return ((appt - new Date()) / 1000 / 60 / 60 > 48) ? true : false;
     }
 
     function convertToSecondFrame(appt, avai) {
