@@ -5,8 +5,10 @@ const appId = "sq0idp-nx_L1O_rlzb112jFLGX8XQ";
 const locationId = "PK14BK78YYVYK";
 
 async function initializeCard(payments) {
+    console.log("initializing")
     const card = await payments.card();
-    await card.attach("#card-container");
+    console.log("card", card);
+    console.log(await card.attach("#card-container"));
     console.log("thing attached");
     return card;
 }
