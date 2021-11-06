@@ -5,16 +5,12 @@ const appId = "sq0idp-nx_L1O_rlzb112jFLGX8XQ";
 const locationId = "PK14BK78YYVYK";
 
 async function initializeCard(payments) {
-    console.log("initializing")
     const card = await payments.card();
-    console.log("card", card);
-    console.log(await card.attach("#card-container"));
-    console.log("thing attached");
+    await card.attach("#card-container");
     return card;
 }
 
 async function finishTransaction(token) {
-    console.log("running transaction...");
     let body = {
         customerDetails: document.customerDetails,
         token: token,
@@ -91,13 +87,13 @@ async function runSquare() {
     let payments;
     try {
         payments = window.Square.payments(appId, locationId);
-    } catch {
+    } catch (error) {
         const statusContainer = document.getElementById(
             "payment-status-container"
         );
         statusContainer.className = "missing-credentials";
         statusContainer.style.visibility = "visible";
-        console.log("something went wrong with authenticating.")
+        console.log("something went wrong with authenticating.", error)
         return;
     }
 
@@ -119,15 +115,15 @@ async function runSquare() {
             // disable the submit button as we await tokenization and make a payment request.
             cardButton.disabled = true;
             const token = await tokenize(paymentMethod);
-            console.log("sending request...");
+            // console.log("sending request...");
             main.innerHTML = "Setting up cleaning...";
             const paymentResults = await finishTransaction(token);
             if (paymentResults === true) {
-                console.log("request success");
+                // console.log("request success");
                 displayPaymentResults("SUCCESS");
                 main.innerHTML = `<h1 >Payment success!! Receipt has been emailed with scheduling info.</h1>`;
             } else {
-                console.log("request error");
+                // console.log("request error");
                 displayPaymentResults("ERROR");
                 main.innerHTML = paymentResults.error;
             }
