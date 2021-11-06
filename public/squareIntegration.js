@@ -19,13 +19,17 @@ async function finishTransaction(token) {
     let subscriptionResponse = {};
     // console.log(body);
     if (await checkAvailable() !== false) {
-        subscriptionResponse = await fetch(subURL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body)
-        });
+        try {
+            subscriptionResponse = await fetch(subURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body)
+            });
+        } catch (error) {
+            console.log("error", error);
+        }
     }
     else {
         return {
@@ -36,6 +40,7 @@ async function finishTransaction(token) {
     if (subscriptionResponse.ok) {
         return true;
     } else {
+        document.getElementById("card-button").disabled = false;
         console.log(
             "error! subscription response: " +
             JSON.stringify(subscriptionResponse)
