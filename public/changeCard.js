@@ -5,8 +5,10 @@ const locationId = "PK14BK78YYVYK";
 var queryParams = new URLSearchParams(window.location.search);
 
 async function initializeCard(payments) {
+    console.log("initializing")
     const card = await payments.card();
-    await card.attach("#card-container");
+    console.log("card", card);
+    console.log(await card.attach("#card-container"));
     console.log("thing attached");
     return card;
 }
