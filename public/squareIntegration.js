@@ -1,8 +1,8 @@
 var subURL;
 subURL = 'https://calendar-integration-backend.vercel.app/api/subscribe';
 // subURL = "http://localhost:3000/api/subscribe";
-const appId = "sandbox-sq0idb-Hq2z0oLxNxfqY-FrJE9abw";
-const locationId = "LXSNHMQ7X5J6G";
+const appId = "sq0idp-nx_L1O_rlzb112jFLGX8XQ";
+const locationId = "PK14BK78YYVYK";
 
 async function initializeCard(payments) {
     const card = await payments.card();

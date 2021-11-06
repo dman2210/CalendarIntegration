@@ -1,7 +1,7 @@
 var changeCardURL = 'https://calendar-integration-backend.vercel.app/api/changeCard';
 // var changeCardURL = "http://localhost:3000/api/changeCard";
-const appId = "sandbox-sq0idb-Hq2z0oLxNxfqY-FrJE9abw";
-const locationId = "LXSNHMQ7X5J6G";
+const appId = "sq0idp-nx_L1O_rlzb112jFLGX8XQ";
+const locationId = "PK14BK78YYVYK";
 var queryParams = new URLSearchParams(window.location.search);
 
 async function initializeCard(payments) {
