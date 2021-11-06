@@ -97,6 +97,7 @@ async function runSquare() {
         );
         statusContainer.className = "missing-credentials";
         statusContainer.style.visibility = "visible";
+        console.log("something went wrong with authenticating.")
         return;
     }
 
