@@ -87,8 +87,9 @@ async function submitChanges() {
     endDate.setHours(start.getHours() + 2);
     // console.log(endDate);
     let eventID = queryParams.get('eventID');
+    let convStart = convertTZ(start, "America/New_York")
     let event = {
-        start: [start.getFullYear(), start.getMonth() + 1, start.getDate(), start.getHours(), start.getMinutes()],
+        start: [start.getFullYear(), start.getMonth() + 1, start.getDate(), convStart.getHours(), start.getMinutes()],
         duration: { hours: 2, minutes: 0 },
         title: frequencyChoice.replace(/(\w)/, "$1".toUpperCase()) + " Housekeeping for " + queryParams.get('who'),
         busyStatus: 'BUSY',
@@ -101,8 +102,6 @@ async function submitChanges() {
         urlFormat(event.title) +
         "&dates=" + getDateString(start, endDate) +
         "&recur=" + (recurrence);
-
-    let convStart = convertTZ(start, "America/New_York")
     let body = {
         start: start.toISOString(),
         current: start.toISOString(),
