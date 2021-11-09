@@ -89,7 +89,7 @@ async function submitChanges() {
     let eventID = queryParams.get('eventID');
     let convStart = convertTZ(start, "America/New_York")
     let event = {
-        start: [start.getFullYear(), start.getMonth() + 1, start.getDate(), convStart.getHours(), start.getMinutes()],
+        start: start.toISOString(),
         duration: { hours: 2, minutes: 0 },
         title: frequencyChoice.replace(/(\w)/, "$1".toUpperCase()) + " Housekeeping for " + queryParams.get('who'),
         busyStatus: 'BUSY',
