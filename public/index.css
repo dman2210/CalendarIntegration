@@ -99,6 +99,7 @@ div#background h4 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-right: 5px;
 }
 .buttonItemContainer {
   display: flex;
@@ -176,6 +177,7 @@ div#background h4 {
 }
 .statusItem {
   margin-bottom: 2vh;
+  text-transform: unset;
 }
 .content {
   display: flex;

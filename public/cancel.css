@@ -13,6 +13,9 @@ div#prompt {
   background: white;
   border-radius: 20px;
 }
+button.buttonAdapt {
+  text-transform: none;
+}
 @media (max-width: 600px) {
   h1 {
     text-align: center;
