@@ -91,7 +91,7 @@ async function submitChanges() {
     let event = {
         start: start.toISOString(),
         duration: { hours: 2, minutes: 0 },
-        title: frequencyChoice.replace(/(\w)/, "$1".toUpperCase()) + " Housekeeping for " + queryParams.get('who'),
+        title: "Housekeeping",
         busyStatus: 'BUSY',
     }
     let icalLink = "https://calendar-integration-backend.vercel.app/api/makeICS?event=" +
