@@ -46,7 +46,7 @@ async function finishTransaction(token) {
             JSON.stringify(subscriptionResponse)
         );
         return (
-            { error: `<h1>There was an error. Please check you card information and try again.</h1>` }
+            { error: `<h1>There was an error. Please check your card information and try again.</h1>` }
         );
     }
 }

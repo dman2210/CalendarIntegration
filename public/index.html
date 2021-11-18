@@ -170,7 +170,7 @@
                         <h4>Phone</h4>
                         <h4 style="margin-left: 3px;color:red">*</h4>
                     </div>
-                    <input name="phone" required pattern=".*([0-9]{3}).*([0-9]{3}).*([0-9]{4}).*"
+                    <input name="phone" required pattern="[^0-9]*([0-9]{3})[^0-9]*([0-9]{3})[^0-9]*([0-9]{4})[^0-9]*"
                         oninvalid="this.setCustomValidity('Please match one of these formats: ##########,   ###-###-####,   (###) ###-####')"
                         oninput="this.setCustomValidity('')" class="textInput" type="tel"></input>
                     <div style="display: flex;">
