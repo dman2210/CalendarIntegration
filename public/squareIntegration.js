@@ -38,7 +38,31 @@ async function finishTransaction(token) {
     }
     // console.log(subscriptionResponse);
     if (subscriptionResponse.ok) {
-        return true;
+        let subData = await subscriptionResponse.json();
+        if (subData.ok) {
+            return true;
+        } else {
+            if (subData.error) {
+                document.getElementById("card-button").disabled = false;
+                console.log(
+                    "error! subscription response: " +
+                    JSON.stringify(subscriptionResponse), subData
+                );
+                return (
+                    { error: subData.error }
+                );
+            } else {
+                document.getElementById("card-button").disabled = false;
+                console.log(
+                    "error! subscription response: " +
+                    JSON.stringify(subscriptionResponse), subData
+                );
+                return (
+                    { error: `<h1>There was an error.</h1>` }
+                );
+            }
+        }
+
     } else {
         document.getElementById("card-button").disabled = false;
         console.log(
@@ -46,7 +70,7 @@ async function finishTransaction(token) {
             JSON.stringify(subscriptionResponse)
         );
         return (
-            { error: `<h1>There was an error. Please check your card information and try again.</h1>` }
+            { error: `<h1>There was an error.</h1>` }
         );
     }
 }
