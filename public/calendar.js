@@ -199,7 +199,7 @@ function disableBookedDays(month, year) {
         date.setMonth(month);
         date.setDate(dayIndex);
         //check if day of month less than today if on current month
-        if (today.getMonth() === month && dayIndex < today.getDate()) {
+        if (today.getMonth() === month && dayIndex < today.getDate() && document.yearDrawn<=today.getFullYear()) {
             bookedDays[month][dayIndex] = true;
         } else {
             //check if bookedDays is set at index already
