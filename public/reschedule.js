@@ -167,6 +167,8 @@ function copyAcrossYearByFrequency(sAppt, step) {
         apptInStep.end = new Date(apptInStep.end);
         let daysDiff = (apptInStep.end - apptInStep.start) / 1000 / 60 / 60 / 24;
         apptInStep.start.setDate(apptInStep.start.getDate() + i * step);
+        apptInStep.end.setFullYear(apptInStep.start.getFullYear());
+        apptInStep.end.setMonth(apptInStep.start.getMonth());
         apptInStep.end.setDate(apptInStep.start.getDate() + daysDiff);
         //if eoy then break
         if (today.getMonth() === apptInStep.start.getMonth() && today.getFullYear() !== apptInStep.start.getFullYear()) {
@@ -203,6 +205,8 @@ function projectBack(appt, step) {
     newAppt.start = new Date(newAppt.start);
     newAppt.end = new Date(newAppt.end);
     newAppt.start.setDate(newAppt.start.getDate() - daysBack);
+    newAppt.end.setFullYear(newAppt.start.getFullYear());
+    newAppt.end.setMonth(newAppt.start.getMonth());
     newAppt.end.setDate(newAppt.start.getDate() + dayDiff);
     return newAppt;
 }
