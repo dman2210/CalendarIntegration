@@ -146,6 +146,15 @@ function dateify(date) {
 
 
 }
+function dateLessOrEqual(first, second){
+    let diff = second-first;
+    let roundedToMinute = Math.floor(diff/1000/60)
+    if(roundedToMinute>0){
+        return false;
+    }else{
+        return true
+    }
+}
 
 ///checks for overlap between appt and time that makes the time unbookable
 function checkOverlap(apptC, timeC) {
@@ -153,7 +162,7 @@ function checkOverlap(apptC, timeC) {
     let appt = dateify(apptC);
     let time = dateify(timeC);
     //check if appt start is earlier than time start (appt might overlap from the left)
-    if (appt.start <= time.start) {
+    if (dateLessOrEqual(appt.start,time.start)) {
         //check if appt starts earlier than time
         if (appt.end > time.start) {
             return true;
