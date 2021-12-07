@@ -38,7 +38,16 @@ async function finishTransaction(token) {
     }
     // console.log(subscriptionResponse);
     if (subscriptionResponse.ok) {
-        let subData = await subscriptionResponse.json();
+        let subDataText = await subscriptionResponse.text();
+        let subData;
+        try {
+            subData = JSON.parse(subDataText);
+        } catch (err) {
+            console.log(err);
+            return (
+                { error: `<h1>There was an error.</h1>` }
+            );
+        }
         if (subData.ok) {
             return true;
         } else {
