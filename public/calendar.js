@@ -147,7 +147,7 @@ function dateify(date) {
 
 }
 function dateLessOrEqual(first, second){
-    let diff = second-first;
+    let diff = first-second;
     let roundedToMinute = Math.floor(diff/1000/60)
     if(roundedToMinute>0){
         return false;
