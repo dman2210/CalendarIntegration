@@ -97,10 +97,9 @@ function prepareCustomer(event, values) {
         familyName: values.last.value,
         emailAddress: values.email.value,
         phoneNumber: values.phone.value,
-        address: values.street.value + " " + values.city.value + " " + values.state.value + " " + values.zip.value,
+        address: values.street.value + " " + values.unit.value + " " + values.city.value + " " + values.state.value + " " + values.zip.value,
         gloves: values.gloveSel.value,
         mask: values.maskSel.value,
-        unitNumber: values.unit.value,
         description: values.instructions.value
     }
     event.preventDefault();
@@ -146,12 +145,12 @@ function dateify(date) {
 
 
 }
-function dateLessOrEqual(first, second){
-    let diff = first-second;
-    let roundedToMinute = Math.floor(diff/1000/60)
-    if(roundedToMinute>0){
+function dateLessOrEqual(first, second) {
+    let diff = first - second;
+    let roundedToMinute = Math.floor(diff / 1000 / 60)
+    if (roundedToMinute > 0) {
         return false;
-    }else{
+    } else {
         return true
     }
 }
@@ -162,7 +161,7 @@ function checkOverlap(apptC, timeC) {
     let appt = dateify(apptC);
     let time = dateify(timeC);
     //check if appt start is earlier than time start (appt might overlap from the left)
-    if (dateLessOrEqual(appt.start,time.start)) {
+    if (dateLessOrEqual(appt.start, time.start)) {
         //check if appt starts earlier than time
         if (appt.end > time.start) {
             return true;
@@ -208,7 +207,7 @@ function disableBookedDays(month, year) {
         date.setMonth(month);
         date.setDate(dayIndex);
         //check if day of month less than today if on current month
-        if (today.getMonth() === month && dayIndex < today.getDate() && document.yearDrawn<=today.getFullYear()) {
+        if (today.getMonth() === month && dayIndex < today.getDate() && document.yearDrawn <= today.getFullYear()) {
             bookedDays[month][dayIndex] = true;
         } else {
             //check if bookedDays is set at index already
