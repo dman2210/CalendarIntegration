@@ -15,6 +15,7 @@ async function finishTransaction(token) {
         customerDetails: document.customerDetails,
         token: token,
         subOptions: document.subOptions,
+        timeNow: (new Date()).toISOString()
     };
     let subscriptionResponse = {};
     // console.log(body);
