@@ -225,9 +225,11 @@ function disableBookedDays(month, year) {
                         time.start = new Date(availableHours[date.getDay()][j]);
                         time.start.setMonth(date.getMonth());
                         time.start.setDate(date.getDate());
+                        time.start.setFullYear(date.getFullYear());
                         time.end = new Date(time.start.getTime());
                         time.end.setHours(time.start.getHours() + 2)
-                        // check for availability closer than 24hrs
+                        time.end.setFullYear(date.getFullYear());
+                        // check if availability closer than 24hrs
                         if (Math.round(Math.abs(new Date() - time.start) / 1000 / 60 / 60) < 48) {
                             bookedDays[month][dayIndex] = true;
                         } else {
