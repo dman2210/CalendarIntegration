@@ -27,7 +27,7 @@ async function cancelAll() {
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     if (respo.ok) {
         // console.log(respo);
-        document.getElementById('confirm').innerHTML = '<h2>Your subscription has been cancelled. You may recieve one last invoice. If so, please ignore it.</h2>'
+        document.getElementById('confirm').innerHTML = '<h2>Your subscription has been cancelled and a confirmation email is on its way to you.</h2>'
     } else {
         console.log(await respo.json());
         document.getElementById('confirm').innerHTML = '<h2>There was an error.</h2>'

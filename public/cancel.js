@@ -46,7 +46,7 @@ async function cancelOne() {
     let respo = await fetch(url, { method: "POST", body: JSON.stringify(body) });
     document.getElementById('loaderContainer').style.display = 'none';
     if (respo.ok) {
-        document.getElementById('confirm').innerHTML = '<h2>Your appointment has been cancelled. Please note that if you have saved this event to your iCal/Google calendar, the event will continue to appear on your calendar until you manually delete it.</h2>'
+        document.getElementById('confirm').innerHTML = '<h2>Your appointment has been cancelled and a confirmation email is on its way to you.</h2>'
     } else {
         document.getElementById('confirm').innerHTML = '<h2>There was an error.</h2>'
     }
