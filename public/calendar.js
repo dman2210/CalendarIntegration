@@ -425,7 +425,11 @@ prepareAvailableHours().then(
         if (option.prevnextbutton === "show") {
             elem = document.createElement("span");
             elem.setAttribute("class", "dycalendar-prev-next-btn next-btn");
-            if ((new Date()).getMonth() - 1 === option.month) {
+            let prevMonth = (new Date()).getMonth() - 1;
+            if (prevMonth < 0) {
+                prevMonth = 11;
+            }
+            if (prevMonth === option.month) {
                 elem.classList.add('unavailable')
             }
             elem.setAttribute("data-date", option.date);
